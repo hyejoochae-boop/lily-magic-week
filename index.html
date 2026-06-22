@@ -49,8 +49,8 @@
 
   .container { max-width: 1180px; margin: 0 auto; padding: 22px 16px 92px; position: relative; z-index: 2; }
   header { text-align: center; margin-bottom: 18px; }
-  .title-main { font-family: 'Pacifico', cursive; font-size: clamp(2.25rem, 7vw, 4.4rem); color: #fff7cf; text-shadow: 0 3px 0 #b858ba, 0 9px 26px rgba(63, 36, 120, 0.38), 0 0 28px rgba(255,255,255,0.75); line-height: 1.04; }
-  .title-ribbon { width: min(560px, 94vw); margin: 4px auto 8px; padding: 7px 18px 10px; border-radius: 999px; background: linear-gradient(90deg, rgba(255,126,179,.9), rgba(157,110,255,.92), rgba(114,205,255,.9)); border: 2px solid rgba(255,255,255,.72); box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 8px 24px rgba(83,48,130,.28); font-family: 'Noto Sans KR', sans-serif; font-size: clamp(1.05rem, 3vw, 1.45rem); font-weight: 700; }
+  .title-main { font-family: 'Pacifico', cursive; font-size: clamp(1.9rem, 6vw, 3.6rem); color: #fff7cf; text-shadow: 0 3px 0 #b858ba, 0 9px 26px rgba(63, 36, 120, 0.38), 0 0 28px rgba(255,255,255,0.75); line-height: 1.1; margin-bottom: 10px; }
+  .title-ribbon { display: inline-block; margin: 0 auto 8px; padding: 5px 28px 7px; border-radius: 999px; background: linear-gradient(90deg, rgba(255,126,179,.9), rgba(157,110,255,.92), rgba(114,205,255,.9)); border: 2px solid rgba(255,255,255,.72); box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 8px 24px rgba(83,48,130,.28); font-family: 'Noto Sans KR', sans-serif; font-size: clamp(.85rem, 2.4vw, 1.1rem); font-weight: 700; }
   .title-sub { font-family: 'Noto Sans KR', sans-serif; font-size: 1.25rem; font-weight: 700; text-shadow: 0 2px 8px rgba(66,35,100,.35); }
 
   /* ── PAGE LAYOUT: 3:7 분할 ── */
@@ -65,7 +65,8 @@
     height: 100%; display: flex; flex-direction: column;
     overflow: hidden; flex-shrink: 0;
     background: linear-gradient(180deg, rgba(120,70,210,0.88) 0%, rgba(85,40,170,0.94) 100%);
-    border-right: 2px solid rgba(255,255,255,.22);
+    border-right: 5px solid rgba(255,255,255,.35);
+    box-shadow: 4px 0 16px rgba(0,0,0,.35);
     position: relative; z-index: 5;
   }
   .room-header {
@@ -135,7 +136,7 @@
   @keyframes lampGlow { 0%,100%{filter:drop-shadow(0 0 5px rgba(255,220,100,.3))} 50%{filter:drop-shadow(0 0 14px rgba(255,220,100,.75))} }
 
   /* Lily in room */
-  .rc-lily { position: absolute; bottom: 34%; left: 50%; transform: translateX(-50%); width: 90%; max-width: 240px; z-index: 8; pointer-events: none; }
+  .rc-lily { position: absolute; width: 90%; max-width: 200px; z-index: 8; cursor: grab; touch-action: none; }
   .rc-lily svg { width: 100%; height: auto; overflow: visible; }
 
   /* Room items */
@@ -147,6 +148,9 @@
   .rc-draggable { cursor: grab; touch-action: none; }
   .rc-draggable:hover .rc-item-emoji { filter: drop-shadow(0 6px 14px rgba(157,110,255,.7)) drop-shadow(0 2px 4px rgba(0,0,0,.4)); transform: scale(1.12); transition: transform .15s; }
   .rc-draggable.dragging { cursor: grabbing; opacity: .88; }
+  .rc-del-btn { display: none; position: absolute; top: -8px; right: -8px; width: 20px; height: 20px; border-radius: 50%; background: rgba(220,50,50,.9); color: #fff; font-size: .75rem; font-weight: 700; border: 1.5px solid #fff; cursor: pointer; align-items: center; justify-content: center; z-index: 30; line-height: 1; }
+  .rc-draggable.selected .rc-del-btn { display: flex; }
+  .rc-draggable.selected .rc-item-emoji { filter: drop-shadow(0 0 8px rgba(255,200,80,.9)); transform: scale(1.1); }
 
   /* FX + dialogue */
   .rc-fx { position: absolute; inset: 0; pointer-events: none; z-index: 10; overflow: hidden; }
@@ -154,6 +158,43 @@
   @keyframes rcFxFloat { 0%{transform:translateY(0) rotate(0);opacity:.85} 100%{transform:translateY(-110%) rotate(45deg);opacity:0} }
   .rc-dialogue { position: absolute; bottom: 2%; left: 3%; right: 3%; background: rgba(4,2,12,.82); border: 1.5px solid rgba(255,255,255,.22); border-radius: 10px; padding: 6px 10px; z-index: 15; backdrop-filter: blur(4px); }
   .rc-dialogue-text { font: 700 0.6rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.9); line-height: 1.5; }
+
+  /* ── 쪽지 보드 ── */
+  .room-msg-board { flex-shrink: 0; background: rgba(255,255,255,.13); border-top: 1px solid rgba(255,255,255,.2); padding: 10px 10px 8px; }
+  .rmb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .rmb-title { font: 700 .68rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.9); }
+  .rmb-add-btn { background: rgba(255,255,255,.22); border: 1px solid rgba(255,255,255,.4); border-radius: 50%; width: 22px; height: 22px; color: white; font-size: .9rem; cursor: pointer; line-height: 1; display: flex; align-items: center; justify-content: center; }
+  .rmb-add-btn:hover { background: rgba(255,255,255,.38); }
+  .rmb-card { background: rgba(255,255,255,.15); border-radius: 8px; padding: 8px 10px; min-height: 68px; font: 500 .68rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.95); line-height: 1.45; word-break: break-all; }
+  .rmb-card.empty { color: rgba(255,255,255,.45); text-align: center; padding-top: 20px; font-size: .63rem; }
+  .rmb-from { font: 700 .6rem 'Noto Sans KR', sans-serif; color: rgba(255,230,150,.9); margin-bottom: 2px; }
+  .rmb-nav { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 5px; }
+  .rmb-nav-btn { background: rgba(255,255,255,.18); border: none; border-radius: 50%; width: 22px; height: 22px; color: white; font-size: .75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .rmb-nav-btn:hover { background: rgba(255,255,255,.32); }
+  .rmb-nav-btn:disabled { opacity: .3; cursor: default; }
+  .rmb-counter { font: 600 .62rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.6); min-width: 28px; text-align: center; }
+  .rmb-del-btn { background: rgba(255,80,80,.25); border: none; border-radius: 50%; width: 22px; height: 22px; color: rgba(255,180,180,.9); font-size: .7rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .rmb-del-btn:hover { background: rgba(255,80,80,.45); }
+  /* 쪽지 입력 오버레이 */
+  .rmb-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.6); z-index: 40; display: flex; align-items: flex-end; backdrop-filter: blur(3px); }
+  .rmb-input-box { background: #2d1060; border-radius: 14px 14px 0 0; padding: 14px 14px 18px; width: 100%; border-top: 2px solid rgba(255,255,255,.25); }
+  .rmb-from-row { display: flex; gap: 6px; margin-bottom: 9px; }
+  .rmb-from-btn { flex: 1; padding: 6px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1); color: rgba(255,255,255,.7); font: 700 .75rem 'Noto Sans KR', sans-serif; cursor: pointer; }
+  .rmb-from-btn.active { background: rgba(255,215,106,.25); border-color: #ffd76a; color: #ffd76a; }
+  .rmb-textarea { width: 100%; background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.25); border-radius: 8px; color: white; font: 500 .8rem 'Noto Sans KR', sans-serif; padding: 8px 10px; resize: none; box-sizing: border-box; outline: none; }
+  .rmb-textarea::placeholder { color: rgba(255,255,255,.35); }
+  .rmb-submit-row { display: flex; gap: 6px; margin-top: 8px; }
+  .rmb-cancel-btn { flex: 1; padding: 8px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,.25); background: rgba(255,255,255,.08); color: rgba(255,255,255,.7); font: 700 .75rem 'Noto Sans KR', sans-serif; cursor: pointer; }
+  .rmb-send-btn { flex: 2; padding: 8px; border-radius: 8px; border: none; background: linear-gradient(90deg, #9d6eff, #ff9dca); color: white; font: 700 .75rem 'Noto Sans KR', sans-serif; cursor: pointer; }
+  /* 꾹 눌러 삭제 컨텍스트 메뉴 */
+  .rc-ctx-menu { position: absolute; z-index: 50; background: rgba(20,5,45,.95); border: 1.5px solid rgba(255,255,255,.25); border-radius: 10px; padding: 6px; display: flex; flex-direction: column; gap: 4px; backdrop-filter: blur(6px); min-width: 100px; }
+  .rc-ctx-btn { background: rgba(255,255,255,.1); border: none; border-radius: 7px; color: white; font: 600 .72rem 'Noto Sans KR', sans-serif; padding: 7px 10px; cursor: pointer; text-align: left; }
+  .rc-ctx-btn:hover { background: rgba(255,255,255,.2); }
+  .rc-ctx-btn.danger { color: #ff9dca; }
+  .rc-ctx-btn.danger:hover { background: rgba(255,80,100,.25); }
+  /* 배치하기 버튼 (상점) */
+  .shop-place-btn { background: linear-gradient(90deg,#4caf82,#3d9970); color: white; border: none; border-radius: 8px; padding: 6px 10px; font: 700 .8rem 'Noto Sans KR',sans-serif; cursor: pointer; width: 100%; margin-top: 4px; }
+  .shop-place-btn:hover { opacity: .85; }
 
   /* Room footer */
   .room-footer { padding: 7px 10px 6px; background: rgba(0,0,0,.3); border-top: 1px solid rgba(255,255,255,.1); flex-shrink: 0; }
@@ -211,8 +252,8 @@
   .fairy-card.done { animation: completedGlow 2.4s ease-in-out infinite; }
   @keyframes completedGlow { 0%, 100% { box-shadow: 0 18px 42px rgba(70,35,110,.23), 0 0 0 rgba(255,255,255,0); } 50% { box-shadow: 0 18px 42px rgba(70,35,110,.23), 0 0 34px rgba(255,244,167,.92); } }
   .fairy-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-  .fairy-name { font-family: 'Pacifico', cursive; font-size: clamp(1.75rem, 4vw, 2.6rem); color: var(--accent); text-shadow: 0 2px 0 rgba(255,255,255,.8); line-height: 1; }
-  .fairy-title { font: 700 1.02rem 'Noto Sans KR', sans-serif; color: var(--ink); opacity: .82; margin-top: 2px; }
+  .fairy-name { font-family: 'Pacifico', cursive; font-size: clamp(1.35rem, 3.2vw, 2rem); color: var(--accent); text-shadow: 0 2px 0 rgba(255,255,255,.8); line-height: 1.15; }
+  .fairy-title { font: 700 .82rem 'Noto Sans KR', sans-serif; color: var(--ink); opacity: .82; margin-top: 5px; }
   .day-badge { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,.68); border: 2px solid rgba(255,255,255,.86); font: 700 .95rem 'Noto Sans KR', sans-serif; white-space: nowrap; }
   .showcase { display: grid; grid-template-columns: minmax(250px, .9fr) minmax(280px, 1.1fr); gap: 14px; align-items: center; }
   .fairy-stage { position: relative; min-height: 438px; display: grid; place-items: center; border-radius: 8px; overflow: hidden; background: radial-gradient(circle at 50% 32%, rgba(255,255,255,.9), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.38), rgba(255,255,255,.08)); }
@@ -224,16 +265,16 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .collection-card { padding: 16px; background: rgba(255,255,255,.66); }
   .collection-title { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 12px; }
-  .collection-title h2 { font-family: 'Noto Sans KR', sans-serif; font-weight: 900; color: var(--accent); font-size: 1.45rem; }
-  .item-progress { font: 700 1rem 'Noto Sans KR', sans-serif; color: var(--ink); }
-  .item-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
-  .item-slot { aspect-ratio: 1; min-height: 72px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; border: 2px solid rgba(110,75,145,.16); background: rgba(255,255,255,.52); position: relative; overflow: hidden; }
+  .collection-title h2 { font-family: 'Noto Sans KR', sans-serif; font-weight: 900; color: var(--accent); font-size: 1.1rem; white-space: nowrap; }
+  .item-progress { font: 700 .82rem 'Noto Sans KR', sans-serif; color: var(--ink); white-space: nowrap; text-align: right; }
+  .item-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+  .item-slot { aspect-ratio: 1; min-height: 52px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center; border: 2px solid rgba(110,75,145,.16); background: rgba(255,255,255,.52); position: relative; overflow: hidden; }
   .item-slot.locked { filter: grayscale(.9); opacity: .45; }
   .item-slot.unlocked { background: linear-gradient(145deg, #fff8cf, #fff); border-color: var(--accent); box-shadow: 0 0 14px rgba(255,215,106,.48); }
   .item-slot.new { animation: slotSparkle 1.2s ease-out; }
   @keyframes slotSparkle { 0% { transform: scale(.72) rotate(-4deg); filter: brightness(1.8); } 55% { transform: scale(1.09) rotate(2deg); } 100% { transform: scale(1); } }
-  .item-emoji { font-size: 1.8rem; line-height: 1; }
-  .item-name { font: 700 .76rem 'Noto Sans KR', sans-serif; line-height: 1.05; padding: 0 2px; }
+  .item-emoji { font-size: 1.4rem; line-height: 1; }
+  .item-name { font: 700 .62rem 'Noto Sans KR', sans-serif; line-height: 1.05; padding: 0 2px; }
   .next-item-hint { margin-top: 12px; padding: 11px 12px; border-radius: 8px; background: rgba(255,255,255,.62); border: 1px solid rgba(255,255,255,.86); font: 700 1rem 'Noto Sans KR', sans-serif; text-align: center; }
   .progress-wrap { margin-top: 14px; }
   .progress-bar { height: 15px; background: rgba(72,38,112,.14); border-radius: 999px; overflow: hidden; border: 2px solid rgba(255,255,255,.76); }
@@ -483,7 +524,7 @@
   <aside class="room-sidebar" id="roomSidebar">
     <div class="room-header">
       <span class="room-title-text">✨ Lily's Room</span>
-      <span class="room-pts-badge" id="roomPtsBadge">💰 0 pt</span>
+      <span class="room-pts-badge" id="roomPtsBadge" ondblclick="resetRoomData()" style="cursor:pointer" title="더블클릭: 초기화">💰 0 pt</span>
     </div>
     <div class="room-body">
       <nav class="room-nav">
@@ -508,7 +549,41 @@
           <span class="rnb-label">효과</span>
         </button>
       </nav>
-      <div class="room-canvas" id="roomCanvas"></div>
+      <div class="room-canvas" id="roomCanvas">
+        <!-- 꾹 눌러 삭제 컨텍스트 메뉴 -->
+        <div class="rc-ctx-menu" id="rcCtxMenu" style="display:none">
+          <button class="rc-ctx-btn danger" onclick="removeFromRoom(window._ctxItemId)">🗑️ 방에서 제거</button>
+          <button class="rc-ctx-btn" onclick="closeCtxMenu()">취소</button>
+        </div>
+      </div>
+    </div>
+    <!-- 쪽지 보드 -->
+    <div class="room-msg-board" id="roomMsgBoard">
+      <div class="rmb-header">
+        <span class="rmb-title">💌 쪽지 보드</span>
+        <button class="rmb-add-btn" onclick="showMsgInput()">＋</button>
+      </div>
+      <div class="rmb-card empty" id="rmbCard">아직 쪽지가 없어요 💌</div>
+      <div class="rmb-nav" id="rmbNav" style="display:none">
+        <button class="rmb-nav-btn" id="rmbPrev" onclick="prevMsg()">◁</button>
+        <span class="rmb-counter" id="rmbCounter">1/1</span>
+        <button class="rmb-nav-btn" id="rmbNext" onclick="nextMsg()">▷</button>
+        <button class="rmb-del-btn" onclick="deleteMsg()" title="삭제">🗑</button>
+      </div>
+      <!-- 쪽지 입력 오버레이 -->
+      <div class="rmb-overlay" id="rmbOverlay" style="display:none" onclick="closeMsgInput(event)">
+        <div class="rmb-input-box" onclick="event.stopPropagation()">
+          <div class="rmb-from-row">
+            <button class="rmb-from-btn active" id="rmbFromMom" onclick="setMsgFrom('mom')">👩 엄마</button>
+            <button class="rmb-from-btn" id="rmbFromLily" onclick="setMsgFrom('lily')">🧚 Lily</button>
+          </div>
+          <textarea class="rmb-textarea" id="rmbTextarea" rows="3" placeholder="쪽지를 써주세요..."></textarea>
+          <div class="rmb-submit-row">
+            <button class="rmb-cancel-btn" onclick="closeMsgInput(null)">취소</button>
+            <button class="rmb-send-btn" onclick="submitMsg()">보내기 💌</button>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="room-footer">
       <div class="room-unlock-slots" id="roomUnlockSlots"></div>
@@ -812,6 +887,9 @@ let newItemIdxForRender = -1;
 let history = [];
 let points = 0;
 let shopOwned = [];
+let roomPlaced = [];
+let messages = [];
+let msgIndex = 0;
 let currentShopCat = 'theme';
 let itemPositions = {};
 
@@ -820,7 +898,11 @@ function applyParsed(parsed) {
   history = parsed.history || [];
   points = typeof parsed.points === 'number' ? parsed.points : 0;
   shopOwned = Array.isArray(parsed.shopOwned) ? parsed.shopOwned : [];
+  // roomPlaced: 없으면 shopOwned 전체를 기본값으로 (기존 데이터 호환)
+  roomPlaced = Array.isArray(parsed.roomPlaced) ? parsed.roomPlaced : [...shopOwned];
   itemPositions = (parsed.itemPositions && typeof parsed.itemPositions === 'object') ? parsed.itemPositions : {};
+  messages = Array.isArray(parsed.messages) ? parsed.messages : [];
+  if (msgIndex >= messages.length) msgIndex = Math.max(0, messages.length - 1);
   DAYS.forEach(day => {
     if (!Array.isArray(data[day])) data[day] = [];
     data[day] = data[day].slice(0, MAX_TASKS).map(task => ({ text: String(task.text || ''), done: !!task.done }));
@@ -850,7 +932,7 @@ function loadData() {
 }
 
 function saveData() {
-  const payload = { data, history, points, shopOwned, itemPositions };
+  const payload = { data, history, points, shopOwned, roomPlaced, itemPositions, messages };
   db.ref(DB_REF).set(payload).catch(e => console.error('Firebase 저장 오류:', e));
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); } catch(e) {}
 }
@@ -1426,7 +1508,7 @@ function renderRoom() {
   const theme = getActiveTheme();
   const unlockedItems = getLilyUnlockedItems();
 
-  const ownedItems = shopOwned.map(id => SHOP_ITEMS.find(it => it.id === id)).filter(Boolean);
+  const ownedItems = roomPlaced.map(id => SHOP_ITEMS.find(it => it.id === id)).filter(Boolean);
   const wallItems  = ownedItems.filter(it => getItemZone(it) === 'wall');
   const floorItems = ownedItems.filter(it => getItemZone(it) === 'floor');
   const petItems   = ownedItems.filter(it => getItemZone(it) === 'pet');
@@ -1458,6 +1540,7 @@ function renderRoom() {
       const x = 4 + i * spread;
       const y = 6 + (i % 2) * 16;
       html += `<div class="rc-item rc-draggable" data-id="${item.id}" style="${itemPosStyle(item, x, y)}">
+        <button class="rc-del-btn" onclick="removeFromRoom('${item.id}')">×</button>
         <span class="rc-item-emoji" style="font-size:2.6rem">${item.emoji}</span>
       </div>`;
     });
@@ -1467,6 +1550,7 @@ function renderRoom() {
     petItems.forEach((item, i) => {
       const x = 3 + i * 14;
       html += `<div class="rc-item pet rc-draggable" data-id="${item.id}" style="${itemPosStyleB(item, x, 47)}">
+        <button class="rc-del-btn" onclick="removeFromRoom('${item.id}')">×</button>
         <span class="rc-item-emoji" style="font-size:2.8rem">${item.emoji}</span>
       </div>`;
     });
@@ -1479,6 +1563,7 @@ function renderRoom() {
       const x = startX + i * spread;
       const yOff = (i % 2) * 4;
       html += `<div class="rc-item rc-draggable" data-id="${item.id}" style="${itemPosStyleB(item, x, 46 + yOff)}">
+        <button class="rc-del-btn" onclick="removeFromRoom('${item.id}')">×</button>
         <span class="rc-item-emoji" style="font-size:2.4rem">${item.emoji}</span>
       </div>`;
     });
@@ -1500,7 +1585,8 @@ function renderRoom() {
   }
 
   const avatarItems = ownedItems.filter(it => getItemZone(it) === 'avatar');
-  html += `<div class="rc-lily">${buildLilyAvatarSVG(unlockedItems, avatarItems)}</div>`;
+  const lilyPos = itemPositions['__lily__'] || { x: 28, y: 18 };
+  html += `<div class="rc-lily rc-draggable" data-id="__lily__" style="left:${lilyPos.x}%;top:${lilyPos.y}%">${buildLilyAvatarSVG(unlockedItems, avatarItems)}</div>`;
 
   scene.innerHTML = html;
 
@@ -1509,7 +1595,7 @@ function renderRoom() {
 
 /* ── DRAG TO REPOSITION ── */
 function makeDraggable(el, container) {
-  let startClientX, startClientY, startLeft, startTop;
+  let startClientX, startClientY, startLeft, startTop, didDrag = false;
 
   function getClient(e) {
     return e.touches ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
@@ -1519,11 +1605,11 @@ function makeDraggable(el, container) {
   function onStart(e) {
     e.preventDefault();
     e.stopPropagation();
+    didDrag = false;
     const { x, y } = getClient(e);
     startClientX = x;
     startClientY = y;
     const rect = container.getBoundingClientRect();
-    // Normalize: always work with top (convert bottom to top if needed)
     if (el.style.bottom && el.style.bottom !== 'auto') {
       const elRect = el.getBoundingClientRect();
       el.style.top = ((elRect.top - rect.top) / rect.height * 100) + '%';
@@ -1543,6 +1629,10 @@ function makeDraggable(el, container) {
   function onMove(e) {
     e.preventDefault();
     const { x, y } = getClient(e);
+    if (Math.abs(x - startClientX) > 8 || Math.abs(y - startClientY) > 8) {
+      didDrag = true;
+    }
+    if (!didDrag) return;
     const rect = container.getBoundingClientRect();
     const newLeft = Math.max(0, Math.min(88, startLeft + (x - startClientX) / rect.width  * 100));
     const newTop  = Math.max(0, Math.min(88, startTop  + (y - startClientY) / rect.height * 100));
@@ -1558,7 +1648,17 @@ function makeDraggable(el, container) {
     el.style.zIndex = '6';
     el.classList.remove('dragging');
     const id = el.dataset.id;
-    if (id) {
+    if (!didDrag && id !== '__lily__') {
+      // 탭 → 선택 토글 (× 버튼 표시/숨김)
+      const isSelected = el.classList.contains('selected');
+      document.querySelectorAll('.rc-draggable.selected').forEach(e => e.classList.remove('selected'));
+      if (!isSelected) {
+        el.classList.add('selected');
+        setTimeout(() => document.addEventListener('click', function deselectAll() {
+          document.querySelectorAll('.rc-draggable.selected').forEach(e => e.classList.remove('selected'));
+        }, { once: true }), 50);
+      }
+    } else if (id) {
       itemPositions[id] = { x: parseFloat(el.style.left), y: parseFloat(el.style.top) };
       saveData();
     }
@@ -1566,6 +1666,113 @@ function makeDraggable(el, container) {
 
   el.addEventListener('mousedown', onStart);
   el.addEventListener('touchstart', onStart, { passive: false });
+}
+
+/* ── 방 아이템 제거 / 배치 ── */
+function removeFromRoom(id) {
+  if (!id) return;
+  roomPlaced = roomPlaced.filter(x => x !== id);
+  delete itemPositions[id];
+  saveData();
+  closeCtxMenu();
+  renderPointsAndRoom();
+  renderShop();
+}
+
+function placeItem(id) {
+  if (!roomPlaced.includes(id)) {
+    roomPlaced.push(id);
+    saveData();
+    renderPointsAndRoom();
+    renderShop();
+    showToast('✨ 방에 배치했어요!');
+  }
+}
+
+function closeCtxMenu() {
+  const menu = document.getElementById('rcCtxMenu');
+  if (menu) menu.style.display = 'none';
+  window._ctxItemId = null;
+}
+
+function closeCtxOnOutside() { closeCtxMenu(); }
+
+/* ── 쪽지 보드 ── */
+let _msgFrom = 'mom';
+
+function showMsgInput() {
+  setMsgFrom('mom');
+  document.getElementById('rmbTextarea').value = '';
+  document.getElementById('rmbOverlay').style.display = 'flex';
+  setTimeout(() => document.getElementById('rmbTextarea').focus(), 100);
+}
+
+function closeMsgInput(e) {
+  if (e === null || !e || e.target === document.getElementById('rmbOverlay')) {
+    document.getElementById('rmbOverlay').style.display = 'none';
+  }
+}
+
+function setMsgFrom(who) {
+  _msgFrom = who;
+  document.getElementById('rmbFromMom').classList.toggle('active', who === 'mom');
+  document.getElementById('rmbFromLily').classList.toggle('active', who === 'lily');
+}
+
+function submitMsg() {
+  const text = document.getElementById('rmbTextarea').value.trim();
+  if (!text) return;
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+  messages.push({ id: Date.now(), text, from: _msgFrom, date: dateStr });
+  msgIndex = messages.length - 1;
+  saveData();
+  renderMessages();
+  document.getElementById('rmbOverlay').style.display = 'none';
+}
+
+function deleteMsg() {
+  if (!messages.length) return;
+  messages.splice(msgIndex, 1);
+  msgIndex = Math.max(0, Math.min(msgIndex, messages.length - 1));
+  saveData();
+  renderMessages();
+}
+
+function prevMsg() { if (msgIndex > 0) { msgIndex--; renderMessages(); } }
+function nextMsg() { if (msgIndex < messages.length - 1) { msgIndex++; renderMessages(); } }
+
+function renderMessages() {
+  const card = document.getElementById('rmbCard');
+  const nav = document.getElementById('rmbNav');
+  const counter = document.getElementById('rmbCounter');
+  const prevBtn = document.getElementById('rmbPrev');
+  const nextBtn = document.getElementById('rmbNext');
+  if (!card) return;
+  if (!messages.length) {
+    card.innerHTML = '아직 쪽지가 없어요 💌';
+    card.className = 'rmb-card empty';
+    if (nav) nav.style.display = 'none';
+    return;
+  }
+  const msg = messages[msgIndex];
+  const fromLabel = msg.from === 'mom' ? '👩 엄마' : '🧚 Lily';
+  card.className = 'rmb-card';
+  card.innerHTML = `<div class="rmb-from">${fromLabel} · ${msg.date}</div>${msg.text}`;
+  if (nav) {
+    nav.style.display = 'flex';
+    counter.textContent = `${msgIndex + 1}/${messages.length}`;
+    prevBtn.disabled = msgIndex === 0;
+    nextBtn.disabled = msgIndex === messages.length - 1;
+  }
+}
+
+/* ── 구매 아이템 초기화 (포인트 유지) ── */
+function resetRoomData() {
+  if (!confirm('구매한 아이템을 모두 초기화할까요? (포인트는 유지돼요)')) return;
+  shopOwned = []; roomPlaced = []; itemPositions = {};
+  saveData(); renderPointsAndRoom(); renderShop();
+  showToast('아이템 초기화 완료!');
 }
 
 /* ── POINTS RENDER ── */
@@ -1586,16 +1793,27 @@ function renderShop() {
   const items = SHOP_ITEMS.filter(it => it.cat === currentShopCat);
   document.getElementById('shopGrid').innerHTML = items.map(item => {
     const owned = shopOwned.includes(item.id);
+    const placed = roomPlaced.includes(item.id);
     const canAfford = points >= item.price;
+    let action = '';
+    if (!owned) {
+      action = `<button class="shop-buy-btn" ${canAfford ? '' : 'disabled'} onclick="purchaseItem('${item.id}')">${canAfford ? '구매하기 ✨' : '포인트 부족'}</button>`;
+    } else if (!placed) {
+      const placeLabel = item.cat === 'avatar' ? '✚ 착용하기' : '✚ 배치하기';
+      action = `<button class="shop-place-btn" onclick="placeItem('${item.id}')">${placeLabel}</button>`;
+    } else {
+      if (item.cat === 'avatar') {
+        action = `<button class="shop-place-btn" style="background:rgba(220,80,80,.15);color:#c0392b;border-color:#e88" onclick="removeFromRoom('${item.id}')">✕ 해제하기</button>`;
+      } else {
+        action = `<div class="shop-owned-badge">✓ 배치 중</div>`;
+      }
+    }
     return `<div class="shop-item-card ${owned ? 'owned' : ''} ${!owned && !canAfford ? 'unaffordable' : ''}">
       <div class="shop-item-emoji">${item.emoji}</div>
       <div class="shop-item-name">${item.name}</div>
       <div class="shop-item-desc">${item.desc}</div>
       <div class="shop-item-price">💰 ${item.price} pt</div>
-      ${owned
-        ? `<div class="shop-owned-badge">✓ 보유 중</div>`
-        : `<button class="shop-buy-btn" ${canAfford ? '' : 'disabled'} onclick="purchaseItem('${item.id}')">${canAfford ? '구매하기 ✨' : '포인트 부족'}</button>`
-      }
+      ${action}
     </div>`;
   }).join('');
 }
@@ -1615,6 +1833,7 @@ function purchaseItem(id) {
   if (!item || shopOwned.includes(id) || points < item.price) return;
   points -= item.price;
   shopOwned.push(id);
+  roomPlaced.push(id);
   saveData();
   showToast(`🎉 ${item.emoji} ${item.name} 구매 완료!`);
   renderPointsAndRoom();
@@ -1970,6 +2189,7 @@ function render() {
   renderTodos();
   renderShop();
   renderCalendar();
+  renderMessages();
 }
 
 document.querySelectorAll('.mode-btn').forEach(btn => {
