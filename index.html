@@ -893,6 +893,8 @@ let messages = [];
 let msgIndex = 0;
 let currentShopCat = 'theme';
 let itemPositions = {};
+let rewardedDays = [];      // 이번 주에 +30 요정 보너스를 이미 받은 요일
+let weekBonusGiven = false; // 이번 주 +100 보너스 지급 여부
 
 function applyParsed(parsed) {
   data = parsed.data || {};
@@ -904,9 +906,11 @@ function applyParsed(parsed) {
   itemPositions = (parsed.itemPositions && typeof parsed.itemPositions === 'object') ? parsed.itemPositions : {};
   messages = Array.isArray(parsed.messages) ? parsed.messages : [];
   if (msgIndex >= messages.length) msgIndex = Math.max(0, messages.length - 1);
+  rewardedDays = Array.isArray(parsed.rewardedDays) ? parsed.rewardedDays : [];
+  weekBonusGiven = !!parsed.weekBonusGiven;
   DAYS.forEach(day => {
     if (!Array.isArray(data[day])) data[day] = [];
-    data[day] = data[day].slice(0, MAX_TASKS).map(task => ({ text: String(task.text || ''), done: !!task.done }));
+    data[day] = data[day].slice(0, MAX_TASKS).map(task => ({ text: String(task.text || ''), done: !!task.done, rewarded: !!task.rewarded }));
   });
 }
 
@@ -933,7 +937,7 @@ function loadData() {
 }
 
 function saveData() {
-  const payload = { data, history, points, shopOwned, roomPlaced, itemPositions, messages };
+  const payload = { data, history, points, shopOwned, roomPlaced, itemPositions, messages, rewardedDays, weekBonusGiven };
   db.ref(DB_REF).set(payload).catch(e => console.error('Firebase 저장 오류:', e));
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); } catch(e) {}
 }
@@ -2095,12 +2099,11 @@ function toggleTodo(idx) {
   const wasComplete = isFairyComplete(currentDay);
   const prevDone = taskCounts(currentDay).done;
   todos[idx].done = !todos[idx].done;
-  // Points: +10 on check, -10 on uncheck (min 0)
-  if (todos[idx].done) {
+  // Points: 한 미션당 처음 완료할 때 딱 한 번만 +10. 해제/재체크에는 변동 없음.
+  if (todos[idx].done && !todos[idx].rewarded) {
+    todos[idx].rewarded = true;
     points += 10;
     showToast(`✅ +10 pt 획득! (총 ${points} pt)`);
-  } else {
-    points = Math.max(0, points - 10);
   }
   saveData();
   const now = taskCounts(currentDay);
@@ -2108,10 +2111,12 @@ function toggleTodo(idx) {
     const itemIdx = Math.min(now.done - 1, MAX_TASKS - 1);
     newItemIdxForRender = itemIdx;
     const item = FAIRIES[currentDay].items[itemIdx];
-    showToast(`${item[0]} ${FAIRIES[currentDay].name} unlocked ${item[1]}! 💰 +10pt`);
+    showToast(`${item[0]} ${FAIRIES[currentDay].name} unlocked ${item[1]}!`);
   }
   render();
-  if (!wasComplete && isFairyComplete(currentDay)) {
+  // 요정 완성 보너스 +30: 이번 주에 해당 요일이 처음 완성됐을 때만 1회
+  if (!wasComplete && isFairyComplete(currentDay) && !rewardedDays.includes(currentDay)) {
+    rewardedDays.push(currentDay);
     points += 30;
     saveData();
     const nowWeekDone = isWeekAllDone();
@@ -2127,6 +2132,8 @@ function recordWeekAndReset() {
   const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
   history.push({ weekNum: history.length + 1, completedDays: completedDaysArr, doneCount, success, date: dateStr });
   DAYS.forEach(day => { data[day] = []; });
+  rewardedDays = [];      // 새 주: 요정 보너스 기록 초기화
+  weekBonusGiven = false; // 새 주: 주간 보너스 다시 받을 수 있게
   saveData(); render();
   // Show new item unlock toast if applicable
   const newItemIdx = successfulWeekCount() - 1;
@@ -2148,8 +2155,12 @@ function showFairyTransformed() {
 }
 
 function showPartyTime() {
-  points += 100;
-  saveData();
+  // 주간 보너스 +100: 이번 주에 한 번만 지급
+  if (!weekBonusGiven) {
+    weekBonusGiven = true;
+    points += 100;
+    saveData();
+  }
   document.getElementById('celebrationEmoji').textContent = '🌈☀️❄️💨☁️🌫️⚡💧';
   document.getElementById('celebrationTitle').textContent = 'Magical Sky Celebration!';
   document.getElementById('celebrationMsg').innerHTML = '7명의 Weather Fairy가 모두 완성됐어요!<br>Lily의 일주일 하늘에 무지개 축제가 열렸어요!<br><br>💰 <strong>100 보너스 포인트 획득!</strong> (총 ' + points + ' pt)<br><br><button onclick="recordWeekAndReset()" style="margin-top:6px;border:0;border-radius:999px;padding:10px 22px;color:white;background:linear-gradient(135deg,#9d6eff,#ff7eb3);font:700 1rem Fredoka,sans-serif;cursor:pointer;">🌟 다음 주 시작하기</button>';
