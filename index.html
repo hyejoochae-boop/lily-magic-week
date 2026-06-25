@@ -895,6 +895,7 @@ let currentShopCat = 'theme';
 let itemPositions = {};
 let rewardedDays = [];      // 이번 주에 +30 요정 보너스를 이미 받은 요일
 let weekBonusGiven = false; // 이번 주 +100 보너스 지급 여부
+let _firebaseLoaded = false; // Firebase 첫 로드 완료 여부
 
 function applyParsed(parsed) {
   data = parsed.data || {};
@@ -929,16 +930,29 @@ function loadData() {
   db.ref(DB_REF).on('value', snapshot => {
     const fbData = snapshot.val();
     if (fbData) {
+      const localMsgs = messages; // Firebase 덮어쓰기 전 현재 쪽지 보존
       applyParsed(fbData);
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(fbData)); } catch(e) {}
+      // Firebase가 쪽지를 지웠을 경우(네트워크 오류/롤백) 로컬 쪽지 복원
+      if (localMsgs.length > messages.length) {
+        messages = localMsgs;
+        if (_firebaseLoaded) saveData(); // Firebase에 다시 동기화
+      } else {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(fbData)); } catch(e) {}
+      }
+      _firebaseLoaded = true;
       render();
+    } else {
+      _firebaseLoaded = true;
     }
   });
 }
 
 function saveData() {
   const payload = { data, history, points, shopOwned, roomPlaced, itemPositions, messages, rewardedDays, weekBonusGiven };
-  db.ref(DB_REF).set(payload).catch(e => console.error('Firebase 저장 오류:', e));
+  // Firebase 로드 전에는 localStorage만 업데이트 (race condition 방지)
+  if (_firebaseLoaded) {
+    db.ref(DB_REF).set(payload).catch(e => console.error('Firebase 저장 오류:', e));
+  }
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); } catch(e) {}
 }
 
