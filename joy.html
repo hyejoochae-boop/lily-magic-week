@@ -1,0 +1,2243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Joy's Wonderful Week - Weather Fairies</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Joy's Week">
+<meta name="theme-color" content="#f7a916">
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --sys-font: 'Noto Sans KR', sans-serif; }
+</style>
+<style>
+  :root {
+    --ink: #5a3200;
+    --violet: #f7a916;
+    --pink: #ff8c00;
+    --gold: #ffd76a;
+    --card: rgba(255, 255, 255, 0.78);
+    --glass: rgba(255, 255, 255, 0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { min-height: 100%; overscroll-behavior: none; -webkit-touch-callout: none; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    color: white;
+    background:
+      radial-gradient(circle at 12% 12%, rgba(255, 237, 152, 0.78) 0 9%, transparent 22%),
+      radial-gradient(circle at 85% 10%, rgba(255, 190, 30, 0.65) 0 11%, transparent 26%),
+      radial-gradient(circle at 72% 78%, rgba(255, 140, 20, 0.52) 0 14%, transparent 32%),
+      linear-gradient(180deg, #c96a00 0%, #e89030 42%, #ffe8a0 100%);
+    overflow-x: hidden;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  input { -webkit-user-select: text; user-select: text; }
+
+  .stars, .weather-drift { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .star { position: absolute; color: white; opacity: 0; animation: twinkle 3.4s infinite; text-shadow: 0 0 12px rgba(255, 235, 165, 0.95); }
+  .drift { position: absolute; opacity: 0.35; animation: driftAcross linear infinite; filter: drop-shadow(0 4px 10px rgba(255,255,255,0.35)); }
+  @keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.35) rotate(0); } 50% { opacity: 1; transform: scale(1.25) rotate(12deg); } }
+  @keyframes driftAcross { from { transform: translateX(-15vw); } to { transform: translateX(115vw); } }
+
+  .container { max-width: 1180px; margin: 0 auto; padding: 22px 16px 92px; position: relative; z-index: 2; }
+  header { text-align: center; margin-bottom: 18px; }
+  .title-main { font-family: 'Pacifico', cursive; font-size: clamp(1.9rem, 6vw, 3.6rem); color: #fff7cf; text-shadow: 0 3px 0 #c87800, 0 9px 26px rgba(120, 65, 0, 0.38), 0 0 28px rgba(255,255,255,0.75); line-height: 1.1; margin-bottom: 10px; }
+  .title-ribbon { display: inline-block; margin: 0 auto 8px; padding: 5px 28px 7px; border-radius: 999px; background: linear-gradient(90deg, rgba(255,140,0,.9), rgba(247,169,22,.92), rgba(114,205,255,.9)); border: 2px solid rgba(255,255,255,.72); box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 8px 24px rgba(130,70,0,.28); font-family: 'Noto Sans KR', sans-serif; font-size: clamp(.85rem, 2.4vw, 1.1rem); font-weight: 700; }
+  .title-sub { font-family: 'Noto Sans KR', sans-serif; font-size: 1.25rem; font-weight: 700; text-shadow: 0 2px 8px rgba(100,55,0,.35); }
+
+  /* ── PAGE LAYOUT: 3:7 분할 ── */
+  .page-layout {
+    display: flex; height: 100vh; height: 100dvh;
+    overflow: hidden; position: relative; z-index: 1;
+  }
+
+  /* ── LEFT 30%: Room Sidebar ── */
+  .room-sidebar {
+    width: 30%; min-width: 210px; max-width: 340px;
+    height: 100%; display: flex; flex-direction: column;
+    overflow: hidden; flex-shrink: 0;
+    background: linear-gradient(180deg, rgba(170,85,0,0.9) 0%, rgba(130,60,0,0.95) 100%);
+    border-right: 5px solid rgba(255,255,255,.35);
+    box-shadow: 4px 0 16px rgba(0,0,0,.35);
+    position: relative; z-index: 5;
+  }
+  .room-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 9px 10px 7px; background: rgba(0,0,0,.32);
+    border-bottom: 1px solid rgba(255,255,255,.13); flex-shrink: 0;
+  }
+  .room-title-text { font: 700 0.78rem 'Noto Sans KR', sans-serif; color: white; }
+  .room-pts-badge {
+    font: 900 0.8rem 'Noto Sans KR', sans-serif; color: #ffd76a;
+    background: rgba(0,0,0,.38); padding: 3px 9px; border-radius: 999px;
+    border: 1px solid rgba(255,215,106,.35);
+  }
+  .room-body { display: flex; flex: 1; overflow: hidden; }
+
+  /* Mini nav column */
+  .room-nav {
+    width: 46px; display: flex; flex-direction: column;
+    align-items: center; gap: 5px; padding: 10px 3px;
+    background: rgba(0,0,0,.28); border-right: 1px solid rgba(255,255,255,.09);
+    flex-shrink: 0; overflow-y: auto;
+  }
+  .room-nav::-webkit-scrollbar { width: 0; }
+  .room-nav-btn {
+    width: 40px; display: flex; flex-direction: column;
+    align-items: center; gap: 2px; padding: 6px 2px;
+    border-radius: 10px; background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.12);
+    cursor: pointer; color: white; transition: background .2s;
+  }
+  .room-nav-btn:hover, .room-nav-btn.active {
+    background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.36);
+  }
+  .room-nav-btn .rnb-icon { font-size: 1.1rem; line-height: 1; }
+  .room-nav-btn .rnb-label { font: 700 0.46rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.72); text-align: center; }
+
+  /* ── ROOM CANVAS ── */
+  .room-canvas { flex: 1; position: relative; overflow: hidden; }
+
+  .rc-wall { position: absolute; top: 0; left: 0; right: 0; height: 57%; transition: background .5s; }
+  .rc-floor { position: absolute; bottom: 0; left: 0; right: 0; height: 45%; transition: background .5s; }
+  .rc-baseboard { position: absolute; left: 0; right: 0; top: calc(57% - 5px); height: 10px; z-index: 2; transition: background .5s; }
+  .rc-floor-grain { position: absolute; bottom: 0; left: 0; right: 0; height: 45%; pointer-events: none; z-index: 1; }
+  .rc-floor-line { position: absolute; left: 0; right: 0; height: 1px; background: rgba(0,0,0,.13); }
+  .rc-wallpaper {
+    position: absolute; top: 0; left: 0; right: 0; height: 57%;
+    pointer-events: none; z-index: 1;
+    display: flex; align-items: center; justify-content: space-around;
+    flex-wrap: wrap; padding: 4px; gap: 3px; font-size: 1rem; opacity: .13; overflow: hidden;
+  }
+
+  /* Window */
+  .rc-window { position: absolute; top: 4%; left: 50%; transform: translateX(-50%); width: 46%; height: 44%; z-index: 3; }
+  .rc-window-inner { position: absolute; inset: 0; border-radius: 3px 3px 0 0; overflow: hidden; }
+  .rc-window-sky { width: 100%; height: 100%; transition: background .5s; }
+  .rc-window-cross-h { position: absolute; top: 50%; left: 0; right: 0; height: 4px; background: rgba(255,255,255,.65); z-index: 2; transform: translateY(-50%); }
+  .rc-window-cross-v { position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; background: rgba(255,255,255,.65); z-index: 2; transform: translateX(-50%); }
+  .rc-window-frame { position: absolute; inset: 0; border: 4px solid; border-radius: 3px 3px 0 0; z-index: 3; }
+  .rc-curtain-l, .rc-curtain-r { position: absolute; top: -6%; height: 112%; width: 28%; z-index: 4; transition: background .5s; }
+  .rc-curtain-l { left: -14%; border-radius: 0 48% 44% 0; }
+  .rc-curtain-r { right: -14%; border-radius: 48% 0 0 44%; }
+
+  /* Hanging lamp */
+  .rc-lamp { position: absolute; top: 0; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 5; pointer-events: none; }
+  .rc-lamp-chain { width: 2px; height: 18px; background: rgba(255,255,255,.45); }
+  .rc-lamp-body { font-size: 1.5rem; line-height: 1; animation: lampGlow 2.8s ease-in-out infinite; }
+  @keyframes lampGlow { 0%,100%{filter:drop-shadow(0 0 5px rgba(255,220,100,.3))} 50%{filter:drop-shadow(0 0 14px rgba(255,220,100,.75))} }
+
+  /* Lily in room */
+  .rc-lily { position: absolute; width: 90%; max-width: 200px; z-index: 8; cursor: grab; touch-action: none; }
+  .rc-lily svg { width: 100%; height: auto; overflow: visible; }
+
+  /* Room items */
+  .rc-item { position: absolute; text-align: center; z-index: 6; }
+  .rc-item-emoji { display: block; line-height: 1; filter: drop-shadow(0 6px 10px rgba(0,0,0,.55)) drop-shadow(0 2px 4px rgba(0,0,0,.35)); }
+  .rc-item-label { display: none; }
+  .rc-item.pet .rc-item-emoji { animation: petBounce2 1.8s ease-in-out infinite; }
+  @keyframes petBounce2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+  .rc-draggable { cursor: grab; touch-action: none; }
+  .rc-draggable:hover .rc-item-emoji { filter: drop-shadow(0 6px 14px rgba(157,110,255,.7)) drop-shadow(0 2px 4px rgba(0,0,0,.4)); transform: scale(1.12); transition: transform .15s; }
+  .rc-draggable.dragging { cursor: grabbing; opacity: .88; }
+  .rc-del-btn { display: none; position: absolute; top: -8px; right: -8px; width: 20px; height: 20px; border-radius: 50%; background: rgba(220,50,50,.9); color: #fff; font-size: .75rem; font-weight: 700; border: 1.5px solid #fff; cursor: pointer; align-items: center; justify-content: center; z-index: 30; line-height: 1; }
+  .rc-draggable.selected .rc-del-btn { display: flex; }
+  .rc-draggable.selected .rc-item-emoji { filter: drop-shadow(0 0 8px rgba(255,200,80,.9)); transform: scale(1.1); }
+
+  /* FX + dialogue */
+  .rc-fx { position: absolute; inset: 0; pointer-events: none; z-index: 10; overflow: hidden; }
+  .rc-fx-particle { position: absolute; animation: rcFxFloat linear infinite; }
+  @keyframes rcFxFloat { 0%{transform:translateY(0) rotate(0);opacity:.85} 100%{transform:translateY(-110%) rotate(45deg);opacity:0} }
+  .rc-dialogue { position: absolute; bottom: 2%; left: 3%; right: 3%; background: rgba(4,2,12,.82); border: 1.5px solid rgba(255,255,255,.22); border-radius: 10px; padding: 6px 10px; z-index: 15; backdrop-filter: blur(4px); }
+  .rc-dialogue-text { font: 700 0.6rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.9); line-height: 1.5; }
+
+  /* ── 쪽지 보드 ── */
+  .room-msg-board { flex-shrink: 0; background: rgba(255,255,255,.13); border-top: 1px solid rgba(255,255,255,.2); padding: 10px 10px 8px; }
+  .rmb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .rmb-title { font: 700 .68rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.9); }
+  .rmb-add-btn { background: rgba(255,255,255,.22); border: 1px solid rgba(255,255,255,.4); border-radius: 50%; width: 22px; height: 22px; color: white; font-size: .9rem; cursor: pointer; line-height: 1; display: flex; align-items: center; justify-content: center; }
+  .rmb-add-btn:hover { background: rgba(255,255,255,.38); }
+  .rmb-card { background: rgba(255,255,255,.15); border-radius: 8px; padding: 8px 10px; min-height: 68px; font: 500 .68rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.95); line-height: 1.45; word-break: break-all; }
+  .rmb-card.empty { color: rgba(255,255,255,.45); text-align: center; padding-top: 20px; font-size: .63rem; }
+  .rmb-from { font: 700 .6rem 'Noto Sans KR', sans-serif; color: rgba(255,230,150,.9); margin-bottom: 2px; }
+  .rmb-nav { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 5px; }
+  .rmb-nav-btn { background: rgba(255,255,255,.18); border: none; border-radius: 50%; width: 22px; height: 22px; color: white; font-size: .75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .rmb-nav-btn:hover { background: rgba(255,255,255,.32); }
+  .rmb-nav-btn:disabled { opacity: .3; cursor: default; }
+  .rmb-counter { font: 600 .62rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.6); min-width: 28px; text-align: center; }
+  .rmb-del-btn { background: rgba(255,80,80,.25); border: none; border-radius: 50%; width: 22px; height: 22px; color: rgba(255,180,180,.9); font-size: .7rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .rmb-del-btn:hover { background: rgba(255,80,80,.45); }
+  /* 쪽지 입력 오버레이 */
+  .rmb-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.6); z-index: 40; display: flex; align-items: flex-end; backdrop-filter: blur(3px); }
+  .rmb-input-box { background: #2d1060; border-radius: 14px 14px 0 0; padding: 14px 14px 18px; width: 100%; border-top: 2px solid rgba(255,255,255,.25); }
+  .rmb-from-row { display: flex; gap: 6px; margin-bottom: 9px; }
+  .rmb-from-btn { flex: 1; padding: 6px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1); color: rgba(255,255,255,.7); font: 700 .75rem 'Noto Sans KR', sans-serif; cursor: pointer; }
+  .rmb-from-btn.active { background: rgba(255,215,106,.25); border-color: #ffd76a; color: #ffd76a; }
+  .rmb-textarea { width: 100%; background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.25); border-radius: 8px; color: white; font: 500 .8rem 'Noto Sans KR', sans-serif; padding: 8px 10px; resize: none; box-sizing: border-box; outline: none; }
+  .rmb-textarea::placeholder { color: rgba(255,255,255,.35); }
+  .rmb-submit-row { display: flex; gap: 6px; margin-top: 8px; }
+  .rmb-cancel-btn { flex: 1; padding: 8px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,.25); background: rgba(255,255,255,.08); color: rgba(255,255,255,.7); font: 700 .75rem 'Noto Sans KR', sans-serif; cursor: pointer; }
+  .rmb-send-btn { flex: 2; padding: 8px; border-radius: 8px; border: none; background: linear-gradient(90deg, #f7a916, #ff9dca); color: white; font: 700 .75rem 'Noto Sans KR', sans-serif; cursor: pointer; }
+  /* 꾹 눌러 삭제 컨텍스트 메뉴 */
+  .rc-ctx-menu { position: absolute; z-index: 50; background: rgba(20,5,45,.95); border: 1.5px solid rgba(255,255,255,.25); border-radius: 10px; padding: 6px; display: flex; flex-direction: column; gap: 4px; backdrop-filter: blur(6px); min-width: 100px; }
+  .rc-ctx-btn { background: rgba(255,255,255,.1); border: none; border-radius: 7px; color: white; font: 600 .72rem 'Noto Sans KR', sans-serif; padding: 7px 10px; cursor: pointer; text-align: left; }
+  .rc-ctx-btn:hover { background: rgba(255,255,255,.2); }
+  .rc-ctx-btn.danger { color: #ff9dca; }
+  .rc-ctx-btn.danger:hover { background: rgba(255,80,100,.25); }
+  /* 배치하기 버튼 (상점) */
+  .shop-place-btn { background: linear-gradient(90deg,#4caf82,#3d9970); color: white; border: none; border-radius: 8px; padding: 6px 10px; font: 700 .8rem 'Noto Sans KR',sans-serif; cursor: pointer; width: 100%; margin-top: 4px; }
+  .shop-place-btn:hover { opacity: .85; }
+
+  /* Room footer */
+  .room-footer { padding: 7px 10px 6px; background: rgba(0,0,0,.3); border-top: 1px solid rgba(255,255,255,.1); flex-shrink: 0; }
+  .room-unlock-slots { display: flex; gap: 3px; flex-wrap: wrap; justify-content: center; margin-bottom: 3px; }
+  .rus-slot { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid rgba(255,255,255,.35); background: rgba(255,255,255,.1); font-size: .65rem; }
+  .rus-slot.filled { background: rgba(255,255,255,.75); border-color: rgba(255,255,255,.9); box-shadow: 0 0 7px rgba(255,215,106,.5); animation: slotAppear .5s ease; }
+  .room-week-label { text-align: center; font: 700 0.58rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.6); }
+
+  /* ── RIGHT 70%: Main scroll ── */
+  .main-scroll { flex: 1; height: 100%; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+  .main-scroll::-webkit-scrollbar { width: 5px; }
+  .main-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,.05); }
+  .main-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,.22); border-radius: 3px; }
+
+  @keyframes slotAppear { 0%{transform:scale(0) rotate(-20deg);filter:brightness(2)} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
+  @keyframes badgePop { 0%{transform:scale(0) rotate(-10deg)} 60%{transform:scale(1.12)} 100%{transform:scale(1)} }
+  .lily-item-badge { padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,.72); border: 2px solid rgba(255,255,255,.9); font: 700 .72rem 'Noto Sans KR', sans-serif; color: var(--ink); animation: badgePop .4s ease; white-space: nowrap; }
+
+  /* ─────────────── rest of styles (unchanged) ─────────────── */
+  .mode-switch { display: flex; justify-content: center; gap: 10px; margin: 16px 0; flex-wrap: wrap; }
+  .mode-btn { min-height: 44px; border: 2px solid rgba(255,255,255,.68); border-radius: 999px; padding: 10px 18px; background: rgba(255,255,255,.2); color: white; font: 700 1rem 'Noto Sans KR', sans-serif; cursor: pointer; box-shadow: 0 6px 16px rgba(105,58,0,.18); }
+  .mode-btn.active { background: linear-gradient(135deg, #fff4b5, #ffb830); color: var(--ink); transform: translateY(-1px); }
+
+  .weekly-sky { position: relative; overflow: hidden; margin-bottom: 18px; border-radius: 26px; border: 2px solid rgba(255,255,255,.58); background: linear-gradient(180deg, rgba(232,165,60,.78), rgba(255,235,150,.72)), linear-gradient(90deg, #c97000, #ffd76a); box-shadow: 0 18px 44px rgba(102,58,0,.24), inset 0 1px 0 rgba(255,255,255,.45); padding: 18px; min-height: 190px; }
+  .weekly-sky.complete { animation: completedGlow 2.6s ease-in-out infinite; }
+  .weekly-sky h2 { font-family: 'Noto Sans KR', sans-serif; font-weight: 900; font-size: 1.65rem; text-shadow: 0 2px 12px rgba(70,35,120,.45); }
+  .weekly-sub { margin-top: 4px; font-family: 'Noto Sans KR', sans-serif; font-size: 1.12rem; font-weight: 700; }
+  .weather-path { position: absolute; left: 24px; right: 24px; bottom: 18px; height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+  .weather-step { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font-size: 1.35rem; background: rgba(255,255,255,.44); border: 2px solid rgba(255,255,255,.65); color: var(--ink); z-index: 2; cursor: pointer; }
+  .weather-step.done { background: linear-gradient(135deg, #fff4a7, #fff); box-shadow: 0 0 20px rgba(255,235,130,.9); transform: scale(1.06); }
+  .weather-line { position: absolute; left: 44px; right: 44px; bottom: 38px; height: 7px; border-radius: 999px; background: linear-gradient(90deg, #7b57d5, #73c7ff, #fff17d, #ff8fc0); opacity: .62; }
+  .rainbow-arc { position: absolute; right: -40px; bottom: -74px; width: 420px; height: 210px; border-radius: 420px 420px 0 0; border-top: 18px solid #ff6a9f; border-left: 18px solid transparent; border-right: 18px solid transparent; opacity: .55; }
+  .rainbow-arc:before { content: ''; position: absolute; inset: 13px 11px auto; height: 170px; border-radius: 360px 360px 0 0; border-top: 16px solid #ffd76a; }
+  .rainbow-arc:after { content: ''; position: absolute; inset: 40px 38px auto; height: 125px; border-radius: 300px 300px 0 0; border-top: 15px solid #7fe0ff; }
+  .weekly-complete-panel { position: absolute; right: 18px; top: 18px; width: min(315px, calc(100% - 36px)); padding: 14px 16px; border-radius: 18px; background: rgba(255,255,255,.74); color: var(--ink); border: 2px solid rgba(255,255,255,.8); text-align: center; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+  .fairy-silhouettes { margin-top: 8px; display: flex; justify-content: center; gap: 4px; }
+  .fairy-dot { width: 24px; height: 34px; display: grid; place-items: center; opacity: .38; filter: grayscale(.65); }
+  .fairy-dot.done { opacity: 1; filter: none; text-shadow: 0 0 10px rgba(255,255,255,.95); }
+
+  .fairy-strip { display: grid; grid-template-columns: repeat(7, minmax(116px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .mini-card { border: 2px solid rgba(255,255,255,.62); border-radius: 8px; min-height: 188px; padding: 10px 8px; color: var(--ink); background: linear-gradient(160deg, var(--light), rgba(255,255,255,.86)); box-shadow: 0 10px 24px rgba(110,60,0,.18), inset 0 1px 0 rgba(255,255,255,.8); cursor: pointer; position: relative; overflow: hidden; }
+  .mini-card.active { border-color: #fff4a7; box-shadow: 0 0 0 3px rgba(255,215,106,.62), 0 15px 32px rgba(110,60,0,.24); transform: translateY(-2px); }
+  .mini-card.done { animation: completedGlow 2.3s ease-in-out infinite; }
+  .mini-card-name { font: 700 1.06rem 'Noto Sans KR', sans-serif; line-height: 1.05; }
+  .mini-card-title { font: 700 .78rem 'Noto Sans KR', sans-serif; opacity: .86; min-height: 28px; }
+  .mini-fairy { height: 96px; display: grid; place-items: center; }
+  .mini-fairy svg { width: 82px; height: 96px; overflow: visible; }
+  .mini-progress { display: flex; align-items: center; gap: 7px; margin-top: 7px; font: 700 .85rem 'Noto Sans KR', sans-serif; }
+  .mini-bar { flex: 1; height: 8px; border-radius: 999px; background: rgba(130,80,0,.15); overflow: hidden; border: 1px solid rgba(255,255,255,.7); }
+  .mini-fill { height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--accent), #fff4a7); }
+
+  .main-layout { display: grid; grid-template-columns: minmax(0, 1.28fr) minmax(300px, .72fr); gap: 18px; align-items: start; }
+  .fairy-card, .todo-card, .collection-card { border-radius: 8px; border: 2px solid rgba(255,255,255,.62); background: var(--card); color: var(--ink); box-shadow: 0 18px 42px rgba(110,60,0,.23), inset 0 1px 0 rgba(255,255,255,.72); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+  .fairy-card { padding: 18px; position: relative; overflow: hidden; background: linear-gradient(145deg, rgba(255,255,255,.78), var(--fairy-light)); }
+  .fairy-card.done { animation: completedGlow 2.4s ease-in-out infinite; }
+  @keyframes completedGlow { 0%, 100% { box-shadow: 0 18px 42px rgba(110,60,0,.23), 0 0 0 rgba(255,255,255,0); } 50% { box-shadow: 0 18px 42px rgba(110,60,0,.23), 0 0 34px rgba(255,244,167,.92); } }
+  .fairy-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+  .fairy-name { font-family: 'Pacifico', cursive; font-size: clamp(1.35rem, 3.2vw, 2rem); color: var(--accent); text-shadow: 0 2px 0 rgba(255,255,255,.8); line-height: 1.15; }
+  .fairy-title { font: 700 .82rem 'Noto Sans KR', sans-serif; color: var(--ink); opacity: .82; margin-top: 5px; }
+  .day-badge { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,.68); border: 2px solid rgba(255,255,255,.86); font: 700 .95rem 'Noto Sans KR', sans-serif; white-space: nowrap; }
+  .showcase { display: grid; grid-template-columns: minmax(250px, .9fr) minmax(280px, 1.1fr); gap: 14px; align-items: center; }
+  .fairy-stage { position: relative; min-height: 438px; display: grid; place-items: center; border-radius: 8px; overflow: hidden; background: radial-gradient(circle at 50% 32%, rgba(255,255,255,.9), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.38), rgba(255,255,255,.08)); }
+  .fairy-stage svg { width: min(360px, 100%); height: auto; overflow: visible; filter: drop-shadow(0 16px 22px rgba(130,80,0,.24)); }
+  .magic-effect { position: absolute; inset: 0; pointer-events: none; opacity: .9; }
+  .magic-effect .effect-symbol { position: absolute; animation: floatUp 2.4s ease-in-out infinite; }
+  @keyframes floatUp { 0%, 100% { transform: translateY(6px) scale(.95); opacity: .55; } 50% { transform: translateY(-12px) scale(1.08); opacity: 1; } }
+  .fairy-card.done .magic-effect:after { content: ''; position: absolute; inset: 14px; border-radius: 50%; border: 3px dashed rgba(255,255,255,.9); animation: spin 9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .collection-card { padding: 16px; background: rgba(255,255,255,.66); }
+  .collection-title { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 12px; }
+  .collection-title h2 { font-family: 'Noto Sans KR', sans-serif; font-weight: 900; color: var(--accent); font-size: 1.1rem; white-space: nowrap; }
+  .item-progress { font: 700 .82rem 'Noto Sans KR', sans-serif; color: var(--ink); white-space: nowrap; text-align: right; }
+  .item-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+  .item-slot { aspect-ratio: 1; min-height: 52px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center; border: 2px solid rgba(145,90,0,.16); background: rgba(255,255,255,.52); position: relative; overflow: hidden; }
+  .item-slot.locked { filter: grayscale(.9); opacity: .45; }
+  .item-slot.unlocked { background: linear-gradient(145deg, #fff8cf, #fff); border-color: var(--accent); box-shadow: 0 0 14px rgba(255,215,106,.48); }
+  .item-slot.new { animation: slotSparkle 1.2s ease-out; }
+  @keyframes slotSparkle { 0% { transform: scale(.72) rotate(-4deg); filter: brightness(1.8); } 55% { transform: scale(1.09) rotate(2deg); } 100% { transform: scale(1); } }
+  .item-emoji { font-size: 1.4rem; line-height: 1; }
+  .item-name { font: 700 .62rem 'Noto Sans KR', sans-serif; line-height: 1.05; padding: 0 2px; }
+  .next-item-hint { margin-top: 12px; padding: 11px 12px; border-radius: 8px; background: rgba(255,255,255,.62); border: 1px solid rgba(255,255,255,.86); font: 700 1rem 'Noto Sans KR', sans-serif; text-align: center; }
+  .progress-wrap { margin-top: 14px; }
+  .progress-bar { height: 15px; background: rgba(112,65,0,.14); border-radius: 999px; overflow: hidden; border: 2px solid rgba(255,255,255,.76); }
+  .progress-fill { height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, #ff8c00, #ffd76a, #ffb830, #ffe066); transition: width .45s ease; }
+  .progress-text { text-align: center; margin-top: 8px; font: 700 1rem 'Noto Sans KR', sans-serif; }
+
+  .todo-card { padding: 18px; background: rgba(255,255,255,.9); }
+  .todo-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+  .todo-header h2 { font-family: 'Pacifico', cursive; color: var(--accent); font-size: 1.55rem; line-height: 1.05; }
+  .count-badge { border-radius: 999px; background: linear-gradient(135deg, var(--accent), #ff9dca); color: white; padding: 6px 12px; font: 700 .95rem 'Noto Sans KR', sans-serif; white-space: nowrap; }
+  .mom-input { display: flex; gap: 8px; margin-bottom: 12px; }
+  .mom-input input { flex: 1; min-width: 0; padding: 12px 13px; border-radius: 8px; border: 2px solid rgba(170,100,0,.32); font: 700 1.08rem 'Noto Sans KR', sans-serif; color: var(--ink); outline: none; }
+  .mom-input input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(247,169,22,.14); }
+  .mom-input button { border: 0; border-radius: 8px; padding: 0 16px; min-height: 48px; color: white; background: linear-gradient(135deg, var(--accent), #ff8c00); font: 700 1rem 'Noto Sans KR', sans-serif; cursor: pointer; }
+  .mom-input button:disabled, .mom-input input:disabled { opacity: .55; cursor: not-allowed; }
+  .todo-list { list-style: none; }
+  .todo-item, .mom-todo-item { display: flex; align-items: center; gap: 11px; min-height: 56px; margin-bottom: 9px; padding: 11px 12px; border-radius: 8px; background: linear-gradient(135deg, #fff, var(--fairy-light)); border: 2px solid rgba(170,100,0,.1); box-shadow: 0 4px 12px rgba(83,46,120,.1); }
+  .todo-item { cursor: pointer; }
+  .todo-item.done { border-color: var(--accent); background: linear-gradient(135deg, #fff8c8, #fff); }
+  .checkbox { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; background: white; border: 3px solid var(--accent); color: white; font-weight: 700; }
+  .todo-item.done .checkbox { background: linear-gradient(135deg, var(--accent), #ffd76a); box-shadow: 0 0 14px rgba(255,215,106,.72); }
+  .todo-text, .mom-todo-item .text { flex: 1; font: 700 1.12rem 'Noto Sans KR', sans-serif; color: var(--ink); }
+  .todo-item.done .todo-text { text-decoration: line-through; color: #8c74a4; }
+  .task-reward { font-size: 1.45rem; width: 32px; text-align: center; flex-shrink: 0; }
+  .delete-btn { width: 36px; height: 36px; border-radius: 50%; border: 0; background: #ffe1ed; color: #d73778; font-weight: 700; cursor: pointer; }
+  .empty-msg { text-align: center; padding: 28px 14px; color: #7c6294; font: 700 1.05rem 'Noto Sans KR', sans-serif; }
+  .empty-msg .big-emoji { display: block; font-size: 3rem; margin-bottom: 8px; }
+  .help-tip { margin-top: 12px; padding: 11px 12px; border-radius: 8px; background: rgba(247,169,22,.11); color: #654286; font: 700 1rem 'Noto Sans KR', sans-serif; text-align: center; }
+
+  .toast { position: fixed; top: 78px; left: 50%; transform: translateX(-50%) translateY(-100px); z-index: 210; opacity: 0; transition: all .45s cubic-bezier(.34,1.56,.64,1); max-width: 92vw; white-space: nowrap; padding: 14px 20px; border-radius: 999px; background: linear-gradient(135deg, #fff4a7, #ff9dca); color: var(--ink); border: 3px solid white; box-shadow: 0 12px 28px rgba(122,72,0,.28); font: 700 1rem 'Noto Sans KR', sans-serif; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .celebration { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 120; background: rgba(104,60,0,.58); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 18px; }
+  .celebration.show { display: flex; }
+  .celebration-box { width: min(460px, 94vw); text-align: center; padding: 30px 24px; border-radius: 24px; border: 3px solid white; background: linear-gradient(145deg, #fff8c8, #ffdced 42%, #dff5ff); color: var(--ink); box-shadow: 0 24px 70px rgba(82,45,0,.32); animation: bounceIn .55s ease; }
+  .celebration-box h2 { font-family: 'Pacifico', cursive; color: var(--violet); font-size: 2rem; margin: 8px 0; }
+  .celebration-box p { font: 700 1.15rem 'Noto Sans KR', sans-serif; margin-bottom: 18px; }
+  .celebration-box button { border: 0; border-radius: 999px; padding: 13px 28px; color: white; background: linear-gradient(135deg, var(--violet), var(--pink)); font: 700 1rem 'Noto Sans KR', sans-serif; cursor: pointer; }
+  @keyframes bounceIn { 0% { opacity: 0; transform: scale(.55); } 65% { transform: scale(1.04); } 100% { opacity: 1; transform: scale(1); } }
+  .confetti { position: fixed; top: -12px; width: 11px; height: 11px; pointer-events: none; z-index: 115; animation: fall 3.2s linear forwards; }
+  @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+  .floating { animation: fairyFloat 3.1s ease-in-out infinite; transform-origin: center; }
+  @keyframes fairyFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .wings-anim { animation: wingFlap 1.45s ease-in-out infinite; transform-origin: 200px 220px; }
+  @keyframes wingFlap { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(.92); } }
+  .new-item { animation: newItemGlow 1.15s ease-out; transform-origin: center; }
+  @keyframes newItemGlow { 0% { opacity: 0; transform: scale(0) rotate(-25deg); filter: drop-shadow(0 0 18px #fff4a7); } 55% { opacity: 1; transform: scale(1.25); filter: drop-shadow(0 0 26px #fff4a7); } 100% { opacity: 1; transform: scale(1); } }
+
+  /* ── HISTORY ── */
+  .history-section { margin-top: 28px; border-radius: 26px; overflow: hidden; border: 2px solid rgba(255,255,255,.58); background: linear-gradient(160deg, rgba(255,255,255,.18), rgba(255,220,100,.12)); box-shadow: 0 18px 44px rgba(102,58,0,.2), inset 0 1px 0 rgba(255,255,255,.4); padding: 20px 22px 24px; }
+  .history-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+  .history-header h2 { font-family: 'Pacifico', cursive; font-size: 1.6rem; color: #fff7cf; text-shadow: 0 2px 0 #c87800, 0 6px 16px rgba(120,65,0,.3); }
+  .history-week-count { padding: 6px 14px; border-radius: 999px; background: rgba(255,255,255,.22); border: 2px solid rgba(255,255,255,.58); font: 700 .95rem 'Noto Sans KR', sans-serif; }
+  .history-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .history-week-card { border-radius: 16px; padding: 14px 12px; border: 2px solid rgba(255,255,255,.48); background: rgba(255,255,255,.14); text-align: center; position: relative; overflow: hidden; }
+  .history-week-card.success { background: linear-gradient(145deg, rgba(255,244,167,.35), rgba(255,200,220,.28)); border-color: rgba(255,215,106,.6); box-shadow: 0 8px 22px rgba(200,150,50,.18); }
+  .history-week-card.fail { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.28); opacity: .72; }
+  .history-week-num { font-family: 'Pacifico', cursive; font-size: 1.25rem; color: #fff7cf; text-shadow: 0 2px 8px rgba(120,65,0,.35); }
+  .history-week-status { font-size: 1.8rem; margin: 4px 0; }
+  .history-week-days { display: flex; justify-content: center; gap: 3px; margin-top: 6px; }
+  .history-day-dot { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: .72rem; border: 1.5px solid rgba(255,255,255,.4); background: rgba(255,255,255,.15); }
+  .history-day-dot.done { background: linear-gradient(135deg, #ffd76a, #ff9dca); border-color: rgba(255,255,255,.7); }
+  .history-week-date { font: 700 .78rem 'Noto Sans KR', sans-serif; opacity: .72; margin-top: 5px; }
+  .history-week-label { font: 700 .82rem 'Noto Sans KR', sans-serif; opacity: .85; margin-top: 3px; }
+  .history-empty { text-align: center; padding: 28px; font: 700 1.08rem 'Noto Sans KR', sans-serif; opacity: .65; }
+
+  /* ── POINTS BADGE ── */
+  .points-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 16px; border-radius: 999px;
+    background: linear-gradient(135deg, #ffd76a, #ffb830);
+    border: 2.5px solid rgba(255,255,255,.9);
+    box-shadow: 0 4px 14px rgba(200,130,0,.28);
+    font: 700 1.2rem 'Noto Sans KR', sans-serif; color: #5a3500;
+    white-space: nowrap; margin-top: 8px;
+  }
+  .points-badge .pt-num { font-size: 1.4rem; }
+  .room-items-strip { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .room-item-chip {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(255,255,255,.75); border: 2px solid rgba(255,255,255,.95);
+    display: grid; place-items: center; font-size: 1.1rem;
+    box-shadow: 0 3px 8px rgba(100,50,160,.14); animation: badgePop .4s ease;
+  }
+
+  /* ── SHOP SECTION ── */
+  .shop-section {
+    margin-top: 28px; border-radius: 26px;
+    border: 2px solid rgba(255,255,255,.58);
+    background: linear-gradient(160deg, rgba(255,255,255,.18), rgba(255,220,100,.12));
+    box-shadow: 0 18px 44px rgba(102,58,0,.2), inset 0 1px 0 rgba(255,255,255,.4);
+    padding: 20px 22px 28px;
+  }
+  .shop-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .shop-header h2 { font-family: 'Pacifico', cursive; font-size: 1.6rem; color: #fff7cf; text-shadow: 0 2px 0 #c87800, 0 6px 16px rgba(120,65,0,.3); }
+  .shop-points-display {
+    padding: 7px 18px; border-radius: 999px;
+    background: linear-gradient(135deg, #ffd76a, #ffb830);
+    border: 2px solid rgba(255,255,255,.8);
+    font: 700 1.1rem 'Noto Sans KR', sans-serif; color: #5a3500;
+  }
+  .shop-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+  .shop-tab {
+    min-height: 38px; padding: 7px 16px; border-radius: 999px;
+    border: 2px solid rgba(255,255,255,.55);
+    background: rgba(255,255,255,.18); color: white;
+    font: 700 .9rem 'Noto Sans KR', sans-serif; cursor: pointer;
+  }
+  .shop-tab.active { background: linear-gradient(135deg, #fff4b5, #ffb830); color: var(--ink); border-color: rgba(255,255,255,.9); }
+  .shop-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
+  .shop-item-card {
+    border-radius: 18px; padding: 16px 10px 14px;
+    background: rgba(255,255,255,.82); border: 2px solid rgba(255,255,255,.9);
+    text-align: center; color: var(--ink);
+    box-shadow: 0 8px 22px rgba(80,40,120,.12);
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+  }
+  .shop-item-card.owned { background: linear-gradient(145deg, #fff8cf, #fff); border-color: #ffd76a; }
+  .shop-item-card.unaffordable { opacity: .65; }
+  .shop-item-emoji { font-size: 2.4rem; line-height: 1.1; }
+  .shop-item-name { font: 700 .95rem 'Noto Sans KR', sans-serif; }
+  .shop-item-desc { font: 700 .78rem 'Noto Sans KR', sans-serif; color: #7c6294; min-height: 26px; }
+  .shop-item-price { font: 700 .9rem 'Noto Sans KR', sans-serif; color: #5a3500; background: linear-gradient(135deg,#ffeea0,#ffd76a); padding: 3px 12px; border-radius: 999px; }
+  .shop-buy-btn {
+    margin-top: 4px; border: 0; border-radius: 999px;
+    padding: 7px 18px; color: white;
+    background: linear-gradient(135deg, #f7a916, #ff8c00);
+    font: 700 .88rem 'Noto Sans KR', sans-serif; cursor: pointer;
+  }
+  .shop-buy-btn:disabled { background: rgba(140,120,160,.35); color: rgba(255,255,255,.6); cursor: not-allowed; }
+  .shop-owned-badge {
+    margin-top: 4px; padding: 5px 14px; border-radius: 999px;
+    background: linear-gradient(135deg, #ffd76a, #ffb830);
+    font: 700 .85rem 'Noto Sans KR', sans-serif; color: #5a3500;
+  }
+
+  @media (max-width: 980px) {
+    .fairy-strip { grid-template-columns: repeat(4, minmax(116px, 1fr)); }
+    .main-layout, .showcase { grid-template-columns: 1fr; }
+    .fairy-stage { min-height: 390px; }
+    .weekly-complete-panel { position: relative; inset: auto; margin: 12px 0 78px auto; }
+    .room-sidebar { max-width: 260px; }
+  }
+  @media (max-width: 700px) {
+    /* 모바일: 2분할 유지하되 페이지 전체를 세로로 스크롤 */
+    .page-layout { flex-direction: column; height: auto; min-height: 100dvh; overflow: visible; }
+    .room-sidebar { width: 100%; max-width: 100%; height: 82vh; border-right: none; border-bottom: 2px solid rgba(255,255,255,.14); }
+    .main-scroll { flex: none; height: auto; overflow: visible; -webkit-overflow-scrolling: auto; }
+  }
+  @media (max-width: 620px) {
+    .container { padding: 16px 10px 86px; }
+    .fairy-strip { grid-template-columns: repeat(2, minmax(130px, 1fr)); }
+    .mini-card { min-height: 170px; }
+    .item-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .fairy-head, .todo-header, .collection-title { align-items: flex-start; flex-direction: column; }
+    .mom-input { flex-direction: column; }
+    .weather-path { left: 10px; right: 10px; }
+    .weather-step { width: 34px; height: 34px; font-size: 1.08rem; }
+    .weather-line { left: 26px; right: 26px; }
+    .history-grid { grid-template-columns: repeat(2, 1fr); }
+    .shop-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .shop-section { padding: 16px 12px 22px; }
+    .room-sidebar { height: 80vh; }
+  }
+
+  /* ── CALENDAR ── */
+  .calendar-section {
+    margin-top: 28px; border-radius: 26px;
+    border: 2px solid rgba(255,255,255,.58);
+    background: linear-gradient(160deg, rgba(255,255,255,.18), rgba(255,220,100,.12));
+    box-shadow: 0 18px 44px rgba(102,58,0,.2), inset 0 1px 0 rgba(255,255,255,.4);
+    padding: 20px 22px 24px;
+  }
+  .cal-header {
+    display: flex; align-items: center; justify-content: center; gap: 18px;
+    margin-bottom: 14px;
+  }
+  .cal-header span {
+    font: 900 1.25rem 'Noto Sans KR', sans-serif; color: #fff7cf;
+    text-shadow: 0 2px 0 #c87800, 0 6px 16px rgba(120,65,0,.3);
+    min-width: 120px; text-align: center;
+  }
+  .cal-nav-btn {
+    width: 34px; height: 34px; border-radius: 50%; border: 2px solid rgba(255,255,255,.55);
+    background: rgba(255,255,255,.18); color: white; font-size: 1.2rem;
+    cursor: pointer; display: grid; place-items: center; line-height: 1;
+    transition: background .15s;
+  }
+  .cal-nav-btn:hover { background: rgba(255,255,255,.32); }
+  .cal-day-headers {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 6px;
+  }
+  .cal-day-headers span {
+    text-align: center; font: 700 .82rem 'Noto Sans KR', sans-serif;
+    color: rgba(255,255,255,.65); padding: 4px 0;
+  }
+  .cal-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px;
+  }
+  .cal-day {
+    aspect-ratio: 1; border-radius: 50%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; position: relative;
+    font: 700 .82rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.82);
+    cursor: default; transition: transform .12s;
+  }
+  .cal-day.other-month { opacity: .28; }
+  .cal-day.cal-today {
+    background: rgba(255,255,255,.22);
+    border: 2px solid rgba(255,255,255,.8);
+    color: white;
+  }
+  .cal-day.status-done {
+    background: linear-gradient(135deg, #f7a916, #ff8c00);
+    color: white;
+    box-shadow: 0 3px 10px rgba(157,110,255,.45);
+  }
+  .cal-day.status-done .cal-date-num { font-size: .72rem; }
+  .cal-day.week-clear-row {
+    background: rgba(255,215,106,.18);
+  }
+  .cal-day.week-clear-row.status-done {
+    background: linear-gradient(135deg, #ffd76a, #ff9dca);
+    box-shadow: 0 3px 10px rgba(255,180,50,.5);
+    color: #5a3500;
+  }
+  .cal-check {
+    font-size: .6rem; line-height: 1; margin-top: 1px; opacity: .9;
+  }
+  .cal-date-num { line-height: 1; }
+  .cal-legend {
+    display: flex; gap: 16px; justify-content: center; margin-top: 14px; flex-wrap: wrap;
+  }
+  .cll {
+    font: 700 .8rem 'Noto Sans KR', sans-serif; padding: 4px 12px; border-radius: 999px;
+    border: 1.5px solid rgba(255,255,255,.4);
+  }
+  .cll.done { background: linear-gradient(135deg, #f7a916, #ff8c00); color: white; }
+  .cll.week-clear { background: linear-gradient(135deg, #ffd76a, #ff9dca); color: #5a3500; }
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="weather-drift" id="weatherDrift"></div>
+<div class="toast" id="toast">Magic item unlocked!</div>
+
+<div class="page-layout">
+  <!-- ── LEFT 30%: Lily's Room Sidebar ── -->
+  <aside class="room-sidebar" id="roomSidebar">
+    <div class="room-header">
+      <span class="room-title-text">✨ Joy's Room</span>
+      <span class="room-pts-badge" id="roomPtsBadge" ondblclick="resetRoomData()" style="cursor:pointer" title="더블클릭: 초기화">💰 0 pt</span>
+    </div>
+    <div class="room-body">
+      <nav class="room-nav">
+        <button class="room-nav-btn active" title="아바타">
+          <span class="rnb-icon">👗</span>
+          <span class="rnb-label">아바타</span>
+        </button>
+        <button class="room-nav-btn" title="가구" onclick="selectShopCat('furniture');scrollToShop()">
+          <span class="rnb-icon">🛋️</span>
+          <span class="rnb-label">가구</span>
+        </button>
+        <button class="room-nav-btn" title="반려동물" onclick="selectShopCat('pet');scrollToShop()">
+          <span class="rnb-icon">🐾</span>
+          <span class="rnb-label">펫</span>
+        </button>
+        <button class="room-nav-btn" title="장식" onclick="selectShopCat('deco');scrollToShop()">
+          <span class="rnb-icon">🌸</span>
+          <span class="rnb-label">장식</span>
+        </button>
+        <button class="room-nav-btn" title="특별효과" onclick="selectShopCat('special');scrollToShop()">
+          <span class="rnb-icon">✨</span>
+          <span class="rnb-label">효과</span>
+        </button>
+      </nav>
+      <div class="room-canvas" id="roomCanvas">
+        <!-- 꾹 눌러 삭제 컨텍스트 메뉴 -->
+        <div class="rc-ctx-menu" id="rcCtxMenu" style="display:none">
+          <button class="rc-ctx-btn danger" onclick="removeFromRoom(window._ctxItemId)">🗑️ 방에서 제거</button>
+          <button class="rc-ctx-btn" onclick="closeCtxMenu()">취소</button>
+        </div>
+      </div>
+    </div>
+    <!-- 쪽지 보드 -->
+    <div class="room-msg-board" id="roomMsgBoard">
+      <div class="rmb-header">
+        <span class="rmb-title">💌 쪽지 보드</span>
+        <button class="rmb-add-btn" onclick="showMsgInput()">＋</button>
+      </div>
+      <div class="rmb-card empty" id="rmbCard">아직 쪽지가 없어요 💌</div>
+      <div class="rmb-nav" id="rmbNav" style="display:none">
+        <button class="rmb-nav-btn" id="rmbPrev" onclick="prevMsg()">◁</button>
+        <span class="rmb-counter" id="rmbCounter">1/1</span>
+        <button class="rmb-nav-btn" id="rmbNext" onclick="nextMsg()">▷</button>
+        <button class="rmb-del-btn" onclick="deleteMsg()" title="삭제">🗑</button>
+      </div>
+      <!-- 쪽지 입력 오버레이 -->
+      <div class="rmb-overlay" id="rmbOverlay" style="display:none" onclick="closeMsgInput(event)">
+        <div class="rmb-input-box" onclick="event.stopPropagation()">
+          <div class="rmb-from-row">
+            <button class="rmb-from-btn active" id="rmbFromMom" onclick="setMsgFrom('mom')">👩 엄마</button>
+            <button class="rmb-from-btn" id="rmbFromJoy" onclick="setMsgFrom('joy')">🧚 Joy</button>
+          </div>
+          <textarea class="rmb-textarea" id="rmbTextarea" rows="3" placeholder="쪽지를 써주세요..."></textarea>
+          <div class="rmb-submit-row">
+            <button class="rmb-cancel-btn" onclick="closeMsgInput(null)">취소</button>
+            <button class="rmb-send-btn" onclick="submitMsg()">보내기 💌</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="room-footer">
+      <div class="room-unlock-slots" id="roomUnlockSlots"></div>
+      <div class="room-week-label" id="roomWeekLabel">Joy의 방을 꾸며요 🌟</div>
+    </div>
+  </aside>
+
+  <!-- ── RIGHT 70%: Main content ── -->
+  <div class="main-scroll" id="mainScroll">
+  <div class="container">
+  <header>
+    <div class="title-main">Joy's Wonderful Week</div>
+    <div class="title-ribbon">🪽 Weather Fairies 🪽</div>
+    <div class="title-sub">할 일을 완료하고 날씨 요정의 아이템을 모아 마법 하늘을 완성해요!</div>
+  </header>
+
+  <div class="mode-switch">
+    <button class="mode-btn active" data-mode="kid">🌈 Joy's Mode</button>
+    <button class="mode-btn" data-mode="mom">🔒 Mom's Mode</button>
+  </div>
+
+  <section class="weekly-sky" id="weeklySky">
+    <h2>요정들이 만드는 마법 하늘</h2>
+    <div class="weekly-sub" id="weeklySubtitle">7명의 Weather Fairy가 모두 완성되면 무지개 축제가 열려요.</div>
+    <div class="weekly-complete-panel">
+      <div id="castleCounter">0 / 7 fairies transformed</div>
+      <div class="fairy-silhouettes" id="fairySilhouettes"></div>
+    </div>
+    <div class="rainbow-arc"></div>
+    <div class="weather-line"></div>
+    <div class="weather-path" id="weatherPath"></div>
+  </section>
+
+  <section class="fairy-strip" id="fairyStrip" aria-label="Weather fairy cards"></section>
+
+  <main class="main-layout">
+    <section class="fairy-card" id="fairyCard">
+      <div class="fairy-head">
+        <div>
+          <div class="fairy-name" id="fairyName">Goldie</div>
+          <div class="fairy-title" id="fairyTitle">the Sunshine Fairy</div>
+        </div>
+        <div class="day-badge" id="dayBadge">Monday</div>
+      </div>
+      <div class="showcase">
+        <div class="fairy-stage" id="fairyStage"></div>
+        <div class="collection-card">
+          <div class="collection-title">
+            <h2>오늘 모은 마법 아이템</h2>
+            <div class="item-progress" id="itemProgress">0 / 10 items collected</div>
+          </div>
+          <div class="item-grid" id="itemGrid"></div>
+          <div class="next-item-hint" id="nextHint">✨ Next item waits for the next task!</div>
+          <div class="progress-wrap">
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="progress-text" id="progressText">Add some tasks!</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <aside class="todo-card">
+      <div class="todo-header">
+        <h2 id="todoTitle">Monday Mission</h2>
+        <span class="count-badge" id="countBadge">0/0</span>
+      </div>
+      <div id="momSection" style="display:none;">
+        <div class="mom-input">
+          <input type="text" id="newTodoInput" placeholder="할 일을 입력해 주세요 (하루 최대 10개)" maxlength="40">
+          <button id="addBtn">Add ✨</button>
+        </div>
+        <div id="momList"></div>
+      </div>
+      <div id="kidSection">
+        <ul class="todo-list" id="kidList"></ul>
+      </div>
+      <div class="help-tip" id="helpTip"></div>
+    </aside>
+  </main>
+
+  <!-- SHOP -->
+  <section class="shop-section">
+    <div class="shop-header">
+      <h2>🏪 Joy's Magic Shop</h2>
+      <div class="shop-points-display" id="shopPointsDisplay">💰 0 pt</div>
+    </div>
+    <div class="shop-tabs" id="shopTabs"></div>
+    <div class="shop-grid" id="shopGrid"></div>
+  </section>
+
+  <!-- CALENDAR -->
+  <section class="calendar-section">
+    <div class="cal-header">
+      <button class="cal-nav-btn" onclick="calendarPrev()">‹</button>
+      <span id="calMonthLabel"></span>
+      <button class="cal-nav-btn" onclick="calendarNext()">›</button>
+    </div>
+    <div class="cal-day-headers">
+      <span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-legend">
+      <span class="cll done">✓ 미션 완료</span>
+      <span class="cll week-clear">🌈 완벽한 주</span>
+    </div>
+  </section>
+</div>
+
+<div class="celebration" id="celebration">
+  <div class="celebration-box">
+    <div style="font-size: 4rem;" id="celebrationEmoji">🌈🧚‍♀️✨</div>
+    <h2 id="celebrationTitle">Weather Magic!</h2>
+    <p id="celebrationMsg">요정이 완성됐어요!</p>
+    <button id="closeCelebrationBtn">Yay! 💖</button>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+<script>
+// ── Firebase 초기화 ──────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyBrFXJ212N2lelFAXfUMJzSwgl2uIScmjI",
+  authDomain: "lily-magic-week.firebaseapp.com",
+  projectId: "lily-magic-week",
+  storageBucket: "lily-magic-week.firebasestorage.app",
+  messagingSenderId: "681422155163",
+  appId: "1:681422155163:web:c4ca9aee953a6dbdd4853e",
+  databaseURL: "https://lily-magic-week-default-rtdb.asia-southeast1.firebasedatabase.app"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const DB_REF = 'joy-data';
+// ────────────────────────────────────────────────
+
+const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const DAY_NAMES = { Mon:'Monday', Tue:'Tuesday', Wed:'Wednesday', Thu:'Thursday', Fri:'Friday', Sat:'Saturday', Sun:'Sunday' };
+const DAY_KOR = { Mon:'월요일', Tue:'화요일', Wed:'수요일', Thu:'목요일', Fri:'금요일', Sat:'토요일', Sun:'일요일' };
+const STORAGE_KEY = 'joys-wonderful-week-v8';
+const STORAGE_KEY_V7 = 'joys-wonderful-week-v7';
+const MAX_TASKS = 10;
+
+const FAIRIES = {
+  Mon: { name: 'Goldie', title: 'the Sunshine Fairy', dayName: 'Goldie Day', icon: '☀️', weather: 'sunshine', accent: '#f7a916', light: '#fff0a7', dress: '#ffc23d', dressDark: '#f39a16', hair: '#d98b27', hairDark: '#9f6320', skin: '#ffe2c2', effect: ['☀️','✨','🌻'], hairStyle: 'curls', wand: 'sun', items: [['☀️','Sunshine Wand'], ['👑','Golden Crown'], ['📿','Sun Necklace'], ['🪽','Glitter Wings'], ['👗','Sunny Petal Dress'], ['🥾','Golden Boots'], ['💛','Sunbeam Belt'], ['💍','Dawn Bracelet'], ['🌻','Sunflower Charm'], ['🌈','Rainbow Glow']] },
+  Tue: { name: 'Crystal', title: 'the Snow Fairy', dayName: 'Crystal Day', icon: '❄️', weather: 'snow', accent: '#43a8e8', light: '#dff6ff', dress: '#77c9ff', dressDark: '#3f94d8', hair: '#ffeeb2', hairDark: '#d5b352', skin: '#ffe4cb', effect: ['❄️','✧','🧊'], hairStyle: 'bob', wand: 'snow', items: [['❄️','Snowflake Wand'], ['🧣','Frosty Scarf'], ['👑','Ice Crown'], ['🪽','Crystal Wings'], ['👗','Snow Dress'], ['⛸️','Snow Boots'], ['💎','Icicle Necklace'], ['🧤','Warm Mittens'], ['🧊','Ice Charm'], ['🌨️','Snowy Glow']] },
+  Wed: { name: 'Abigail', title: 'the Breeze Fairy', dayName: 'Abigail Day', icon: '💨', weather: 'breeze', accent: '#f6a13d', light: '#ffe2b8', dress: '#ffc85c', dressDark: '#ef8830', hair: '#8b4a2a', hairDark: '#5c2e1b', skin: '#ffd9bd', effect: ['🍃','💨','🌀'], hairStyle: 'long', wand: 'pinwheel', items: [['💨','Breeze Wand'], ['🎀','Wind Ribbon'], ['🪁','Kite Brooch'], ['🪽','Flutter Wings'], ['👗','Breezy Dress'], ['👢','Leaf Boots'], ['🌀','Swirl Necklace'], ['🍃','Leaf Bracelet'], ['🌬️','Whisper Charm'], ['🌈','Wind Glow']] },
+  Thu: { name: 'Pearl', title: 'the Cloud Fairy', dayName: 'Pearl Day', icon: '☁️', weather: 'cloud', accent: '#f58abc', light: '#ffe0ef', dress: '#ff9ec7', dressDark: '#e864a7', hair: '#2e2630', hairDark: '#141018', skin: '#ffe0c7', effect: ['☁️','✨','🫧'], hairStyle: 'braid', wand: 'cloud', items: [['☁️','Cloud Wand'], ['🎀','Pearl Hair Bow'], ['📿','Cloud Necklace'], ['🪽','Soft Wings'], ['👗','Puffy Cloud Dress'], ['🥿','Cloud Shoes'], ['🫧','Bubble Belt'], ['💍','Pearl Bracelet'], ['🌤️','Cloud Charm'], ['✨','Silver Lining']] },
+  Fri: { name: 'Evie', title: 'the Mist Fairy', dayName: 'Evie Day', icon: '🌫️', weather: 'mist', accent: '#8e6fd1', light: '#eadfff', dress: '#a486de', dressDark: '#7652bd', hair: '#59413d', hairDark: '#2d2222', skin: '#ffe0c7', effect: ['🌫️','💧','✧'], hairStyle: 'wave', wand: 'mist', items: [['🌫️','Mist Wand'], ['💜','Violet Headband'], ['🔮','Mist Necklace'], ['🪽','Hazy Wings'], ['👗','Lavender Dress'], ['🥿','Fog Shoes'], ['🫧','Mist Belt'], ['💍','Dew Bracelet'], ['🧴','Tiny Potion'], ['🌌','Misty Glow']] },
+  Sat: { name: 'Storm', title: 'the Lightning Fairy', dayName: 'Storm Day', icon: '⚡', weather: 'lightning', accent: '#5757c8', light: '#dfe4ff', dress: '#6b55c8', dressDark: '#3b348f', hair: '#f6d46d', hairDark: '#c28e2a', skin: '#ffe0c7', effect: ['⚡','🌩️','✦'], hairStyle: 'straight', wand: 'lightning', items: [['⚡','Lightning Wand'], ['👑','Thunder Tiara'], ['⭐','Bolt Necklace'], ['🪽','Storm Wings'], ['👗','Lightning Dress'], ['🥾','Bolt Boots'], ['🟣','Storm Belt'], ['💍','Spark Ring'], ['🌩️','Thunder Charm'], ['✨','Electric Glow']] },
+  Sun: { name: 'Hayley', title: 'the Rain Fairy', dayName: 'Hayley Day', icon: '💧', weather: 'rain', accent: '#6d63d8', light: '#e3dcff', dress: '#7b6edc', dressDark: '#4f45aa', hair: '#7b3f2d', hairDark: '#4d241a', skin: '#ffd8bd', effect: ['💧','☔','🌧️'], hairStyle: 'pony', wand: 'rain', items: [['💧','Rain Wand'], ['☔','Tiny Umbrella'], ['📿','Raindrop Necklace'], ['🪽','Rainy Wings'], ['👗','Violet Rain Dress'], ['👢','Splash Boots'], ['💙','Rain Belt'], ['💍','Droplet Bracelet'], ['🌧️','Raincloud Charm'], ['🌈','After-Rain Glow']] }
+};
+
+/*
+ * ── FIX 1 ──
+ * LILY_WEEK_ITEMS: each entry is unlocked by completing one FULL week (all 7 days).
+ * So item index 0 = after 1st successful week in history, etc.
+ * Max 7 items (7 weeks of trophies).
+ *
+ * Items are split into:
+ *   character items  → visible on Lily's SVG body
+ *   background items → appear in the scene SVG layer (rainbow, castle, etc.)
+ *
+ * Structure: [emoji, label, type]
+ * type: 'char' | 'bg'
+ */
+const LILY_WEEK_ITEMS = [
+  ['🌸', 'Flower Crown',    'char'],   // week 1 — flower crown on head
+  ['🌈', 'Magic Rainbow',   'bg'],     // week 2 — rainbow in background
+  ['💫', 'Sparkle Wand',    'char'],   // week 3 — sparkle wand in hand
+  ['🏰', 'Fairy Castle',    'bg'],     // week 4 — unicorn castle in background
+  ['🦋', 'Butterfly Wings', 'char'],   // week 5 — butterfly effect on character
+  ['⭐', 'Star Shower',     'bg'],     // week 6 — falling stars in background
+  ['🌟', 'Full Magic',      'char'],   // week 7 — full golden glow aura
+];
+
+/* ── SHOP DATA ── */
+const SHOP_CATS = [
+  { key:'theme',     label:'🏠 방 테마' },
+  { key:'furniture', label:'🛋️ 가구' },
+  { key:'pet',       label:'🐾 반려동물' },
+  { key:'deco',      label:'🌸 장식품' },
+  { key:'food',      label:'🍰 음식' },
+  { key:'special',   label:'✨ 특별 효과' },
+  { key:'avatar',    label:'👗 아바타' },
+];
+const SHOP_ITEMS = [
+  // ── 방 테마
+  { id:'theme_spring',    emoji:'🌸', name:'봄 정원',      cat:'theme',     price:300, desc:'꽃이 만발한 봄날의 방' },
+  { id:'theme_ocean',     emoji:'🌊', name:'바닷속 왕국',  cat:'theme',     price:400, desc:'아름다운 산호초와 물고기' },
+  { id:'theme_cloud',     emoji:'☁️', name:'구름 나라',    cat:'theme',     price:400, desc:'폭신폭신 구름 위의 방' },
+  { id:'theme_forest',    emoji:'🍄', name:'마법 숲',      cat:'theme',     price:500, desc:'반짝이는 마법의 숲속 방' },
+  { id:'theme_starnight', emoji:'🌙', name:'별빛 밤하늘',  cat:'theme',     price:600, desc:'쏟아지는 별들의 밤방' },
+  { id:'theme_candy',     emoji:'🍭', name:'캔디 나라',    cat:'theme',     price:500, desc:'달콤한 사탕으로 가득한 방' },
+  // ── 가구
+  { id:'furn_bed',        emoji:'🛏️', name:'핑크 침대',    cat:'furniture', price:150, desc:'푹신한 핑크 공주 침대' },
+  { id:'furn_bookshelf',  emoji:'📚', name:'마법 책장',    cat:'furniture', price:120, desc:'마법 책들이 가득한 책장' },
+  { id:'furn_chair',      emoji:'🪑', name:'보라 의자',    cat:'furniture', price:80,  desc:'귀여운 보라색 의자' },
+  { id:'furn_sofa',       emoji:'🛋️', name:'무지개 소파',  cat:'furniture', price:200, desc:'색색의 쿠션이 있는 소파' },
+  { id:'furn_mirror',     emoji:'🪞', name:'마법 거울',    cat:'furniture', price:180, desc:'진실을 말해주는 거울' },
+  { id:'furn_desk',       emoji:'🖥️', name:'별빛 책상',    cat:'furniture', price:160, desc:'반짝이는 별 모양 책상' },
+  { id:'furn_wardrobe',   emoji:'🎀', name:'리본 옷장',    cat:'furniture', price:200, desc:'예쁜 리본이 달린 옷장' },
+  { id:'furn_lamp',       emoji:'🪔', name:'요정 램프',    cat:'furniture', price:100, desc:'따뜻한 빛의 마법 램프' },
+  { id:'furn_rug',        emoji:'🌺', name:'꽃무늬 러그',  cat:'furniture', price:130, desc:'화사한 꽃무늬 바닥 깔개' },
+  { id:'furn_piano',      emoji:'🎹', name:'미니 피아노',  cat:'furniture', price:280, desc:'요정 노래를 연주하는 피아노' },
+  // ── 반려동물
+  { id:'pet_cat',         emoji:'🐱', name:'마법 고양이',  cat:'pet',       price:250, desc:'마법을 쓸 줄 아는 고양이' },
+  { id:'pet_rabbit',      emoji:'🐰', name:'달빛 토끼',    cat:'pet',       price:200, desc:'달에서 온 귀여운 토끼' },
+  { id:'pet_hamster',     emoji:'🐹', name:'햄스터',       cat:'pet',       price:150, desc:'볼 터지도록 먹는 햄스터' },
+  { id:'pet_butterfly',   emoji:'🦋', name:'나비 친구',    cat:'pet',       price:220, desc:'반짝이는 날개의 나비' },
+  { id:'pet_fox',         emoji:'🦊', name:'마법 여우',    cat:'pet',       price:350, desc:'꼬리가 아홉 개인 여우' },
+  { id:'pet_bird',        emoji:'🐦', name:'파랑새',       cat:'pet',       price:180, desc:'행복을 가져다주는 파랑새' },
+  { id:'pet_unicorn',     emoji:'🦄', name:'미니 유니콘',  cat:'pet',       price:500, desc:'전설의 미니 유니콘' },
+  { id:'pet_frog',        emoji:'🐸', name:'개구리 왕자',  cat:'pet',       price:180, desc:'왕자님이 변한 개구리' },
+  { id:'pet_dragon',      emoji:'🐲', name:'미니 드래곤',  cat:'pet',       price:450, desc:'불을 뿜는 아기 드래곤' },
+  { id:'pet_penguin',     emoji:'🐧', name:'펭귄 친구',    cat:'pet',       price:220, desc:'춤추는 귀여운 펭귄' },
+  // ── 장식품
+  { id:'deco_blossom',    emoji:'🌸', name:'벚꽃 가랜드',  cat:'deco',      price:80,  desc:'방을 화사하게 만드는 가랜드' },
+  { id:'deco_mobile',     emoji:'⭐', name:'별빛 모빌',    cat:'deco',      price:100, desc:'천장에서 빙글빙글 도는 모빌' },
+  { id:'deco_candle',     emoji:'🕯️', name:'요정 촛불',    cat:'deco',      price:70,  desc:'따뜻한 요정의 빛' },
+  { id:'deco_wand',       emoji:'🪄', name:'미니 마법봉',  cat:'deco',      price:90,  desc:'작지만 강력한 마법봉' },
+  { id:'deco_painting',   emoji:'🖼️', name:'요정 그림',    cat:'deco',      price:120, desc:'요정 화가의 특별 그림' },
+  { id:'deco_tent',       emoji:'⛺', name:'미니 텐트',    cat:'deco',      price:150, desc:'방 안에 캠핑 느낌 텐트' },
+  { id:'deco_rainbow',    emoji:'🌈', name:'무지개 아치',  cat:'deco',      price:130, desc:'방에 걸린 작은 무지개' },
+  { id:'deco_vase',       emoji:'💐', name:'꽃다발 꽃병',  cat:'deco',      price:80,  desc:'예쁜 꽃이 가득한 꽃병' },
+  { id:'deco_bear',       emoji:'🧸', name:'테디베어',     cat:'deco',      price:90,  desc:'포근한 갈색 테디베어' },
+  { id:'deco_balloon',    emoji:'🎈', name:'별 풍선',      cat:'deco',      price:60,  desc:'두둥실 별 모양 풍선' },
+  { id:'deco_crystal',    emoji:'💎', name:'수정 장식',    cat:'deco',      price:160, desc:'빛을 반짝이게 만드는 수정' },
+  { id:'deco_clock',      emoji:'⏰', name:'꽃 시계',      cat:'deco',      price:110, desc:'꽃 모양 귀여운 벽시계' },
+  // ── 음식
+  { id:'food_cake',       emoji:'🎂', name:'생일 케이크',  cat:'food',      price:100, desc:'언제나 특별한 생일 케이크' },
+  { id:'food_cupcake',    emoji:'🧁', name:'컵케이크 세트',cat:'food',      price:80,  desc:'알록달록 컵케이크 5개' },
+  { id:'food_tea',        emoji:'🫖', name:'마법 티세트',  cat:'food',      price:120, desc:'마법의 꽃잎으로 우린 차' },
+  { id:'food_candy',      emoji:'🍬', name:'사탕 바구니',  cat:'food',      price:60,  desc:'달콤한 사탕이 가득' },
+  { id:'food_parfait',    emoji:'🍓', name:'딸기 파르페',  cat:'food',      price:90,  desc:'딸기가 한가득 파르페' },
+  { id:'food_donut',      emoji:'🍩', name:'도넛 탑',      cat:'food',      price:70,  desc:'탑처럼 쌓인 알록달록 도넛' },
+  { id:'food_macaron',    emoji:'🍡', name:'마카롱 세트',  cat:'food',      price:85,  desc:'프랑스식 알록달록 마카롱' },
+  { id:'food_icecream',   emoji:'🍦', name:'요정 아이스크림',cat:'food',    price:75,  desc:'무지개 맛 요정 아이스크림' },
+  // ── 특별 효과
+  { id:'fx_sparkle',      emoji:'✨', name:'반짝이 눈 효과',cat:'special',  price:150, desc:'방 안에 반짝이가 떨어져요' },
+  { id:'fx_aura',         emoji:'🌟', name:'골든 아우라',  cat:'special',   price:300, desc:'Lily에게 황금빛 아우라' },
+  { id:'fx_particle',     emoji:'💫', name:'마법 파티클',  cat:'special',   price:200, desc:'마법 가루가 둥둥 떠다녀요' },
+  { id:'fx_firework',     emoji:'🎆', name:'미니 불꽃놀이',cat:'special',   price:250, desc:'방 안에 작은 불꽃놀이' },
+  { id:'fx_bubble',       emoji:'🫧', name:'반짝 버블',    cat:'special',   price:180, desc:'반짝이는 비눗방울이 떠다녀요' },
+  { id:'fx_music',        emoji:'🎵', name:'음표 떠다니기',cat:'special',   price:170, desc:'음표가 방 안을 둥실둥실' },
+  { id:'fx_snow',         emoji:'❄️', name:'실내 눈송이',  cat:'special',   price:220, desc:'방 안에 내리는 예쁜 눈' },
+  { id:'fx_rainbow_glow', emoji:'🌈', name:'무지개 빛 후광',cat:'special',  price:400, desc:'Lily 주변에 무지개 빛이!' },
+  // ── 장식품 추가 15개
+  { id:'deco_lantern',   emoji:'🏮', name:'홍등',          cat:'deco', price:90,  desc:'따뜻한 빛의 홍등' },
+  { id:'deco_crown_d',   emoji:'👑', name:'왕관 장식',     cat:'deco', price:150, desc:'반짝이는 미니 왕관' },
+  { id:'deco_shell',     emoji:'🐚', name:'조개 장식',     cat:'deco', price:70,  desc:'바다의 소리가 들리는 조개' },
+  { id:'deco_mushroom',  emoji:'🍄', name:'버섯 집',       cat:'deco', price:100, desc:'요정이 사는 알록달록 버섯' },
+  { id:'deco_clover',    emoji:'🍀', name:'네잎클로버',    cat:'deco', price:65,  desc:'행운을 가져다주는 클로버' },
+  { id:'deco_gem2',      emoji:'💜', name:'보라 보석',     cat:'deco', price:160, desc:'신비로운 빛을 내는 보석' },
+  { id:'deco_feather',   emoji:'🪶', name:'마법 깃털',     cat:'deco', price:95,  desc:'무지개 빛 요정의 깃털' },
+  { id:'deco_hourglass', emoji:'⏳', name:'모래시계',      cat:'deco', price:110, desc:'마법 가루가 담긴 모래시계' },
+  { id:'deco_telescope', emoji:'🔭', name:'미니 망원경',   cat:'deco', price:130, desc:'별을 관찰하는 망원경' },
+  { id:'deco_music_box', emoji:'🎵', name:'오르골',        cat:'deco', price:145, desc:'아름다운 멜로디의 오르골' },
+  { id:'deco_butterfly2',emoji:'🦋', name:'나비 모빌',     cat:'deco', price:85,  desc:'날갯짓하는 나비 모빌' },
+  { id:'deco_sunflower', emoji:'🌻', name:'해바라기',      cat:'deco', price:75,  desc:'태양을 닮은 해바라기' },
+  { id:'deco_pinwheel',  emoji:'🌀', name:'바람개비',      cat:'deco', price:80,  desc:'빙글빙글 도는 바람개비' },
+  { id:'deco_map',       emoji:'🗺️', name:'보물 지도',     cat:'deco', price:120, desc:'숨겨진 보물로 가는 지도' },
+  { id:'deco_potion',    emoji:'🧪', name:'마법 물약',     cat:'deco', price:140, desc:'색이 변하는 신기한 물약' },
+  // ── 아바타 꾸미기
+  { id:'av_hair_bow',    emoji:'🎀', name:'핑크 리본 헤어',  cat:'avatar', price:120, desc:'큰 핑크 리본이 달린 헤어' },
+  { id:'av_hair_pink',   emoji:'💗', name:'분홍 트윈테일',   cat:'avatar', price:150, desc:'양쪽으로 묶은 분홍 트윈테일' },
+  { id:'av_hair_star',   emoji:'⭐', name:'별 핀 헤어',      cat:'avatar', price:90,  desc:'반짝이는 별 모양 머리핀' },
+  { id:'av_hair_flower', emoji:'🌸', name:'꽃 화환 헤어',    cat:'avatar', price:140, desc:'꽃으로 장식한 화환 헤어' },
+  { id:'av_outfit_princess', emoji:'👸', name:'프린세스 드레스', cat:'avatar', price:200, desc:'반짝이는 공주 드레스' },
+  { id:'av_outfit_rainbow',  emoji:'🌈', name:'무지개 드레스',   cat:'avatar', price:220, desc:'무지개색 줄무늬 드레스' },
+  { id:'av_outfit_galaxy',   emoji:'🌌', name:'갤럭시 드레스',   cat:'avatar', price:280, desc:'밤하늘 별빛 드레스' },
+  { id:'av_outfit_pink',     emoji:'🌸', name:'벚꽃 드레스',     cat:'avatar', price:200, desc:'벚꽃이 흩날리는 드레스' },
+  { id:'av_acc_tiara',    emoji:'👑', name:'골드 티아라',    cat:'avatar', price:180, desc:'황금빛 빛나는 티아라' },
+  { id:'av_acc_necklace', emoji:'💫', name:'별 목걸이',      cat:'avatar', price:100, desc:'반짝이는 별 모양 목걸이' },
+  { id:'av_acc_glasses',  emoji:'👓', name:'동그란 안경',    cat:'avatar', price:90,  desc:'귀여운 동그란 안경' },
+  { id:'av_acc_ribbon',   emoji:'💝', name:'리본 목걸이',    cat:'avatar', price:110, desc:'예쁜 리본 목걸이' },
+  { id:'av_acc_earrings', emoji:'✨', name:'별 귀걸이',      cat:'avatar', price:80,  desc:'반짝이는 별 귀걸이' },
+  // ── 아바타 옷 추가 5개
+  { id:'av_outfit_angel',   emoji:'🤍', name:'천사 드레스',   cat:'avatar', price:240, desc:'새하얀 천사 날개 드레스' },
+  { id:'av_outfit_mermaid', emoji:'🧜', name:'인어 드레스',   cat:'avatar', price:260, desc:'비늘 무늬 반짝이 인어 드레스' },
+  { id:'av_outfit_witch',   emoji:'🧙', name:'마녀 드레스',   cat:'avatar', price:220, desc:'별빛 반짝이는 마녀 드레스' },
+  { id:'av_outfit_star',    emoji:'🌟', name:'별빛 드레스',   cat:'avatar', price:230, desc:'온몸에 별이 반짝이는 드레스' },
+  { id:'av_outfit_rose',    emoji:'🌹', name:'장미 드레스',   cat:'avatar', price:210, desc:'붉은 장미 꽃잎 드레스' },
+  // ── 신발 & 가방 10개
+  { id:'av_shoes_glass',    emoji:'👠', name:'유리 구두',      cat:'avatar', price:150, desc:'신데렐라의 유리 구두' },
+  { id:'av_shoes_star',     emoji:'⭐', name:'별빛 부츠',      cat:'avatar', price:130, desc:'반짝이는 별빛 부츠' },
+  { id:'av_shoes_rainbow',  emoji:'🌈', name:'무지개 스니커즈',cat:'avatar', price:120, desc:'무지개 색 귀여운 스니커즈' },
+  { id:'av_shoes_flower',   emoji:'🌸', name:'꽃 샌들',        cat:'avatar', price:110, desc:'꽃 장식이 달린 예쁜 샌들' },
+  { id:'av_shoes_moon',     emoji:'🌙', name:'달빛 슬리퍼',   cat:'avatar', price:100, desc:'달빛을 담은 포근한 슬리퍼' },
+  { id:'av_bag_star',       emoji:'⭐', name:'별 미니백',       cat:'avatar', price:140, desc:'별 모양 반짝이 미니백' },
+  { id:'av_bag_heart',      emoji:'💖', name:'하트 핸드백',    cat:'avatar', price:160, desc:'사랑스러운 하트 핸드백' },
+  { id:'av_bag_rainbow',    emoji:'🌈', name:'무지개 배낭',    cat:'avatar', price:130, desc:'알록달록 무지개 배낭' },
+  { id:'av_bag_flower',     emoji:'🌷', name:'꽃바구니 백',    cat:'avatar', price:120, desc:'꽃이 담긴 예쁜 바구니 백' },
+  { id:'av_bag_magic',      emoji:'🪄', name:'마법사 가방',    cat:'avatar', price:180, desc:'신비로운 마법사 가방' },
+];
+
+let currentDay = 'Mon';
+let currentMode = 'kid';
+let data = {};
+let newItemIdxForRender = -1;
+let history = [];
+let points = 0;
+let shopOwned = [];
+let roomPlaced = [];
+let messages = [];
+let msgIndex = 0;
+let currentShopCat = 'theme';
+let itemPositions = {};
+let rewardedDays = [];      // 이번 주에 +30 요정 보너스를 이미 받은 요일
+let weekBonusGiven = false; // 이번 주 +100 보너스 지급 여부
+let _firebaseLoaded = false; // Firebase 첫 로드 완료 여부
+
+function applyParsed(parsed) {
+  data = parsed.data || {};
+  history = parsed.history || [];
+  points = typeof parsed.points === 'number' ? parsed.points : 0;
+  shopOwned = Array.isArray(parsed.shopOwned) ? parsed.shopOwned : [];
+  // roomPlaced: 없으면 shopOwned 전체를 기본값으로 (기존 데이터 호환)
+  roomPlaced = Array.isArray(parsed.roomPlaced) ? parsed.roomPlaced : [...shopOwned];
+  itemPositions = (parsed.itemPositions && typeof parsed.itemPositions === 'object') ? parsed.itemPositions : {};
+  messages = Array.isArray(parsed.messages) ? parsed.messages : [];
+  if (msgIndex >= messages.length) msgIndex = Math.max(0, messages.length - 1);
+  rewardedDays = Array.isArray(parsed.rewardedDays) ? parsed.rewardedDays : [];
+  weekBonusGiven = !!parsed.weekBonusGiven;
+  DAYS.forEach(day => {
+    if (!Array.isArray(data[day])) data[day] = [];
+    data[day] = data[day].slice(0, MAX_TASKS).map(task => ({ text: String(task.text || ''), done: !!task.done, rewarded: !!task.rewarded }));
+  });
+}
+
+function loadData() {
+  // 1) localStorage에서 즉시 로드 (오프라인 백업)
+  try {
+    let stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) {
+      const v7stored = localStorage.getItem(STORAGE_KEY_V7);
+      if (v7stored) stored = v7stored;
+    }
+    if (stored) applyParsed(JSON.parse(stored));
+  } catch (e) { data = {}; history = []; points = 0; shopOwned = []; itemPositions = {}; }
+
+  // 2) Firebase 실시간 리스너 — 다른 기기에서 변경되면 자동 반영
+  db.ref(DB_REF).on('value', snapshot => {
+    const fbData = snapshot.val();
+    if (fbData) {
+      const localMsgs = messages; // Firebase 덮어쓰기 전 현재 쪽지 보존
+      applyParsed(fbData);
+      // Firebase가 쪽지를 지웠을 경우(네트워크 오류/롤백) 로컬 쪽지 복원
+      if (localMsgs.length > messages.length) {
+        messages = localMsgs;
+        if (_firebaseLoaded) saveData(); // Firebase에 다시 동기화
+      } else {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(fbData)); } catch(e) {}
+      }
+      _firebaseLoaded = true;
+      render();
+    } else {
+      _firebaseLoaded = true;
+    }
+  });
+}
+
+function saveData() {
+  const payload = { data, history, points, shopOwned, roomPlaced, itemPositions, messages, rewardedDays, weekBonusGiven };
+  // Firebase 로드 전에는 localStorage만 업데이트 (race condition 방지)
+  if (_firebaseLoaded) {
+    db.ref(DB_REF).set(payload).catch(e => console.error('Firebase 저장 오류:', e));
+  }
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); } catch(e) {}
+}
+
+function taskCounts(day) {
+  const todos = data[day] || [];
+  return { total: Math.min(todos.length, MAX_TASKS), done: todos.filter(t => t.done).length };
+}
+
+function isFairyComplete(day) {
+  const { total, done } = taskCounts(day);
+  return total > 0 && done === total;
+}
+
+function isWeekAllDone() { return DAYS.every(isFairyComplete); }
+function completedDaysCount() { return DAYS.filter(isFairyComplete).length; }
+
+/* ── FIX 1: count successful weeks from history ── */
+function successfulWeekCount() {
+  return history.filter(w => w.success).length;
+}
+
+/* items unlocked = one per successful full week */
+function getLilyUnlockedItems() {
+  const count = Math.min(successfulWeekCount(), LILY_WEEK_ITEMS.length);
+  return LILY_WEEK_ITEMS.slice(0, count);
+}
+
+/* ── FIX 3: Build background scene SVG based on unlocked items ── */
+function buildSceneSVG(unlockedItems) {
+  const hasBg = type => unlockedItems.some(it => it[2] === 'bg' && it[0] === type);
+  const hasRainbow = unlockedItems.some(it => it[1] === 'Magic Rainbow');
+  const hasCastle  = unlockedItems.some(it => it[1] === 'Fairy Castle');
+  const hasStars   = unlockedItems.some(it => it[1] === 'Star Shower');
+  const allItems   = unlockedItems.length;
+
+  // Sky gradient evolves as items unlock
+  const skyColors = [
+    ['#c8aaee','#a0c4f8'],          // 0 items — soft purple-blue
+    ['#d4b8f5','#aacfff'],          // 1
+    ['#e0c6ff','#b8dcff'],          // 2 rainbow day
+    ['#d8b4fe','#93c5fd'],          // 3
+    ['#fcd5fb','#c4b5fd'],          // 4 castle day
+    ['#fce7f3','#ddd6fe'],          // 5
+    ['#fff1f2','#e9d5ff'],          // 6 star shower
+    ['#fef9c3','#fce7f3'],          // 7 full magic
+  ];
+  const [sky1, sky2] = skyColors[Math.min(allItems, 7)];
+
+  let parts = [];
+
+  // Base sky gradient
+  parts.push(`<defs>
+    <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="${sky1}"/>
+      <stop offset="100%" stop-color="${sky2}"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="200" fill="url(#skyGrad)"/>`);
+
+  // Soft clouds always present
+  parts.push(`
+    <ellipse cx="720" cy="52" rx="72" ry="28" fill="rgba(255,255,255,.42)"/>
+    <ellipse cx="760" cy="44" rx="48" ry="22" fill="rgba(255,255,255,.35)"/>
+    <ellipse cx="820" cy="58" rx="54" ry="20" fill="rgba(255,255,255,.3)"/>
+    <ellipse cx="80" cy="36" rx="60" ry="22" fill="rgba(255,255,255,.28)"/>
+    <ellipse cx="120" cy="28" rx="40" ry="16" fill="rgba(255,255,255,.22)"/>
+  `);
+
+  // Week 2 — Rainbow arc in background
+  if (hasRainbow) {
+    parts.push(`
+      <g opacity=".72">
+        <path d="M430 200 Q540 10 680 200" fill="none" stroke="#ff6a9f" stroke-width="14" stroke-linecap="round"/>
+        <path d="M440 200 Q545 28 670 200" fill="none" stroke="#ffd76a" stroke-width="11" stroke-linecap="round"/>
+        <path d="M450 200 Q550 44 660 200" fill="none" stroke="#77d6ff" stroke-width="10" stroke-linecap="round"/>
+        <path d="M460 200 Q555 58 650 200" fill="none" stroke="#a8f0a0" stroke-width="8" stroke-linecap="round"/>
+        <path d="M468 200 Q558 70 642 200" fill="none" stroke="#c4b5fd" stroke-width="7" stroke-linecap="round"/>
+      </g>
+    `);
+  }
+
+  // Week 4 — Unicorn Castle
+  if (hasCastle) {
+    parts.push(`
+      <g transform="translate(670,20)" opacity=".82">
+        <!-- Castle base -->
+        <rect x="20" y="90" width="120" height="90" rx="4" fill="#f0d8ff" stroke="#c07bde" stroke-width="2"/>
+        <!-- Towers -->
+        <rect x="8"  y="70" width="36" height="50" rx="3" fill="#e8c8ff" stroke="#c07bde" stroke-width="2"/>
+        <rect x="116" y="70" width="36" height="50" rx="3" fill="#e8c8ff" stroke="#c07bde" stroke-width="2"/>
+        <rect x="62" y="60" width="36" height="40" rx="3" fill="#f5e0ff" stroke="#c07bde" stroke-width="2"/>
+        <!-- Roofs (triangles) -->
+        <polygon points="8,70 44,70 26,40" fill="#d084f0"/>
+        <polygon points="116,70 152,70 134,40" fill="#d084f0"/>
+        <polygon points="62,60 98,60 80,28" fill="#e57bff"/>
+        <!-- Flag -->
+        <line x1="80" y1="28" x2="80" y2="10" stroke="#c07bde" stroke-width="2"/>
+        <polygon points="80,10 100,18 80,24" fill="#ff9dca"/>
+        <!-- Door -->
+        <rect x="70" y="128" width="20" height="28" rx="3" fill="#c07bde"/>
+        <!-- Windows -->
+        <rect x="30" y="88" width="14" height="14" rx="2" fill="#fff4a7" stroke="#c07bde" stroke-width="1.5"/>
+        <rect x="116" y="88" width="14" height="14" rx="2" fill="#fff4a7" stroke="#c07bde" stroke-width="1.5"/>
+        <!-- Sparkles around castle -->
+        <text x="-4" y="64" font-size="14" opacity=".85">✨</text>
+        <text x="148" y="60" font-size="12" opacity=".85">✦</text>
+        <text x="72" y="188" font-size="13" opacity=".75">🌸</text>
+      </g>
+    `);
+  }
+
+  // Week 6 — Star shower
+  if (hasStars) {
+    const starPositions = [
+      [120,18],[200,8],[310,22],[395,10],[550,16],[620,6],[780,20],[850,10],
+      [160,54],[270,44],[480,50],[700,46],[840,52]
+    ];
+    parts.push(`<g opacity=".75">`);
+    starPositions.forEach(([x,y],i) => {
+      const sz = 8 + (i % 3) * 5;
+      const animDelay = (i * 0.4) % 2.8;
+      parts.push(`<text x="${x}" y="${y}" font-size="${sz}" style="animation:twinkle ${2.2 + (i%3)*.6}s ${animDelay}s infinite">⭐</text>`);
+    });
+    parts.push(`</g>`);
+  }
+
+  // Floating flower petals — always nice background decoration
+  if (allItems >= 1) {
+    parts.push(`
+      <g opacity=".55">
+        <text x="248" y="22" font-size="13" style="animation:twinkle 3s 0.5s infinite">🌸</text>
+        <text x="385" y="30" font-size="11" style="animation:twinkle 2.6s 1.2s infinite">✿</text>
+        <text x="510" y="18" font-size="13" style="animation:twinkle 3.2s 0.8s infinite">🌸</text>
+      </g>
+    `);
+  }
+
+  return parts.join('');
+}
+
+/* ── Lily character SVG ── */
+function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
+  ownedAvatarItems = ownedAvatarItems || [];
+  const count = unlockedItems.length;
+  const hasCrown    = unlockedItems.some(it => it[1] === 'Flower Crown');
+  const hasWand     = unlockedItems.some(it => it[1] === 'Sparkle Wand');
+  const hasButterfly= unlockedItems.some(it => it[1] === 'Butterfly Wings');
+  const hasGlow     = unlockedItems.some(it => it[1] === 'Full Magic');
+  const wingOpacity = count >= 1 ? .82 : .26;
+
+  const av = id => ownedAvatarItems.some(it => it.id === id);
+  const activeOutfit = ownedAvatarItems.find(it => it.id.startsWith('av_outfit_'));
+  const hasHairBow    = av('av_hair_bow');
+  const hasHairPink   = av('av_hair_pink');
+  const hasHairStar   = av('av_hair_star');
+  const hasHairFlower = av('av_hair_flower');
+  const hasTiara    = av('av_acc_tiara');
+  const hasNecklace = av('av_acc_necklace');
+  const hasGlasses  = av('av_acc_glasses');
+  const hasRibbon   = av('av_acc_ribbon');
+  const hasEarrings = av('av_acc_earrings');
+
+  const hair = '#d98b27'; const hairDark = '#9f6320';
+  const skin = '#ffe2c2'; const accent = '#f7a916';
+  const dress = '#ffc23d'; const dressDark = '#f39a16';
+
+  const outfitOverlay = !activeOutfit ? '' :
+    activeOutfit.id === 'av_outfit_princess' ? `
+      <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#f5d0ff" opacity="0.45"/>
+      <path d="M155 305 Q200 328 245 305" fill="none" stroke="rgba(255,255,255,.72)" stroke-width="4"/>
+      <path d="M148 338 Q200 364 252 338" fill="none" stroke="rgba(255,255,255,.72)" stroke-width="3"/>
+      <text x="162" y="268" font-size="10">✨</text><text x="222" y="284" font-size="9">✦</text><text x="184" y="348" font-size="10">⭐</text>` :
+    activeOutfit.id === 'av_outfit_rainbow' ? `
+      <path d="M172 226 Q200 210 228 226 L229 248 Q200 244 171 248 Z" fill="#FF6B6B" opacity="0.82"/>
+      <path d="M171 248 Q200 244 229 248 L231 268 Q200 264 169 268 Z" fill="#FF9F43" opacity="0.82"/>
+      <path d="M169 268 Q200 264 231 268 L233 288 Q200 284 167 288 Z" fill="#FFD32A" opacity="0.82"/>
+      <path d="M167 288 L237 292 L242 318 Q200 330 158 318 L163 292 Z" fill="#1DD1A1" opacity="0.72"/>
+      <path d="M158 318 Q200 330 242 318 L252 360 Q200 380 148 360 Z" fill="#54A0FF" opacity="0.72"/>` :
+    activeOutfit.id === 'av_outfit_galaxy' ? `
+      <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#0d0030" opacity="0.68"/>
+      <circle cx="175" cy="252" r="1.5" fill="white" opacity="0.9"/><circle cx="202" cy="266" r="1" fill="white" opacity="0.9"/>
+      <circle cx="227" cy="248" r="1.5" fill="white" opacity="0.9"/><circle cx="183" cy="296" r="1" fill="white" opacity="0.9"/>
+      <circle cx="213" cy="316" r="1.5" fill="white" opacity="0.9"/><circle cx="162" cy="332" r="1" fill="white" opacity="0.9"/>
+      <circle cx="234" cy="302" r="1" fill="white" opacity="0.9"/><circle cx="202" cy="346" r="1.5" fill="white" opacity="0.9"/>
+      <text x="176" y="284" font-size="10" opacity="0.75">✨</text><text x="199" y="318" font-size="9" opacity="0.65">⭐</text>` :
+    activeOutfit.id === 'av_outfit_pink' ? `
+      <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#FFB6C1" opacity="0.55"/>
+      <text x="164" y="253" font-size="11">🌸</text><text x="210" y="270" font-size="9">🌸</text>
+      <text x="180" y="300" font-size="10">🌸</text><text x="216" y="320" font-size="9">🌸</text>
+      <text x="164" y="344" font-size="10">🌸</text><text x="202" y="358" font-size="9">🌸</text>` :
+    activeOutfit.id === 'av_outfit_angel' ? `
+      <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="white" opacity="0.55"/>
+      <path d="M80 240 C60 200 90 170 130 200 C110 230 105 268 120 290 Z" fill="rgba(255,255,255,.55)" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/>
+      <path d="M320 240 C340 200 310 170 270 200 C290 230 295 268 280 290 Z" fill="rgba(255,255,255,.55)" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/>
+      <text x="152" y="310" font-size="10">✦</text><text x="236" y="298" font-size="9">✦</text>
+      <text x="180" y="354" font-size="10">✨</text><text x="205" y="366" font-size="9">✦</text>` :
+    activeOutfit.id === 'av_outfit_mermaid' ? `
+      <path d="M172 280 Q200 268 228 280 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#00c8a0" opacity="0.65"/>
+      <path d="M172 226 Q200 210 228 226 L228 280 Q200 268 172 280 Z" fill="#0084b4" opacity="0.55"/>
+      <path d="M157 316 Q200 335 243 316" fill="none" stroke="rgba(0,220,180,.8)" stroke-width="3"/>
+      <path d="M150 342 Q200 362 250 342" fill="none" stroke="rgba(0,200,160,.7)" stroke-width="2.5"/>
+      <text x="165" y="268" font-size="9">🐚</text><text x="218" y="272" font-size="8">🐠</text>
+      <text x="178" y="345" font-size="9">🐚</text><text x="210" y="358" font-size="8">💎</text>` :
+    activeOutfit.id === 'av_outfit_witch' ? `
+      <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#1a0040" opacity="0.72"/>
+      <path d="M157 316 Q200 335 243 316" fill="none" stroke="#f7a916" stroke-width="2.5" opacity="0.8"/>
+      <text x="163" y="262" font-size="9">✨</text><text x="220" y="274" font-size="8">⭐</text>
+      <text x="180" y="308" font-size="9">✦</text><text x="212" y="340" font-size="8">✨</text>
+      <text x="170" y="358" font-size="9">🌙</text><text x="205" y="366" font-size="8">⭐</text>` :
+    activeOutfit.id === 'av_outfit_star' ? `
+      <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#4a0080" opacity="0.60"/>
+      <circle cx="172" cy="255" r="3" fill="#ffd76a" opacity="0.9"/><circle cx="210" cy="248" r="4" fill="#ffd76a" opacity="0.9"/>
+      <circle cx="230" cy="272" r="2.5" fill="#fff4a7" opacity="0.9"/><circle cx="160" cy="290" r="3" fill="#ffd76a" opacity="0.9"/>
+      <circle cx="200" cy="305" r="4" fill="#ffd76a" opacity="0.9"/><circle cx="240" cy="300" r="2.5" fill="#fff4a7" opacity="0.9"/>
+      <circle cx="168" cy="338" r="3" fill="#ffd76a" opacity="0.9"/><circle cx="215" cy="348" r="4" fill="#ffd76a" opacity="0.9"/>
+      <text x="183" y="278" font-size="10">⭐</text><text x="195" y="322" font-size="11">🌟</text>` :
+    activeOutfit.id === 'av_outfit_rose' ? `
+      <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#c0003c" opacity="0.55"/>
+      <path d="M157 316 Q200 335 243 316" fill="none" stroke="rgba(255,80,100,.7)" stroke-width="3"/>
+      <text x="162" y="253" font-size="11">🌹</text><text x="208" y="268" font-size="9">🌹</text>
+      <text x="178" y="298" font-size="10">🌹</text><text x="215" y="318" font-size="9">🌹</text>
+      <text x="162" y="344" font-size="10">🌹</text><text x="200" y="358" font-size="9">🌹</text>` : '';
+
+  // Shoes overlay (replaces default shoes)
+  const activeShoes = ownedAvatarItems.find(it => it.id.startsWith('av_shoes_'));
+  const shoesOverlay = !activeShoes ? '' :
+    activeShoes.id === 'av_shoes_glass' ? `
+      <path d="M166 430 Q184 419 197 432 Q194 445 171 443 Z" fill="rgba(180,230,255,.82)" stroke="rgba(255,255,255,.9)" stroke-width="1.5"/>
+      <path d="M203 432 Q216 419 234 430 Q229 443 206 445 Z" fill="rgba(180,230,255,.82)" stroke="rgba(255,255,255,.9)" stroke-width="1.5"/>
+      <circle cx="184" cy="432" r="2.5" fill="white" opacity="0.9"/><circle cx="216" cy="432" r="2.5" fill="white" opacity="0.9"/>` :
+    activeShoes.id === 'av_shoes_star' ? `
+      <path d="M163 432 Q182 419 197 432 Q193 446 168 444 Z" fill="#3a1060" stroke="#ffd76a" stroke-width="1.5"/>
+      <path d="M203 432 Q218 419 237 432 Q232 446 207 445 Z" fill="#3a1060" stroke="#ffd76a" stroke-width="1.5"/>
+      <text x="170" y="441" font-size="7">⭐</text><text x="210" y="441" font-size="7">⭐</text>` :
+    activeShoes.id === 'av_shoes_rainbow' ? `
+      <path d="M164 430 Q183 419 197 432 Q194 445 170 443 Z" fill="white" stroke="#ff9dca" stroke-width="1.5"/>
+      <path d="M203 432 Q217 419 235 430 Q230 443 206 445 Z" fill="white" stroke="#9dccff" stroke-width="1.5"/>
+      <text x="169" y="441" font-size="7">🌈</text><text x="209" y="441" font-size="7">🌈</text>` :
+    activeShoes.id === 'av_shoes_flower' ? `
+      <path d="M165 430 Q183 419 197 432 Q194 445 170 443 Z" fill="#ff9dca" stroke="#ff8c00" stroke-width="1.5"/>
+      <path d="M203 432 Q217 419 234 430 Q229 443 206 445 Z" fill="#ff9dca" stroke="#ff8c00" stroke-width="1.5"/>
+      <text x="170" y="441" font-size="7">🌸</text><text x="210" y="441" font-size="7">🌸</text>` :
+    activeShoes.id === 'av_shoes_moon' ? `
+      <path d="M165 430 Q183 419 197 432 Q194 445 170 443 Z" fill="#c8a0f8" stroke="#f7a916" stroke-width="1.5"/>
+      <path d="M203 432 Q217 419 234 430 Q229 443 206 445 Z" fill="#c8a0f8" stroke="#f7a916" stroke-width="1.5"/>
+      <text x="170" y="441" font-size="7">🌙</text><text x="210" y="441" font-size="7">🌙</text>` : '';
+
+  // Bag overlay (near right hand)
+  const activeBag = ownedAvatarItems.find(it => it.id.startsWith('av_bag_'));
+  const bagOverlay = !activeBag ? '' :
+    activeBag.id === 'av_bag_star' ?    `<text x="270" y="318" font-size="28" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">⭐</text>` :
+    activeBag.id === 'av_bag_heart' ?   `<text x="268" y="320" font-size="28" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">💖</text>` :
+    activeBag.id === 'av_bag_rainbow' ? `<text x="266" y="318" font-size="28" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">🌈</text>` :
+    activeBag.id === 'av_bag_flower' ?  `<text x="268" y="320" font-size="26" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">🌷</text>` :
+    activeBag.id === 'av_bag_magic' ?   `<text x="268" y="318" font-size="26" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">🪄</text>` : '';
+
+  return `<svg viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg" aria-label="Lily">
+    <defs>
+      <radialGradient id="lhalo" cx="50%" cy="45%"><stop offset="0%" stop-color="#fff" stop-opacity=".9"/><stop offset="55%" stop-color="#f0d8ff" stop-opacity=".45"/><stop offset="100%" stop-color="${accent}" stop-opacity=".0"/></radialGradient>
+      <linearGradient id="ldress" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${dress}"/><stop offset="1" stop-color="${dressDark}"/></linearGradient>
+      <linearGradient id="lwing"  x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".92"/><stop offset="1" stop-color="#f0d8ff" stop-opacity=".72"/></linearGradient>
+      <linearGradient id="lhair"  x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${hair}"/><stop offset="1" stop-color="${hairDark}"/></linearGradient>
+      ${hasGlow ? `<radialGradient id="lglow" cx="50%" cy="50%"><stop offset="0%" stop-color="#ffd76a" stop-opacity=".6"/><stop offset="100%" stop-color="#ff9dca" stop-opacity="0"/></radialGradient>` : ''}
+    </defs>
+
+    ${hasGlow ? `<circle cx="200" cy="240" r="200" fill="url(#lglow)"/>` : ''}
+    <circle cx="200" cy="238" r="178" fill="url(#lhalo)"/>
+
+    <g class="floating">
+      ${hasGlow ? `<ellipse cx="200" cy="244" rx="168" ry="204" fill="none" stroke="${accent}" stroke-width="3" stroke-dasharray="6 8" opacity=".55"/><ellipse cx="200" cy="244" rx="150" ry="186" fill="none" stroke="#fff4a7" stroke-width="3" stroke-dasharray="5 9" opacity=".5"/>` : ''}
+      <g class="wings-anim" opacity="${wingOpacity}">
+        <path d="M176 206 C104 138 58 190 80 258 C96 300 145 288 181 250 Z" fill="url(#lwing)" stroke="${accent}" stroke-width="2"/>
+        <path d="M177 258 C111 274 92 332 138 354 C170 346 186 310 194 276 Z" fill="url(#lwing)" stroke="${accent}" stroke-width="2"/>
+        <path d="M224 206 C296 138 342 190 320 258 C304 300 255 288 219 250 Z" fill="url(#lwing)" stroke="${accent}" stroke-width="2"/>
+        <path d="M223 258 C289 274 308 332 262 354 C230 346 214 310 206 276 Z" fill="url(#lwing)" stroke="${accent}" stroke-width="2"/>
+      </g>
+      ${hasButterfly ? `
+        <g class="wings-anim" opacity=".7">
+          <path d="M170 220 C90 150 42 200 68 270 C82 308 138 295 177 256 Z" fill="rgba(255,200,255,.6)" stroke="#ff9dca" stroke-width="2.5"/>
+          <path d="M230 220 C310 150 358 200 332 270 C318 308 262 295 223 256 Z" fill="rgba(200,220,255,.6)" stroke="#9dccff" stroke-width="2.5"/>
+          <text x="56" y="225" font-size="18">🦋</text>
+          <text x="312" y="222" font-size="16">🦋</text>
+        </g>` : ''}
+      <path d="M186 348 L181 430" stroke="${skin}" stroke-width="12" stroke-linecap="round"/>
+      <path d="M214 348 L219 430" stroke="${skin}" stroke-width="12" stroke-linecap="round"/>
+      <path d="M166 430 Q184 419 197 432 Q194 445 171 443 Z" fill="${accent}"/>
+      <path d="M203 432 Q216 419 234 430 Q229 443 206 445 Z" fill="${accent}"/>
+      <circle cx="184" cy="432" r="3" fill="#fff4a7"/><circle cx="216" cy="432" r="3" fill="#fff4a7"/>
+      ${shoesOverlay}
+      <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="url(#ldress)" stroke="rgba(255,255,255,.7)" stroke-width="2"/>
+      <path d="M157 316 Q200 340 243 316" fill="none" stroke="#fff" stroke-width="3" opacity=".55"/>
+      <circle cx="182" cy="318" r="4" fill="#fff4a7"/><circle cx="206" cy="333" r="4" fill="#fff4a7"/><circle cx="225" cy="314" r="4" fill="#fff4a7"/>
+      ${outfitOverlay}
+      <path d="M172 232 Q146 264 140 304" stroke="${skin}" stroke-width="11" stroke-linecap="round" fill="none"/>
+      <path d="M228 232 Q256 266 264 306" stroke="${skin}" stroke-width="11" stroke-linecap="round" fill="none"/>
+      <circle cx="140" cy="306" r="7" fill="${skin}"/>
+      <circle cx="264" cy="306" r="7" fill="${skin}"/>
+      ${hasWand ? `
+        <line x1="264" y1="306" x2="304" y2="224" stroke="${accent}" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="304" cy="214" r="16" fill="#fff4a7" stroke="${accent}" stroke-width="3"/>
+        <text x="295" y="220" font-size="16">💫</text>
+        <circle cx="264" cy="306" r="5" fill="#fff4a7"/>` : ''}
+      ${bagOverlay}
+      <path d="M148 174 C136 125 154 92 200 88 C246 92 264 125 252 174 C260 214 252 252 236 282 C242 222 238 178 226 150 C211 134 189 134 174 150 C162 178 158 222 164 282 C148 252 140 214 148 174 Z" fill="url(#lhair)"/>
+      <ellipse cx="151" cy="206" rx="12" ry="20" fill="${hair}"/>
+      <ellipse cx="249" cy="206" rx="12" ry="20" fill="${hair}"/>
+      <rect x="194" y="200" width="12" height="22" fill="${skin}"/>
+      <ellipse cx="200" cy="168" rx="47" ry="54" fill="${skin}"/>
+      <path d="M151 149 C158 120 180 106 204 112 C231 112 247 129 251 150 C234 148 219 154 205 166 C187 151 169 151 151 149 Z" fill="url(#lhair)"/>
+      <path d="M158 145 C174 126 195 123 218 132 C199 135 183 148 170 168 C165 160 161 153 158 145 Z" fill="${hair}"/>
+      <ellipse cx="160" cy="174" rx="11" ry="17" fill="${hair}"/>
+      <ellipse cx="240" cy="174" rx="11" ry="17" fill="${hair}"/>
+      ${hasHairPink ? `
+        <path d="M154 190 Q128 215 125 252 Q128 278 142 285 Q138 262 142 238 Q148 218 159 204" fill="#ff9dca" stroke="#ff8c00" stroke-width="1.5" opacity="0.9"/>
+        <path d="M246 190 Q272 215 275 252 Q272 278 258 285 Q262 262 258 238 Q252 218 241 204" fill="#ff9dca" stroke="#ff8c00" stroke-width="1.5" opacity="0.9"/>
+        <ellipse cx="157" cy="192" rx="9" ry="7" fill="#ff8c00" stroke="#ff5599" stroke-width="1"/>
+        <ellipse cx="243" cy="192" rx="9" ry="7" fill="#ff8c00" stroke="#ff5599" stroke-width="1"/>` : ''}
+      ${hasHairBow ? `
+        <path d="M185 96 Q182 77 192 69 Q200 63 208 69 Q218 77 215 96 Q208 83 200 81 Q192 83 185 96Z" fill="#ff9dca" stroke="#ff5599" stroke-width="1.5" opacity="0.95"/>
+        <path d="M182 85 Q174 73 176 65 Q184 58 190 66 Q184 74 182 85Z" fill="#ff8c00" stroke="#ff5599" stroke-width="1.5"/>
+        <path d="M218 85 Q226 73 224 65 Q216 58 210 66 Q216 74 218 85Z" fill="#ff8c00" stroke="#ff5599" stroke-width="1.5"/>
+        <ellipse cx="200" cy="83" rx="9" ry="7" fill="#ff9dca" stroke="#ff5599" stroke-width="1.5"/>` : ''}
+      ${hasHairStar ? `
+        <text x="148" y="166" font-size="15">⭐</text>
+        <text x="232" y="162" font-size="13">⭐</text>` : ''}
+      ${hasHairFlower ? `
+        <text x="152" y="143" font-size="12">🌸</text>
+        <text x="175" y="129" font-size="13">🌸</text>
+        <text x="198" y="123" font-size="12">🌸</text>
+        <text x="220" y="128" font-size="13">🌸</text>
+        <text x="240" y="143" font-size="12">🌸</text>` : ''}
+      <ellipse cx="181" cy="176" rx="7" ry="10" fill="#fff"/>
+      <ellipse cx="219" cy="176" rx="7" ry="10" fill="#fff"/>
+      <ellipse cx="181" cy="178" rx="4.8" ry="7" fill="#3d2854"/>
+      <ellipse cx="219" cy="178" rx="4.8" ry="7" fill="#3d2854"/>
+      <circle cx="183" cy="174" r="2" fill="#fff"/>
+      <circle cx="221" cy="174" r="2" fill="#fff"/>
+      <path d="M188 206 Q200 216 212 206" stroke="#d64d84" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <ellipse cx="169" cy="198" rx="9" ry="6" fill="#ff9dca" opacity=".55"/>
+      <ellipse cx="231" cy="198" rx="9" ry="6" fill="#ff9dca" opacity=".55"/>
+      ${hasGlasses ? `
+        <circle cx="181" cy="176" r="12" fill="rgba(157,110,255,.12)" stroke="#f7a916" stroke-width="2.5"/>
+        <circle cx="219" cy="176" r="12" fill="rgba(157,110,255,.12)" stroke="#f7a916" stroke-width="2.5"/>
+        <path d="M193 176 Q200 179 207 176" stroke="#f7a916" stroke-width="2.5" fill="none"/>
+        <path d="M169 175 L153 172" stroke="#f7a916" stroke-width="2.5"/>
+        <path d="M231 175 L247 172" stroke="#f7a916" stroke-width="2.5"/>` : ''}
+      ${hasNecklace ? `
+        <path d="M178 224 Q200 232 222 224" stroke="#ffd76a" stroke-width="2" fill="none"/>
+        <text x="193" y="236" font-size="11">⭐</text>` : ''}
+      ${hasRibbon ? `
+        <path d="M193 222 Q200 230 207 222" stroke="#ff8c00" stroke-width="2" fill="none"/>
+        <path d="M188 218 Q196 210 200 218 Q204 210 212 218 Q205 226 200 220 Q195 226 188 218Z" fill="#ff9dca" stroke="#ff8c00" stroke-width="1.5"/>` : ''}
+      ${hasEarrings ? `
+        <text x="144" y="195" font-size="11">⭐</text>
+        <text x="237" y="195" font-size="11">⭐</text>` : ''}
+      ${hasGlow ? `
+        <text x="64" y="148" font-size="22" style="animation:twinkle 2s 0s infinite">✨</text>
+        <text x="310" y="150" font-size="20" style="animation:twinkle 2s 0.4s infinite">⭐</text>
+        <text x="60" y="278" font-size="18" style="animation:twinkle 2s 0.8s infinite">✦</text>
+        <text x="316" y="282" font-size="18" style="animation:twinkle 2s 1.2s infinite">✨</text>
+        <text x="190" y="56" font-size="22" style="animation:twinkle 2s 0.6s infinite">🌟</text>` : ''}
+      ${hasCrown ? `
+        <path d="M163 118 L176 98 L190 114 L200 88 L210 114 L224 98 L237 118 L200 127 Z" fill="#ff9dca" stroke="${accent}" stroke-width="2"/>
+        <circle cx="200" cy="107" r="5" fill="#fff4a7"/>
+        <text x="183" y="118" font-size="13">🌸</text>` : ''}
+      ${hasTiara ? `
+        <path d="M162 136 L172 114 L182 132 L200 106 L218 132 L228 114 L238 136" stroke="#ffd76a" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="200" cy="108" r="6" fill="#ffd76a" stroke="white" stroke-width="1.5"/>
+        <circle cx="172" cy="118" r="3.5" fill="#ffd76a" stroke="white" stroke-width="1"/>
+        <circle cx="228" cy="118" r="3.5" fill="#ffd76a" stroke="white" stroke-width="1"/>` : ''}
+    </g>
+  </svg>`;
+}
+
+function createStars() {
+  const container = document.getElementById('stars');
+  const symbols = ['✦', '✧', '⭐', '✨', '·'];
+  for (let i = 0; i < 62; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3.4 + 's';
+    star.style.fontSize = (7 + Math.random() * 18) + 'px';
+    container.appendChild(star);
+  }
+}
+
+function createWeatherDrift() {
+  const container = document.getElementById('weatherDrift');
+  const symbols = ['☁️','✨','💧','❄️','☀️','🌈'];
+  for (let i = 0; i < 14; i++) {
+    const drift = document.createElement('div');
+    drift.className = 'drift';
+    drift.textContent = symbols[i % symbols.length];
+    drift.style.top = (5 + Math.random() * 86) + '%';
+    drift.style.left = (-18 + Math.random() * 80) + 'vw';
+    drift.style.fontSize = (20 + Math.random() * 22) + 'px';
+    drift.style.animationDuration = (28 + Math.random() * 26) + 's';
+    drift.style.animationDelay = (-Math.random() * 40) + 's';
+    container.appendChild(drift);
+  }
+}
+
+function createLilyBgStars() {
+  const container = document.getElementById('lilyBgStars');
+  if (!container) return;
+  const symbols = ['✦','✧','✨','·','⭐'];
+  for (let i = 0; i < 14; i++) {
+    const s = document.createElement('span');
+    s.className = 'lily-bg-star';
+    s.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = Math.random() * 3 + 's';
+    s.style.opacity = 0.4;
+    s.style.color = ['#ffd76a','#ffb830','#f7a916','#ffe066'][Math.floor(Math.random() * 4)];
+    container.appendChild(s);
+  }
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function itemCountFor(day) { return Math.min(taskCounts(day).done, MAX_TASKS); }
+function keyFor(f) { return Object.keys(FAIRIES).find(day => FAIRIES[day] === f); }
+function buildMiniFairy(day, complete = false) {
+  const itemsVisible = complete ? Array.from({length: 10}, (_, i) => i) : [];
+  return buildFairySVG(day, itemsVisible, -1, true);
+}
+
+function hairBack(f) {
+  const key = keyFor(f);
+  if (f.hairStyle === 'curls') return `<path d="M148 174 C136 125 154 92 200 88 C246 92 264 125 252 174 C260 214 252 252 236 282 C242 222 238 178 226 150 C211 134 189 134 174 150 C162 178 158 222 164 282 C148 252 140 214 148 174 Z" fill="url(#hair-${key})"/><ellipse cx="151" cy="206" rx="12" ry="20" fill="${f.hair}"/><ellipse cx="249" cy="206" rx="12" ry="20" fill="${f.hair}"/><ellipse cx="150" cy="240" rx="10" ry="18" fill="${f.hairDark}"/><ellipse cx="250" cy="240" rx="10" ry="18" fill="${f.hairDark}"/>`;
+  if (f.hairStyle === 'braid') return `<path d="M148 174 C137 122 157 92 200 89 C243 92 263 122 252 174 L252 244 C236 226 238 183 226 151 C210 134 190 134 174 151 C162 183 164 226 148 244 Z" fill="url(#hair-${key})"/><ellipse cx="252" cy="232" rx="13" ry="23" fill="${f.hair}"/><ellipse cx="260" cy="266" rx="11" ry="19" fill="${f.hairDark}"/><ellipse cx="255" cy="294" rx="9" ry="15" fill="${f.hair}"/>`;
+  if (f.hairStyle === 'pony') return `<path d="M149 174 C136 121 156 91 200 88 C244 91 264 121 251 174 C258 200 263 222 266 244 C248 230 240 195 226 151 C210 134 190 134 174 151 C162 184 162 218 150 242 Z" fill="url(#hair-${key})"/><path d="M244 156 C292 166 298 214 280 246 C266 214 244 196 228 184 Z" fill="${f.hairDark}"/>`;
+  return `<path d="M149 174 C137 124 156 94 200 90 C244 94 263 124 251 174 L250 224 C236 210 238 184 226 152 C210 135 190 135 174 152 C162 184 164 210 150 224 Z" fill="url(#hair-${key})"/>`;
+}
+
+function hairFront(f) {
+  const key = keyFor(f);
+  const shine = `stroke="rgba(255,255,255,.28)" stroke-width="2" stroke-linecap="round" fill="none"`;
+  if (f.hairStyle === 'bob') return `<path d="M151 148 C160 120 181 107 207 113 C231 116 246 130 251 151 C236 146 221 151 206 162 C189 151 169 151 151 148 Z" fill="url(#hair-${key})"/><path d="M158 142 C174 124 196 122 216 132 C199 134 183 145 169 164 C164 158 160 151 158 142 Z" fill="${f.hair}"/><path d="M156 158 C147 183 151 208 160 222 C171 211 170 184 166 162 Z" fill="${f.hair}"/><path d="M244 158 C253 183 249 208 240 222 C229 211 230 184 234 162 Z" fill="${f.hair}"/><path d="M174 136 C188 128 205 128 220 136" ${shine}/>`;
+  if (f.hairStyle === 'straight') return `<path d="M151 148 C164 122 181 111 200 113 C219 111 236 122 249 148 C235 153 218 160 200 158 C182 160 165 153 151 148 Z" fill="url(#hair-${key})"/><path d="M158 145 C176 132 194 127 218 134 C204 139 188 149 174 165 C168 158 162 152 158 145 Z" fill="${f.hair}"/><path d="M242 147 C228 139 212 136 196 140 C212 147 225 156 235 168 C238 160 241 153 242 147 Z" fill="${f.hairDark}"/><path d="M176 134 C190 127 209 128 224 137" ${shine}/>`;
+  if (f.hairStyle === 'curls') return `<path d="M151 149 C158 120 180 106 204 112 C231 112 247 129 251 150 C234 148 219 154 205 166 C187 151 169 151 151 149 Z" fill="url(#hair-${key})"/><path d="M158 145 C174 126 195 123 218 132 C199 135 183 148 170 168 C165 160 161 153 158 145 Z" fill="${f.hair}"/><ellipse cx="160" cy="174" rx="11" ry="17" fill="${f.hair}"/><ellipse cx="240" cy="174" rx="11" ry="17" fill="${f.hair}"/><ellipse cx="154" cy="202" rx="9" ry="14" fill="${f.hairDark}"/><ellipse cx="246" cy="202" rx="9" ry="14" fill="${f.hairDark}"/><path d="M176 135 C190 128 206 128 222 137" ${shine}/>`;
+  return `<path d="M151 149 C160 121 181 108 207 113 C232 116 247 131 251 151 C235 148 219 154 204 165 C187 152 169 152 151 149 Z" fill="url(#hair-${key})"/><path d="M158 145 C176 125 199 123 220 132 C200 136 184 148 171 168 C166 160 162 153 158 145 Z" fill="${f.hair}"/><path d="M153 162 C143 190 150 218 160 228 C171 214 170 187 166 166 Z" fill="${f.hair}"/><path d="M247 162 C258 190 250 218 240 228 C229 214 230 187 234 166 Z" fill="${f.hair}"/><path d="M176 136 C192 128 209 129 225 138" ${shine}/>`;
+}
+
+function headItem(f) {
+  if (f.weather === 'sunshine') return `<path d="M166 116 L178 96 L192 111 L200 88 L208 111 L222 96 L234 116 L200 124 Z" fill="#ffd76a" stroke="${f.accent}" stroke-width="2"/><circle cx="200" cy="105" r="5" fill="#fff"/>`;
+  if (f.weather === 'snow') return `<path d="M170 116 L182 100 L200 112 L218 100 L230 116 L200 124 Z" fill="#eaf9ff" stroke="${f.accent}" stroke-width="2"/><text x="192" y="114" font-size="16">❄️</text>`;
+  return `<g transform="translate(224 132)"><circle r="9" fill="${f.accent}"/><circle cx="-7" cy="-5" r="6" fill="#fff"/><circle cx="7" cy="-5" r="6" fill="#fff"/><circle cx="-5" cy="6" r="6" fill="#fff"/><circle cx="5" cy="6" r="6" fill="#fff"/><circle r="3" fill="#ffd76a"/></g>`;
+}
+
+function wandSVG(f) {
+  const top = {
+    sun: `<circle cx="304" cy="224" r="17" fill="#ffd76a" stroke="${f.accent}" stroke-width="3"/><g stroke="#ffd76a" stroke-width="3" stroke-linecap="round"><line x1="304" y1="196" x2="304" y2="187"/><line x1="304" y1="252" x2="304" y2="261"/><line x1="276" y1="224" x2="267" y2="224"/><line x1="332" y1="224" x2="341" y2="224"/><line x1="284" y1="204" x2="278" y2="198"/><line x1="324" y1="204" x2="330" y2="198"/><line x1="284" y1="244" x2="278" y2="250"/><line x1="324" y1="244" x2="330" y2="250"/></g>`,
+    snow: `<text x="288" y="232" font-size="34">❄️</text>`,
+    pinwheel: `<g transform="translate(304 224)"><path d="M0 0 L0 -28 Q18 -16 0 0" fill="#ff6a9f"/><path d="M0 0 L28 0 Q16 18 0 0" fill="#ffd76a"/><path d="M0 0 L0 28 Q-18 16 0 0" fill="#77d6ff"/><path d="M0 0 L-28 0 Q-16 -18 0 0" fill="#8ee5a5"/><circle r="5" fill="#fff"/></g>`,
+    cloud: `<text x="284" y="232" font-size="32">☁️</text>`,
+    mist: `<text x="282" y="232" font-size="32">🌫️</text>`,
+    lightning: `<text x="288" y="232" font-size="34">⚡</text>`,
+    rain: `<text x="287" y="232" font-size="34">💧</text>`
+  }[f.wand];
+  return `<line x1="264" y1="306" x2="304" y2="224" stroke="${f.accent}" stroke-width="4" stroke-linecap="round"/>${top}<circle cx="264" cy="306" r="5" fill="#fff4a7"/>`;
+}
+
+function buildFairySVG(day, itemsVisible, newItemIdx, mini = false) {
+  const f = FAIRIES[day];
+  const show = idx => itemsVisible.includes(idx);
+  const cls = idx => idx === newItemIdx ? 'new-item' : '';
+  const scale = mini ? 'scale(.55) translate(165 140)' : '';
+  const wingOpacity = show(3) ? .84 : .22;
+  const dressReady = show(4);
+  const shoesReady = show(5);
+  const wandReady = show(0);
+  const crownReady = show(1);
+  const necklaceReady = show(2);
+  const auraReady = show(9);
+
+  return `
+    <svg viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg" aria-label="${f.name} ${f.title}">
+      <defs>
+        <radialGradient id="halo-${day}" cx="50%" cy="45%"><stop offset="0%" stop-color="#ffffff" stop-opacity=".92"/><stop offset="48%" stop-color="${f.light}" stop-opacity=".55"/><stop offset="100%" stop-color="${f.accent}" stop-opacity=".04"/></radialGradient>
+        <linearGradient id="dress-${day}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${dressReady ? f.dress : '#fff7fb'}"/><stop offset="1" stop-color="${dressReady ? f.dressDark : '#f1dce9'}"/></linearGradient>
+        <linearGradient id="wing-${day}" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".92"/><stop offset="1" stop-color="${f.light}" stop-opacity=".72"/></linearGradient>
+        <linearGradient id="hair-${day}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${f.hair}"/><stop offset="1" stop-color="${f.hairDark}"/></linearGradient>
+      </defs>
+      ${mini ? '' : `<circle cx="200" cy="238" r="178" fill="url(#halo-${day})"/>`}
+      <g class="floating" transform="${scale}">
+        ${auraReady ? `<g class="${cls(9)}" opacity=".78"><ellipse cx="200" cy="244" rx="168" ry="204" fill="none" stroke="${f.accent}" stroke-width="3" stroke-dasharray="6 8"/><ellipse cx="200" cy="244" rx="150" ry="186" fill="none" stroke="#fff4a7" stroke-width="3" stroke-dasharray="5 9"/></g>` : ''}
+        <g class="wings-anim ${cls(3)}" opacity="${wingOpacity}"><path d="M176 206 C104 138 58 190 80 258 C96 300 145 288 181 250 Z" fill="url(#wing-${day})" stroke="${f.accent}" stroke-width="2"/><path d="M177 258 C111 274 92 332 138 354 C170 346 186 310 194 276 Z" fill="url(#wing-${day})" stroke="${f.accent}" stroke-width="2"/><path d="M224 206 C296 138 342 190 320 258 C304 300 255 288 219 250 Z" fill="url(#wing-${day})" stroke="${f.accent}" stroke-width="2"/><path d="M223 258 C289 274 308 332 262 354 C230 346 214 310 206 276 Z" fill="url(#wing-${day})" stroke="${f.accent}" stroke-width="2"/><circle cx="126" cy="230" r="4" fill="#fff"/><circle cx="274" cy="230" r="4" fill="#fff"/></g>
+        <path d="M186 348 L181 430" stroke="${f.skin}" stroke-width="12" stroke-linecap="round"/><path d="M214 348 L219 430" stroke="${f.skin}" stroke-width="12" stroke-linecap="round"/>
+        ${shoesReady ? `<g class="${cls(5)}"><path d="M166 430 Q184 419 197 432 Q194 445 171 443 Z" fill="${f.accent}"/><path d="M203 432 Q216 419 234 430 Q229 443 206 445 Z" fill="${f.accent}"/><circle cx="184" cy="432" r="3" fill="#fff4a7"/><circle cx="216" cy="432" r="3" fill="#fff4a7"/></g>` : `<ellipse cx="183" cy="434" rx="13" ry="6" fill="${f.skin}"/><ellipse cx="217" cy="434" rx="13" ry="6" fill="${f.skin}"/>`}
+        <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="url(#dress-${day})" stroke="rgba(255,255,255,.7)" stroke-width="2"/>
+        ${dressReady ? `<g class="${cls(4)}"><path d="M157 316 Q200 340 243 316" fill="none" stroke="#fff" stroke-width="3" opacity=".55"/><circle cx="182" cy="318" r="4" fill="#fff4a7"/><circle cx="206" cy="333" r="4" fill="#fff4a7"/><circle cx="225" cy="314" r="4" fill="#fff4a7"/></g>` : ''}
+        ${show(6) ? `<g class="${cls(6)}"><path d="M162 286 Q200 300 238 286" stroke="${f.accent}" stroke-width="6" stroke-linecap="round"/><circle cx="200" cy="292" r="7" fill="#fff4a7" stroke="${f.accent}" stroke-width="2"/></g>` : ''}
+        <path d="M172 232 Q146 264 140 304" stroke="${f.skin}" stroke-width="11" stroke-linecap="round" fill="none"/><path d="M228 232 Q256 266 264 306" stroke="${f.skin}" stroke-width="11" stroke-linecap="round" fill="none"/><circle cx="140" cy="306" r="7" fill="${f.skin}"/><circle cx="264" cy="306" r="7" fill="${f.skin}"/>
+        <rect x="194" y="200" width="12" height="22" fill="${f.skin}"/>${hairBack(f)}<ellipse cx="200" cy="168" rx="47" ry="54" fill="${f.skin}"/>${hairFront(f)}
+        <ellipse cx="181" cy="176" rx="7" ry="10" fill="#fff"/><ellipse cx="219" cy="176" rx="7" ry="10" fill="#fff"/><ellipse cx="181" cy="178" rx="4.8" ry="7" fill="#3d2854"/><ellipse cx="219" cy="178" rx="4.8" ry="7" fill="#3d2854"/><circle cx="183" cy="174" r="2" fill="#fff"/><circle cx="221" cy="174" r="2" fill="#fff"/>
+        <path d="M188 206 Q200 216 212 206" stroke="#d64d84" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="169" cy="198" rx="9" ry="6" fill="#ff9dca" opacity=".55"/><ellipse cx="231" cy="198" rx="9" ry="6" fill="#ff9dca" opacity=".55"/>
+        ${crownReady ? `<g class="${cls(1)}">${headItem(f)}</g>` : ''}
+        ${necklaceReady ? `<g class="${cls(2)}"><path d="M184 221 Q200 236 216 221" stroke="${f.accent}" stroke-width="2.4" fill="none"/><circle cx="200" cy="236" r="8" fill="#fff4a7" stroke="${f.accent}" stroke-width="2"/><text x="200" y="240" text-anchor="middle" font-size="10">${f.icon}</text></g>` : ''}
+        ${show(7) ? `<g class="${cls(7)}"><circle cx="140" cy="306" r="11" fill="none" stroke="${f.accent}" stroke-width="3"/><circle cx="264" cy="306" r="11" fill="none" stroke="${f.accent}" stroke-width="3"/><circle cx="140" cy="299" r="3" fill="#fff4a7"/><circle cx="264" cy="299" r="3" fill="#fff4a7"/></g>` : ''}
+        ${wandReady ? `<g class="${cls(0)}">${wandSVG(f)}</g>` : ''}
+        ${show(8) ? `<g class="${cls(8)}"><text x="70" y="156" font-size="24">${f.effect[0]}</text><text x="306" y="158" font-size="22">${f.effect[1]}</text><text x="62" y="285" font-size="19">${f.effect[2]}</text><text x="316" y="288" font-size="20">✨</text><text x="192" y="62" font-size="22">✦</text></g>` : ''}
+      </g>
+    </svg>`;
+}
+
+function weatherEffect(f) {
+  return f.effect.map((symbol, i) => `<span class="effect-symbol" style="left:${12 + i * 33}%; top:${18 + (i % 2) * 48}%; animation-delay:${i * .35}s; font-size:${24 + i * 3}px;">${symbol}</span>`).join('');
+}
+
+/* ── RENDER LILY AVATAR ── */
+function renderLilyAvatar() {
+  const weeksDone = successfulWeekCount();
+  const allDone = isWeekAllDone();
+
+  const slotsEl = document.getElementById('roomUnlockSlots');
+  if (slotsEl) {
+    slotsEl.innerHTML = LILY_WEEK_ITEMS.map((item, idx) => {
+      const filled = idx < weeksDone;
+      return `<div class="rus-slot ${filled ? 'filled' : ''}" title="${filled ? item[1] : '?'}">${filled ? item[0] : '·'}</div>`;
+    }).join('');
+  }
+
+  const labelEl = document.getElementById('roomWeekLabel');
+  if (labelEl) {
+    labelEl.textContent = weeksDone === 0 && !allDone
+      ? '미션 완료 → Joy 아이템 획득! ✨'
+      : allDone
+      ? '🌈 이번 주 완료! Joy가 빛나요!'
+      : `${weeksDone}주 완료! Joy가 빛나고 있어요 ✨`;
+  }
+}
+
+/* ── ROOM THEME PALETTES ── */
+const ROOM_THEMES = {
+  default:         { wall:'#ffe8a8', wall2:'#ffd070', floor:'#e08030', floor2:'#c06018', base:'#9a4808', wp:['☀️','✨','🌻'] },
+  theme_spring:    { wall:'#fde8f4', wall2:'#fbd0e8', floor:'#c8e8a8', floor2:'#a8d880', base:'#80b860', wp:['🌸','🌷','🌼'] },
+  theme_ocean:     { wall:'#a8d8f0', wall2:'#80c4e4', floor:'#3a7fa0', floor2:'#206080', base:'#104060', wp:['🌊','🐠','🐚'] },
+  theme_cloud:     { wall:'#eef6ff', wall2:'#d8ecff', floor:'#b8d4f0', floor2:'#98bce0', base:'#78a4d0', wp:['☁️','🌤️','⛅'] },
+  theme_forest:    { wall:'#b8dca0', wall2:'#98c878', floor:'#7a5030', floor2:'#5a3018', base:'#3a1808', wp:['🍄','🌿','🍀'] },
+  theme_starnight: { wall:'#0a0828', wall2:'#060520', floor:'#18104a', floor2:'#100838', base:'#080628', wp:['⭐','🌟','✨'] },
+  theme_candy:     { wall:'#ffb8d8', wall2:'#ff90c0', floor:'#ffd890', floor2:'#ffb850', base:'#ff9030', wp:['🍭','🍬','🧁'] },
+};
+
+function getActiveTheme() {
+  const owned = shopOwned.find(id => id.startsWith('theme_'));
+  return owned ? ROOM_THEMES[owned] || ROOM_THEMES.default : ROOM_THEMES.default;
+}
+
+function getItemZone(item) {
+  if (item.cat === 'theme') return 'bg';
+  if (item.cat === 'avatar') return 'avatar';
+  if (item.cat === 'pet') return 'pet';
+  if (item.cat === 'special') return 'overlay';
+  if (item.cat === 'furniture' || item.cat === 'food') return 'floor';
+  if (item.cat === 'deco') {
+    return ['deco_blossom','deco_mobile','deco_painting','deco_rainbow','deco_balloon','deco_crystal','deco_clock'].includes(item.id) ? 'wall' : 'floor';
+  }
+  return 'floor';
+}
+
+/* ── CYWORLD ROOM RENDER ── */
+function renderRoom() {
+  const scene = document.getElementById('roomCanvas');
+  if (!scene) return;
+  const theme = getActiveTheme();
+  const unlockedItems = getLilyUnlockedItems();
+
+  const ownedItems = roomPlaced.map(id => SHOP_ITEMS.find(it => it.id === id)).filter(Boolean);
+  const wallItems  = ownedItems.filter(it => getItemZone(it) === 'wall');
+  const floorItems = ownedItems.filter(it => getItemZone(it) === 'floor');
+  const petItems   = ownedItems.filter(it => getItemZone(it) === 'pet');
+  const fxItems    = ownedItems.filter(it => getItemZone(it) === 'overlay');
+
+  const wpEmojis = theme.wp.map(e => `<span>${e}</span>`).join('').repeat(8);
+  let html = `
+    <div class="rc-wall" style="background:linear-gradient(180deg,${theme.wall},${theme.wall2})"></div>
+    <div class="rc-floor" style="background:linear-gradient(180deg,${theme.floor},${theme.floor2})"></div>
+    <div class="rc-baseboard" style="background:${theme.base}"></div>
+    <div class="rc-wallpaper">${wpEmojis}</div>
+  `;
+
+  function itemPosStyle(item, defaultLeft, defaultTop) {
+    const saved = itemPositions[item.id];
+    if (saved) return `left:${saved.x}%;top:${saved.y}%;bottom:auto`;
+    return `left:${defaultLeft}%;top:${defaultTop}%`;
+  }
+
+  function itemPosStyleB(item, defaultLeft, defaultBottom) {
+    const saved = itemPositions[item.id];
+    if (saved) return `left:${saved.x}%;top:${saved.y}%;bottom:auto`;
+    return `left:${defaultLeft}%;bottom:${defaultBottom}%`;
+  }
+
+  if (wallItems.length > 0) {
+    const spread = 90 / Math.max(wallItems.length, 1);
+    wallItems.forEach((item, i) => {
+      const x = 4 + i * spread;
+      const y = 6 + (i % 2) * 16;
+      html += `<div class="rc-item rc-draggable" data-id="${item.id}" style="${itemPosStyle(item, x, y)}">
+        <button class="rc-del-btn" onclick="removeFromRoom('${item.id}')">×</button>
+        <span class="rc-item-emoji" style="font-size:2.6rem">${item.emoji}</span>
+      </div>`;
+    });
+  }
+
+  if (petItems.length > 0) {
+    petItems.forEach((item, i) => {
+      const x = 3 + i * 14;
+      html += `<div class="rc-item pet rc-draggable" data-id="${item.id}" style="${itemPosStyleB(item, x, 47)}">
+        <button class="rc-del-btn" onclick="removeFromRoom('${item.id}')">×</button>
+        <span class="rc-item-emoji" style="font-size:2.8rem">${item.emoji}</span>
+      </div>`;
+    });
+  }
+
+  if (floorItems.length > 0) {
+    const startX = petItems.length > 0 ? petItems.length * 14 + 4 : 4;
+    const spread = (93 - startX) / Math.max(floorItems.length, 1);
+    floorItems.forEach((item, i) => {
+      const x = startX + i * spread;
+      const yOff = (i % 2) * 4;
+      html += `<div class="rc-item rc-draggable" data-id="${item.id}" style="${itemPosStyleB(item, x, 46 + yOff)}">
+        <button class="rc-del-btn" onclick="removeFromRoom('${item.id}')">×</button>
+        <span class="rc-item-emoji" style="font-size:2.4rem">${item.emoji}</span>
+      </div>`;
+    });
+  }
+
+  if (fxItems.length > 0) {
+    html += `<div class="rc-fx">`;
+    fxItems.forEach(item => {
+      const count = item.id === 'fx_snow' ? 12 : item.id === 'fx_sparkle' ? 10 : 7;
+      for (let i = 0; i < count; i++) {
+        const x = 5 + (i / count) * 90;
+        const dur = 2.5 + (i % 4) * 0.7;
+        const delay = -(i * 0.4);
+        const size = 0.7 + (i % 3) * 0.3;
+        html += `<div class="rc-fx-particle" style="left:${x}%;bottom:${(i%5)*18}%;font-size:${size}rem;animation-duration:${dur}s;animation-delay:${delay}s">${item.emoji}</div>`;
+      }
+    });
+    html += `</div>`;
+  }
+
+  const avatarItems = ownedItems.filter(it => getItemZone(it) === 'avatar');
+  const lilyPos = itemPositions['__lily__'] || { x: 28, y: 18 };
+  html += `<div class="rc-lily rc-draggable" data-id="__lily__" style="left:${lilyPos.x}%;top:${lilyPos.y}%">${buildLilyAvatarSVG(unlockedItems, avatarItems)}</div>`;
+
+  scene.innerHTML = html;
+
+  scene.querySelectorAll('.rc-draggable').forEach(el => makeDraggable(el, scene));
+}
+
+/* ── DRAG TO REPOSITION ── */
+function makeDraggable(el, container) {
+  let startClientX, startClientY, startLeft, startTop, didDrag = false;
+
+  function getClient(e) {
+    return e.touches ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
+                     : { x: e.clientX, y: e.clientY };
+  }
+
+  function onStart(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    didDrag = false;
+    const { x, y } = getClient(e);
+    startClientX = x;
+    startClientY = y;
+    const rect = container.getBoundingClientRect();
+    if (el.style.bottom && el.style.bottom !== 'auto') {
+      const elRect = el.getBoundingClientRect();
+      el.style.top = ((elRect.top - rect.top) / rect.height * 100) + '%';
+      el.style.bottom = 'auto';
+    }
+    startLeft = parseFloat(el.style.left) || 0;
+    startTop  = parseFloat(el.style.top)  || 0;
+    el.style.zIndex = '20';
+    el.style.transition = 'none';
+    el.classList.add('dragging');
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('mouseup', onEnd);
+    document.addEventListener('touchend', onEnd);
+  }
+
+  function onMove(e) {
+    e.preventDefault();
+    const { x, y } = getClient(e);
+    if (Math.abs(x - startClientX) > 8 || Math.abs(y - startClientY) > 8) {
+      didDrag = true;
+    }
+    if (!didDrag) return;
+    const rect = container.getBoundingClientRect();
+    const newLeft = Math.max(0, Math.min(88, startLeft + (x - startClientX) / rect.width  * 100));
+    const newTop  = Math.max(0, Math.min(88, startTop  + (y - startClientY) / rect.height * 100));
+    el.style.left = newLeft + '%';
+    el.style.top  = newTop  + '%';
+  }
+
+  function onEnd() {
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('mouseup', onEnd);
+    document.removeEventListener('touchend', onEnd);
+    el.style.zIndex = '6';
+    el.classList.remove('dragging');
+    const id = el.dataset.id;
+    if (!didDrag && id !== '__lily__') {
+      // 탭 → 선택 토글 (× 버튼 표시/숨김)
+      const isSelected = el.classList.contains('selected');
+      document.querySelectorAll('.rc-draggable.selected').forEach(e => e.classList.remove('selected'));
+      if (!isSelected) {
+        el.classList.add('selected');
+        setTimeout(() => document.addEventListener('click', function deselectAll() {
+          document.querySelectorAll('.rc-draggable.selected').forEach(e => e.classList.remove('selected'));
+        }, { once: true }), 50);
+      }
+    } else if (id) {
+      itemPositions[id] = { x: parseFloat(el.style.left), y: parseFloat(el.style.top) };
+      saveData();
+    }
+  }
+
+  el.addEventListener('mousedown', onStart);
+  el.addEventListener('touchstart', onStart, { passive: false });
+}
+
+/* ── 방 아이템 제거 / 배치 ── */
+function removeFromRoom(id) {
+  if (!id) return;
+  roomPlaced = roomPlaced.filter(x => x !== id);
+  delete itemPositions[id];
+  saveData();
+  closeCtxMenu();
+  renderPointsAndRoom();
+  renderShop();
+}
+
+function placeItem(id) {
+  if (!roomPlaced.includes(id)) {
+    roomPlaced.push(id);
+    saveData();
+    renderPointsAndRoom();
+    renderShop();
+    showToast('✨ 방에 배치했어요!');
+  }
+}
+
+function closeCtxMenu() {
+  const menu = document.getElementById('rcCtxMenu');
+  if (menu) menu.style.display = 'none';
+  window._ctxItemId = null;
+}
+
+function closeCtxOnOutside() { closeCtxMenu(); }
+
+/* ── 쪽지 보드 ── */
+let _msgFrom = 'mom';
+
+function showMsgInput() {
+  setMsgFrom('mom');
+  document.getElementById('rmbTextarea').value = '';
+  document.getElementById('rmbOverlay').style.display = 'flex';
+  setTimeout(() => document.getElementById('rmbTextarea').focus(), 100);
+}
+
+function closeMsgInput(e) {
+  if (e === null || !e || e.target === document.getElementById('rmbOverlay')) {
+    document.getElementById('rmbOverlay').style.display = 'none';
+  }
+}
+
+function setMsgFrom(who) {
+  _msgFrom = who;
+  document.getElementById('rmbFromMom').classList.toggle('active', who === 'mom');
+  document.getElementById('rmbFromJoy').classList.toggle('active', who === 'joy');
+}
+
+function submitMsg() {
+  const text = document.getElementById('rmbTextarea').value.trim();
+  if (!text) return;
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+  messages.push({ id: Date.now(), text, from: _msgFrom, date: dateStr });
+  msgIndex = messages.length - 1;
+  saveData();
+  renderMessages();
+  document.getElementById('rmbOverlay').style.display = 'none';
+}
+
+function deleteMsg() {
+  if (!messages.length) return;
+  messages.splice(msgIndex, 1);
+  msgIndex = Math.max(0, Math.min(msgIndex, messages.length - 1));
+  saveData();
+  renderMessages();
+}
+
+function prevMsg() { if (msgIndex > 0) { msgIndex--; renderMessages(); } }
+function nextMsg() { if (msgIndex < messages.length - 1) { msgIndex++; renderMessages(); } }
+
+function renderMessages() {
+  const card = document.getElementById('rmbCard');
+  const nav = document.getElementById('rmbNav');
+  const counter = document.getElementById('rmbCounter');
+  const prevBtn = document.getElementById('rmbPrev');
+  const nextBtn = document.getElementById('rmbNext');
+  if (!card) return;
+  if (!messages.length) {
+    card.innerHTML = '아직 쪽지가 없어요 💌';
+    card.className = 'rmb-card empty';
+    if (nav) nav.style.display = 'none';
+    return;
+  }
+  const msg = messages[msgIndex];
+  const fromLabel = msg.from === 'mom' ? '👩 엄마' : '🧚 Joy';
+  card.className = 'rmb-card';
+  card.innerHTML = `<div class="rmb-from">${fromLabel} · ${msg.date}</div>${msg.text}`;
+  if (nav) {
+    nav.style.display = 'flex';
+    counter.textContent = `${msgIndex + 1}/${messages.length}`;
+    prevBtn.disabled = msgIndex === 0;
+    nextBtn.disabled = msgIndex === messages.length - 1;
+  }
+}
+
+/* ── 구매 아이템 초기화 (포인트 유지) ── */
+function resetRoomData() {
+  if (!confirm('구매한 아이템을 모두 초기화할까요? (포인트는 유지돼요)')) return;
+  shopOwned = []; roomPlaced = []; itemPositions = {};
+  saveData(); renderPointsAndRoom(); renderShop();
+  showToast('아이템 초기화 완료!');
+}
+
+/* ── POINTS RENDER ── */
+function renderPointsAndRoom() {
+  document.getElementById('roomPtsBadge').textContent = `💰 ${points} pt`;
+  document.getElementById('shopPointsDisplay').textContent = `💰 ${points} pt`;
+  renderRoom();
+}
+
+/* ── SHOP RENDER ── */
+function renderShop() {
+  // Tabs
+  document.getElementById('shopTabs').innerHTML = SHOP_CATS.map(cat =>
+    `<button class="shop-tab ${currentShopCat === cat.key ? 'active' : ''}" onclick="selectShopCat('${cat.key}')">${cat.label}</button>`
+  ).join('');
+
+  // Grid
+  const items = SHOP_ITEMS.filter(it => it.cat === currentShopCat);
+  document.getElementById('shopGrid').innerHTML = items.map(item => {
+    const owned = shopOwned.includes(item.id);
+    const placed = roomPlaced.includes(item.id);
+    const canAfford = points >= item.price;
+    let action = '';
+    if (!owned) {
+      action = `<button class="shop-buy-btn" ${canAfford ? '' : 'disabled'} onclick="purchaseItem('${item.id}')">${canAfford ? '구매하기 ✨' : '포인트 부족'}</button>`;
+    } else if (!placed) {
+      const placeLabel = item.cat === 'avatar' ? '✚ 착용하기' : '✚ 배치하기';
+      action = `<button class="shop-place-btn" onclick="placeItem('${item.id}')">${placeLabel}</button>`;
+    } else {
+      if (item.cat === 'avatar') {
+        action = `<button class="shop-place-btn" style="background:rgba(220,80,80,.15);color:#c0392b;border-color:#e88" onclick="removeFromRoom('${item.id}')">✕ 해제하기</button>`;
+      } else {
+        action = `<div class="shop-owned-badge">✓ 배치 중</div>`;
+      }
+    }
+    return `<div class="shop-item-card ${owned ? 'owned' : ''} ${!owned && !canAfford ? 'unaffordable' : ''}">
+      <div class="shop-item-emoji">${item.emoji}</div>
+      <div class="shop-item-name">${item.name}</div>
+      <div class="shop-item-desc">${item.desc}</div>
+      <div class="shop-item-price">💰 ${item.price} pt</div>
+      ${action}
+    </div>`;
+  }).join('');
+}
+
+function scrollToShop() {
+  const el = document.querySelector('.shop-section');
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+
+function selectShopCat(cat) {
+  currentShopCat = cat;
+  renderShop();
+}
+
+function purchaseItem(id) {
+  const item = SHOP_ITEMS.find(it => it.id === id);
+  if (!item || shopOwned.includes(id) || points < item.price) return;
+  points -= item.price;
+  shopOwned.push(id);
+  roomPlaced.push(id);
+  saveData();
+  showToast(`🎉 ${item.emoji} ${item.name} 구매 완료!`);
+  renderPointsAndRoom();
+  renderShop();
+}
+
+function renderWeeklySky() {
+  const completeDays = DAYS.filter(isFairyComplete);
+  const sky = document.getElementById('weeklySky');
+  sky.classList.toggle('complete', completeDays.length === 7);
+  document.getElementById('castleCounter').textContent = completeDays.length === 7 ? '🌈 Magical weather complete!' : `${completeDays.length} / 7 fairies transformed`;
+  document.getElementById('weeklySubtitle').textContent = completeDays.length === 7 ? '모든 Weather Fairy가 모여 Joy의 하늘에 무지개 축제가 열렸어요!' : '7명의 Weather Fairy가 모두 완성되면 무지개 축제가 열려요.';
+  document.getElementById('fairySilhouettes').innerHTML = DAYS.map(day => `<span class="fairy-dot ${isFairyComplete(day) ? 'done' : ''}">${FAIRIES[day].icon}</span>`).join('');
+  document.getElementById('weatherPath').innerHTML = DAYS.map(day => `<button class="weather-step ${isFairyComplete(day) ? 'done' : ''}" title="${FAIRIES[day].name}" onclick="selectDay('${day}')">${FAIRIES[day].icon}</button>`).join('');
+}
+
+function renderFairyStrip() {
+  const strip = document.getElementById('fairyStrip');
+  strip.innerHTML = DAYS.map(day => {
+    const f = FAIRIES[day];
+    const { total, done } = taskCounts(day);
+    const pct = total ? (done / total) * 100 : 0;
+    return `<button class="mini-card ${day === currentDay ? 'active' : ''} ${isFairyComplete(day) ? 'done' : ''}" style="--accent:${f.accent}; --light:${f.light};" onclick="selectDay('${day}')">
+      <div class="mini-card-name">${f.name}</div>
+      <div class="mini-card-title">${f.title}</div>
+      <div class="mini-fairy">${buildMiniFairy(day, isFairyComplete(day))}</div>
+      <div class="mini-progress"><span>${f.icon}</span><div class="mini-bar"><div class="mini-fill" style="width:${pct}%"></div></div><span>${done}/${MAX_TASKS}</span></div>
+    </button>`;
+  }).join('');
+}
+
+function renderFairy() {
+  const f = FAIRIES[currentDay];
+  const { total, done } = taskCounts(currentDay);
+  const itemCount = itemCountFor(currentDay);
+  const itemsVisible = Array.from({ length: itemCount }, (_, i) => i);
+  const complete = isFairyComplete(currentDay);
+  const percent = total ? (done / total) * 100 : 0;
+
+  document.documentElement.style.setProperty('--accent', f.accent);
+  document.documentElement.style.setProperty('--fairy-light', f.light);
+  document.getElementById('fairyCard').classList.toggle('done', complete);
+  document.getElementById('fairyName').textContent = f.name;
+  document.getElementById('fairyTitle').textContent = f.title;
+  document.getElementById('dayBadge').textContent = `${DAY_KOR[currentDay]} · ${f.dayName}`;
+  document.getElementById('fairyStage').innerHTML = buildFairySVG(currentDay, itemsVisible, newItemIdxForRender) + `<div class="magic-effect">${complete ? weatherEffect(f) : ''}</div>`;
+  document.getElementById('itemProgress').textContent = `${itemCount} / ${MAX_TASKS} items collected`;
+  document.getElementById('itemGrid').innerHTML = f.items.map((item, idx) => {
+    const unlocked = idx < itemCount;
+    const isNew = idx === newItemIdxForRender;
+    return `<div class="item-slot ${unlocked ? 'unlocked' : 'locked'} ${isNew ? 'new' : ''}">
+      <div class="item-emoji">${unlocked ? item[0] : '🔒'}</div>
+      <div class="item-name">${idx + 1}. ${unlocked ? item[1] : 'Mystery item'}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('progressFill').style.width = `${percent}%`;
+  if (total === 0) {
+    document.getElementById('progressText').textContent = `${f.name} is waiting for up to 10 missions ${f.icon}`;
+    document.getElementById('nextHint').textContent = `Mom can add today's missions for ${f.name}.`;
+  } else if (complete) {
+    document.getElementById('progressText').textContent = `✨ ${f.name} is fully transformed into her Weather Fairy form!`;
+    document.getElementById('nextHint').textContent = `${f.icon} Completed magical weather effect is shining!`;
+  } else {
+    const next = f.items[itemCount];
+    document.getElementById('progressText').textContent = `${done} / ${total} missions complete · ${itemCount} / ${MAX_TASKS} items collected`;
+    document.getElementById('nextHint').textContent = next ? `✨ Next unlock: ${next[0]} ${next[1]}` : '✨ Keep going to finish the transformation!';
+  }
+  newItemIdxForRender = -1;
+}
+
+function renderTodos() {
+  const f = FAIRIES[currentDay];
+  const todos = data[currentDay] || [];
+  const { total, done } = taskCounts(currentDay);
+  document.getElementById('todoTitle').textContent = `${DAY_NAMES[currentDay]} Mission`;
+  document.getElementById('countBadge').textContent = `${done}/${total}`;
+
+  if (currentMode === 'mom') {
+    document.getElementById('momSection').style.display = '';
+    document.getElementById('kidSection').style.display = 'none';
+    document.getElementById('helpTip').textContent = total >= MAX_TASKS ? '오늘은 10개의 미션이 모두 준비됐어요.' : `엄마가 ${f.name}의 미션을 추가해 주세요. 하루 최대 10개까지 저장돼요.`;
+    document.getElementById('newTodoInput').disabled = total >= MAX_TASKS;
+    document.getElementById('addBtn').disabled = total >= MAX_TASKS;
+    const list = document.getElementById('momList');
+    list.innerHTML = todos.length ? todos.map((task, idx) => {
+      const reward = f.items[idx] || ['✨','Magic'];
+      return `<div class="mom-todo-item"><span class="task-reward">${reward[0]}</span><span class="text">${idx + 1}. ${escapeHtml(task.text)}<br><small>Unlocks: ${reward[1]}</small></span><button class="delete-btn" data-idx="${idx}">✕</button></div>`;
+    }).join('') : `<div class="empty-msg"><span class="big-emoji">${f.icon}</span>No missions yet</div>`;
+    list.querySelectorAll('.delete-btn').forEach(btn => btn.onclick = () => deleteTodo(Number(btn.dataset.idx)));
+  } else {
+    document.getElementById('momSection').style.display = 'none';
+    document.getElementById('kidSection').style.display = '';
+    document.getElementById('helpTip').textContent = todos.length ? `동그라미를 누르면 ${f.name}의 아이템이 하나씩 반짝이며 열려요!` : `Ask Mom to add missions for ${f.name}!`;
+    const list = document.getElementById('kidList');
+    list.innerHTML = todos.length ? todos.map((task, idx) => {
+      const reward = f.items[idx] || ['✨','Magic'];
+      return `<li class="todo-item ${task.done ? 'done' : ''}" data-idx="${idx}"><div class="checkbox">${task.done ? '✓' : ''}</div><div class="todo-text">${escapeHtml(task.text)}</div><div class="task-reward" title="${reward[1]}">${task.done ? reward[0] : '🔒'}</div></li>`;
+    }).join('') : `<div class="empty-msg"><span class="big-emoji">${f.icon}</span>${f.name} is waiting for today's magic missions.</div>`;
+    list.querySelectorAll('.todo-item').forEach(item => item.onclick = () => toggleTodo(Number(item.dataset.idx)));
+  }
+}
+
+/* ── CALENDAR ── */
+let calendarYear = 0;
+let calendarMonth = 0;
+
+function initCalendar() {
+  const now = new Date();
+  calendarYear = now.getFullYear();
+  calendarMonth = now.getMonth();
+}
+
+function getMondayOfWeek(date) {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  const day = d.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  d.setDate(d.getDate() + diff);
+  return d;
+}
+
+function findHistoryForWeek(mondayDate) {
+  for (const entry of history) {
+    if (!entry.date) continue;
+    const [y, m, d] = entry.date.split('.').map(Number);
+    const entryMonday = getMondayOfWeek(new Date(y, m - 1, d));
+    if (entryMonday.getTime() === mondayDate.getTime()) return entry;
+  }
+  return null;
+}
+
+function calendarPrev() {
+  calendarMonth--;
+  if (calendarMonth < 0) { calendarMonth = 11; calendarYear--; }
+  renderCalendar();
+}
+
+function calendarNext() {
+  calendarMonth++;
+  if (calendarMonth > 11) { calendarMonth = 0; calendarYear++; }
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const label = document.getElementById('calMonthLabel');
+  if (label) label.textContent = `${calendarYear}년 ${calendarMonth + 1}월`;
+
+  const grid = document.getElementById('calGrid');
+  if (!grid) return;
+
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const todayMondayTime = getMondayOfWeek(today).getTime();
+
+  const firstDay = new Date(calendarYear, calendarMonth, 1);
+  const lastDay  = new Date(calendarYear, calendarMonth + 1, 0);
+
+  const gridStart = getMondayOfWeek(firstDay);
+  const gridEnd = new Date(lastDay);
+  while (gridEnd.getDay() !== 0) gridEnd.setDate(gridEnd.getDate() + 1);
+
+  // Pre-compute which weeks are successful for the entire grid
+  const successWeeks = new Set();
+  const d0 = new Date(gridStart);
+  while (d0 <= gridEnd) {
+    if (d0.getDay() === 1 || d0.getTime() === gridStart.getTime()) {
+      const mon = getMondayOfWeek(d0);
+      const monTime = mon.getTime();
+      if (monTime === todayMondayTime) {
+        if (isWeekAllDone()) successWeeks.add(monTime);
+      } else {
+        const entry = findHistoryForWeek(mon);
+        if (entry && entry.success) successWeeks.add(monTime);
+      }
+    }
+    d0.setDate(d0.getDate() + 1);
+  }
+
+  let html = '';
+  const d = new Date(gridStart);
+  while (d <= gridEnd) {
+    const isCurrentMonth = d.getMonth() === calendarMonth;
+    const isToday        = d.getTime() === today.getTime();
+    const dayOfWeek      = (d.getDay() + 6) % 7; // 0=Mon…6=Sun
+    const weekMonday     = getMondayOfWeek(d);
+    const weekMondayTime = weekMonday.getTime();
+    const isWeekClear    = successWeeks.has(weekMondayTime);
+
+    let status = 'none';
+    if (weekMondayTime === todayMondayTime) {
+      const dayName = DAYS[dayOfWeek];
+      if (isFairyComplete(dayName)) status = 'done';
+      else if (d < today) status = 'past';
+      else if (isToday) status = 'today';
+    } else if (d < today) {
+      const entry = findHistoryForWeek(weekMonday);
+      if (entry && entry.completedDays && entry.completedDays[dayOfWeek]) status = 'done';
+      else if (entry) status = 'missed';
+    }
+
+    const classes = [
+      'cal-day',
+      isCurrentMonth ? '' : 'other-month',
+      isToday ? 'cal-today' : '',
+      `status-${status}`,
+      isWeekClear ? 'week-clear-row' : '',
+    ].filter(Boolean).join(' ');
+
+    html += `<div class="${classes}">
+      <span class="cal-date-num">${d.getDate()}</span>
+      ${status === 'done' ? '<span class="cal-check">✓</span>' : ''}
+    </div>`;
+
+    d.setDate(d.getDate() + 1);
+  }
+
+  grid.innerHTML = html;
+}
+
+function renderHistory() {
+  const grid = document.getElementById('historyGrid');
+  document.getElementById('historyWeekCount').textContent = `Week ${history.length}`;
+  if (history.length === 0) {
+    grid.innerHTML = `<div class="history-empty">아직 완료된 주가 없어요.<br>할 일을 모두 마치면 기록이 쌓여요! 🌈</div>`;
+    return;
+  }
+  grid.innerHTML = history.map((week, idx) => {
+    const dayDots = DAYS.map((day, di) => {
+      const done = week.completedDays && week.completedDays[di];
+      return `<div class="history-day-dot ${done ? 'done' : ''}" title="${DAY_KOR[day]}">${done ? '✓' : '·'}</div>`;
+    }).join('');
+    return `<div class="history-week-card ${week.success ? 'success' : 'fail'}">
+      <div class="history-week-num">Week ${idx + 1}</div>
+      <div class="history-week-status">${week.success ? '🌈' : '💪'}</div>
+      <div class="history-week-days">${dayDots}</div>
+      <div class="history-week-label">${week.success ? '완벽한 한 주! ✨' : `${week.doneCount || 0}/7 days`}</div>
+      <div class="history-week-date">${week.date || ''}</div>
+    </div>`;
+  }).reverse().join('');
+}
+
+function selectDay(day) { currentDay = day; render(); }
+
+function addTodo() {
+  const input = document.getElementById('newTodoInput');
+  const text = input.value.trim();
+  if (!text) return;
+  if ((data[currentDay] || []).length >= MAX_TASKS) { showToast('하루 미션은 최대 10개까지예요 ✨'); return; }
+  data[currentDay].push({ text, done: false });
+  input.value = '';
+  saveData(); render();
+}
+
+function deleteTodo(idx) { data[currentDay].splice(idx, 1); saveData(); render(); }
+
+function toggleTodo(idx) {
+  const todos = data[currentDay];
+  const wasComplete = isFairyComplete(currentDay);
+  const prevDone = taskCounts(currentDay).done;
+  todos[idx].done = !todos[idx].done;
+  // Points: 한 미션당 처음 완료할 때 딱 한 번만 +10. 해제/재체크에는 변동 없음.
+  if (todos[idx].done && !todos[idx].rewarded) {
+    todos[idx].rewarded = true;
+    points += 10;
+    showToast(`✅ +10 pt 획득! (총 ${points} pt)`);
+  }
+  saveData();
+  const now = taskCounts(currentDay);
+  if (now.done > prevDone) {
+    const itemIdx = Math.min(now.done - 1, MAX_TASKS - 1);
+    newItemIdxForRender = itemIdx;
+    const item = FAIRIES[currentDay].items[itemIdx];
+    showToast(`${item[0]} ${FAIRIES[currentDay].name} unlocked ${item[1]}!`);
+  }
+  render();
+  // 요정 완성 보너스 +30: 이번 주에 해당 요일이 처음 완성됐을 때만 1회
+  if (!wasComplete && isFairyComplete(currentDay) && !rewardedDays.includes(currentDay)) {
+    rewardedDays.push(currentDay);
+    points += 30;
+    saveData();
+    const nowWeekDone = isWeekAllDone();
+    setTimeout(() => nowWeekDone ? showPartyTime() : showFairyTransformed(), 650);
+  }
+}
+
+function recordWeekAndReset() {
+  const completedDaysArr = DAYS.map(d => isFairyComplete(d));
+  const doneCount = completedDaysArr.filter(Boolean).length;
+  const success = doneCount === 7;
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+  history.push({ weekNum: history.length + 1, completedDays: completedDaysArr, doneCount, success, date: dateStr });
+  DAYS.forEach(day => { data[day] = []; });
+  rewardedDays = [];      // 새 주: 요정 보너스 기록 초기화
+  weekBonusGiven = false; // 새 주: 주간 보너스 다시 받을 수 있게
+  saveData(); render();
+  // Show new item unlock toast if applicable
+  const newItemIdx = successfulWeekCount() - 1;
+  if (success && newItemIdx < LILY_WEEK_ITEMS.length) {
+    const newItem = LILY_WEEK_ITEMS[newItemIdx];
+    setTimeout(() => showToast(`🎊 ${newItem[0]} Joy의 새 아이템 획득: ${newItem[1]}!`), 800);
+  } else {
+    showToast('🎊 새로운 주가 시작됐어요! 기록이 저장됐습니다!');
+  }
+}
+
+function showFairyTransformed() {
+  const f = FAIRIES[currentDay];
+  document.getElementById('celebrationEmoji').textContent = `${f.icon}🧚‍♀️✨`;
+  document.getElementById('celebrationTitle').textContent = `${f.name} transformed!`;
+  document.getElementById('celebrationMsg').innerHTML = `Joy야 잘했어! ${f.name}이(가) ${f.title} 모습으로 완성됐어요.<br>${f.weather} 마법이 반짝반짝 빛나요!<br><br>💰 <strong>30 포인트를 받았어요!</strong> (총 ${points} pt)`;
+  document.getElementById('celebration').classList.add('show');
+  launchConfetti(70);
+}
+
+function showPartyTime() {
+  // 주간 보너스 +100: 이번 주에 한 번만 지급
+  if (!weekBonusGiven) {
+    weekBonusGiven = true;
+    points += 100;
+    saveData();
+  }
+  document.getElementById('celebrationEmoji').textContent = '🌈☀️❄️💨☁️🌫️⚡💧';
+  document.getElementById('celebrationTitle').textContent = 'Magical Sky Celebration!';
+  document.getElementById('celebrationMsg').innerHTML = '7명의 Weather Fairy가 모두 완성됐어요!<br>Joy의 일주일 하늘에 무지개 축제가 열렸어요!<br><br>💰 <strong>100 보너스 포인트 획득!</strong> (총 ' + points + ' pt)<br><br><button onclick="recordWeekAndReset()" style="margin-top:6px;border:0;border-radius:999px;padding:10px 22px;color:white;background:linear-gradient(135deg,#f7a916,#ff8c00);font:700 1rem Fredoka,sans-serif;cursor:pointer;">🌟 다음 주 시작하기</button>';
+  document.getElementById('celebration').classList.add('show');
+  launchConfetti(150);
+}
+
+function closeCelebration() { document.getElementById('celebration').classList.remove('show'); }
+
+function showToast(text) {
+  const toast = document.getElementById('toast');
+  toast.textContent = text;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2800);
+}
+
+function launchConfetti(count) {
+  const colors = ['#ff8c00', '#ffd76a', '#ffb830', '#ffe066', '#f7a916', '#ffffff'];
+  for (let i = 0; i < count; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + '%';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.animationDelay = Math.random() * .55 + 's';
+    c.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
+    c.style.transform = `rotate(${Math.random() * 360}deg)`;
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 3600);
+  }
+}
+
+function render() {
+  renderLilyAvatar();
+  renderPointsAndRoom();
+  renderWeeklySky();
+  renderFairyStrip();
+  renderFairy();
+  renderTodos();
+  renderShop();
+  renderCalendar();
+  renderMessages();
+}
+
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentMode = btn.dataset.mode;
+    render();
+  };
+});
+document.getElementById('addBtn').onclick = addTodo;
+document.getElementById('closeCelebrationBtn').onclick = closeCelebration;
+document.getElementById('newTodoInput').addEventListener('keydown', e => { if (e.key === 'Enter') addTodo(); });
+
+createStars();
+createWeatherDrift();
+createLilyBgStars();
+initCalendar();
+loadData();
+const todayIdx = (new Date().getDay() + 6) % 7;
+currentDay = DAYS[todayIdx];
+render();
+</script>
+</body>
+</html>
