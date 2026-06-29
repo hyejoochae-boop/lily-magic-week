@@ -310,13 +310,14 @@
     border: 1.5px solid rgba(255,255,255,.25);
     border-radius: 12px;
     color: white;
-    font: 500 .95rem 'Noto Sans KR', sans-serif;
+    font: 500 1rem 'Noto Sans KR', sans-serif;
     padding: 12px 14px;
     resize: none;
     box-sizing: border-box;
     outline: none;
     line-height: 1.5;
     transition: border-color .15s;
+    touch-action: manipulation;
   }
   .msg-textarea:focus { border-color: rgba(255,255,255,.55); }
   .msg-textarea::placeholder { color: rgba(255,255,255,.32); }
@@ -420,11 +421,11 @@
     <div class="compose-wrap">
       <div class="compose-title">쪽지 보내는 사람을 선택하세요</div>
       <div class="sender-row">
-        <button class="sender-btn active-lily" id="btnLily" onclick="setSender('lily')">🧚 Lily</button>
-        <button class="sender-btn" id="btnJoy"  onclick="setSender('joy')">🌟 Joy</button>
+        <button type="button" class="sender-btn active-lily" id="btnLily" onclick="setSender('lily')">🧚 Lily</button>
+        <button type="button" class="sender-btn" id="btnJoy"  onclick="setSender('joy')">🌟 Joy</button>
       </div>
       <textarea class="msg-textarea" id="msgInput" rows="3" placeholder="쪽지 내용을 입력하세요..."></textarea>
-      <button class="msg-send-btn" onclick="sendMsg()">보내기 💌</button>
+      <button type="button" class="msg-send-btn" onclick="sendMsg()">보내기 💌</button>
     </div>
   </section>
 </div>
