@@ -1604,7 +1604,9 @@ function renderRoom() {
   }
 
   const avatarItems = ownedItems.filter(it => getItemZone(it) === 'avatar');
-  const lilyPos = itemPositions['__lily__'] || { x: 28, y: 18 };
+  const _rawPos = itemPositions['__lily__'] || { x: 28, y: 18 };
+  const lilyPos = (_rawPos.x >= 0 && _rawPos.x <= 75 && _rawPos.y >= 0 && _rawPos.y <= 68)
+    ? _rawPos : (() => { itemPositions['__lily__'] = { x: 28, y: 18 }; saveData(); return { x: 28, y: 18 }; })();
   html += `<div class="rc-lily rc-draggable" data-id="__lily__" style="left:${lilyPos.x}%;top:${lilyPos.y}%">${buildLilyAvatarSVG(unlockedItems, avatarItems)}</div>`;
 
   scene.innerHTML = html;
