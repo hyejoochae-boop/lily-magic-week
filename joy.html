@@ -230,7 +230,7 @@
   .rainbow-arc:before { content: ''; position: absolute; inset: 13px 11px auto; height: 170px; border-radius: 360px 360px 0 0; border-top: 16px solid #ffd76a; }
   .rainbow-arc:after { content: ''; position: absolute; inset: 40px 38px auto; height: 125px; border-radius: 300px 300px 0 0; border-top: 15px solid #7fe0ff; }
   .weekly-complete-panel { position: absolute; right: 18px; top: 18px; width: min(315px, calc(100% - 36px)); padding: 14px 16px; border-radius: 18px; background: rgba(255,255,255,.74); color: var(--ink); border: 2px solid rgba(255,255,255,.8); text-align: center; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
-  .next-week-btn { display: none; width: 100%; margin-top: 12px; padding: 12px 10px; border: 0; border-radius: 999px; color: #fff; background: linear-gradient(135deg,#9d6eff,#ff7eb3); font: 800 1rem 'Noto Sans KR', sans-serif; cursor: pointer; box-shadow: 0 6px 18px rgba(100,60,160,.3); animation: nextWeekPulse 1.8s ease-in-out infinite; }
+  .next-week-btn { display: none; width: 100%; margin: 4px 0 20px; padding: 15px 12px; border: 0; border-radius: 18px; color: #fff; background: linear-gradient(135deg,#9d6eff,#ff7eb3); font: 800 1.08rem 'Noto Sans KR', sans-serif; cursor: pointer; box-shadow: 0 6px 18px rgba(100,60,160,.3); animation: nextWeekPulse 1.8s ease-in-out infinite; }
   .next-week-btn:hover { opacity: .92; transform: translateY(-1px); }
   .next-week-btn:active { transform: translateY(0); }
   @keyframes nextWeekPulse { 0%,100% { box-shadow: 0 6px 18px rgba(100,60,160,.3); } 50% { box-shadow: 0 6px 26px rgba(255,126,179,.6); } }
@@ -616,12 +616,12 @@
     <div class="weekly-complete-panel">
       <div id="castleCounter">0 / 7 fairies transformed</div>
       <div class="fairy-silhouettes" id="fairySilhouettes"></div>
-      <button type="button" id="nextWeekBtn" class="next-week-btn" onclick="recordWeekAndReset()">🌟 다음 주 시작하기</button>
     </div>
     <div class="rainbow-arc"></div>
     <div class="weather-line"></div>
     <div class="weather-path" id="weatherPath"></div>
   </section>
+  <button type="button" id="nextWeekBtn" class="next-week-btn" onclick="recordWeekAndReset()">🌟 다음 주 시작하기</button>
 
   <section class="fairy-strip" id="fairyStrip" aria-label="Weather fairy cards"></section>
 
