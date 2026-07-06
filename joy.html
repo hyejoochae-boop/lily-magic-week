@@ -230,6 +230,10 @@
   .rainbow-arc:before { content: ''; position: absolute; inset: 13px 11px auto; height: 170px; border-radius: 360px 360px 0 0; border-top: 16px solid #ffd76a; }
   .rainbow-arc:after { content: ''; position: absolute; inset: 40px 38px auto; height: 125px; border-radius: 300px 300px 0 0; border-top: 15px solid #7fe0ff; }
   .weekly-complete-panel { position: absolute; right: 18px; top: 18px; width: min(315px, calc(100% - 36px)); padding: 14px 16px; border-radius: 18px; background: rgba(255,255,255,.74); color: var(--ink); border: 2px solid rgba(255,255,255,.8); text-align: center; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+  .next-week-btn { display: none; width: 100%; margin-top: 12px; padding: 12px 10px; border: 0; border-radius: 999px; color: #fff; background: linear-gradient(135deg,#9d6eff,#ff7eb3); font: 800 1rem 'Noto Sans KR', sans-serif; cursor: pointer; box-shadow: 0 6px 18px rgba(100,60,160,.3); animation: nextWeekPulse 1.8s ease-in-out infinite; }
+  .next-week-btn:hover { opacity: .92; transform: translateY(-1px); }
+  .next-week-btn:active { transform: translateY(0); }
+  @keyframes nextWeekPulse { 0%,100% { box-shadow: 0 6px 18px rgba(100,60,160,.3); } 50% { box-shadow: 0 6px 26px rgba(255,126,179,.6); } }
   .fairy-silhouettes { margin-top: 8px; display: flex; justify-content: center; gap: 4px; }
   .fairy-dot { width: 24px; height: 34px; display: grid; place-items: center; opacity: .38; filter: grayscale(.65); }
   .fairy-dot.done { opacity: 1; filter: none; text-shadow: 0 0 10px rgba(255,255,255,.95); }
@@ -612,6 +616,7 @@
     <div class="weekly-complete-panel">
       <div id="castleCounter">0 / 7 fairies transformed</div>
       <div class="fairy-silhouettes" id="fairySilhouettes"></div>
+      <button type="button" id="nextWeekBtn" class="next-week-btn" onclick="recordWeekAndReset()">🌟 다음 주 시작하기</button>
     </div>
     <div class="rainbow-arc"></div>
     <div class="weather-line"></div>
@@ -1879,6 +1884,9 @@ function renderWeeklySky() {
   document.getElementById('weeklySubtitle').textContent = completeDays.length === 7 ? '모든 Weather Fairy가 모여 Joy의 하늘에 무지개 축제가 열렸어요!' : '7명의 Weather Fairy가 모두 완성되면 무지개 축제가 열려요.';
   document.getElementById('fairySilhouettes').innerHTML = DAYS.map(day => `<span class="fairy-dot ${isFairyComplete(day) ? 'done' : ''}">${FAIRIES[day].icon}</span>`).join('');
   document.getElementById('weatherPath').innerHTML = DAYS.map(day => `<button class="weather-step ${isFairyComplete(day) ? 'done' : ''}" title="${FAIRIES[day].name}" onclick="selectDay('${day}')">${FAIRIES[day].icon}</button>`).join('');
+  // 이번 주 7일 완성 시 항상 '다음 주 시작하기' 버튼 노출 (파티 모달을 놓쳐도 넘어갈 수 있게)
+  const nextWeekBtn = document.getElementById('nextWeekBtn');
+  if (nextWeekBtn) nextWeekBtn.style.display = completeDays.length === 7 ? 'block' : 'none';
 }
 
 function renderFairyStrip() {
@@ -2154,6 +2162,8 @@ function recordWeekAndReset() {
   const completedDaysArr = DAYS.map(d => isFairyComplete(d));
   const doneCount = completedDaysArr.filter(Boolean).length;
   const success = doneCount === 7;
+  // 파티 모달을 거치지 않고 버튼으로 바로 넘어가도 이번 주 +100 보너스를 놓치지 않도록 보정
+  if (success && !weekBonusGiven) { points += 100; weekBonusGiven = true; }
   const now = new Date();
   const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
   history.push({ weekNum: history.length + 1, completedDays: completedDaysArr, doneCount, success, date: dateStr });
