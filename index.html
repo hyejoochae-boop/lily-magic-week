@@ -337,6 +337,97 @@
   .msg-send-btn:hover { opacity: .9; transform: translateY(-1px); }
   .msg-send-btn:active { opacity: .85; transform: translateY(0); }
 
+  /* 메시지 안 사진/동영상 */
+  .msg-media {
+    display: block;
+    max-width: 100%;
+    max-height: 320px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    border: 1.5px solid rgba(255,255,255,.35);
+    background: rgba(0,0,0,.15);
+  }
+  .msg-media.is-image { cursor: zoom-in; object-fit: cover; }
+  video.msg-media { width: 100%; }
+  .msg-bubble:has(.msg-media) { max-width: 92%; }
+
+  /* 첨부 버튼 & 미리보기 */
+  .attach-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .attach-btn {
+    flex: 1;
+    padding: 11px 8px;
+    border-radius: 12px;
+    border: 1.5px dashed rgba(255,255,255,.4);
+    background: rgba(255,255,255,.08);
+    color: rgba(255,255,255,.8);
+    font: 700 .92rem 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: all .18s;
+  }
+  .attach-btn:hover { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.6); }
+  .attach-btn:active { transform: translateY(1px); }
+  .attach-btn:disabled { opacity: .5; cursor: default; }
+
+  .attach-preview {
+    margin-top: 12px;
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1.5px solid rgba(255,255,255,.3);
+    background: rgba(0,0,0,.18);
+  }
+  .attach-preview img, .attach-preview video {
+    display: block;
+    width: 100%;
+    max-height: 220px;
+    object-fit: contain;
+    background: rgba(0,0,0,.25);
+  }
+  .attach-remove {
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,.85);
+    background: rgba(30,10,50,.7);
+    color: white;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2;
+  }
+  .attach-remove:hover { background: rgba(255,80,80,.85); }
+  .attach-status {
+    padding: 12px;
+    text-align: center;
+    font: 700 .88rem 'Noto Sans KR', sans-serif;
+    color: rgba(255,255,255,.8);
+  }
+
+  /* 사진 확대 라이트박스 */
+  .lightbox {
+    position: fixed; inset: 0;
+    z-index: 300;
+    background: rgba(20,8,40,.9);
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 24px;
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    cursor: zoom-out;
+  }
+  .lightbox.show { display: flex; }
+  .lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  }
+
   /* 토스트 */
   .toast {
     position: fixed; top: 70px; left: 50%;
@@ -425,10 +516,21 @@
         <button type="button" class="sender-btn" id="btnJoy"  onclick="setSender('joy')">🌟 Joy</button>
       </div>
       <textarea class="msg-textarea" id="msgInput" rows="3" placeholder="쪽지 내용을 입력하세요..."></textarea>
+
+      <div class="attach-preview" id="attachPreview" style="display:none;"></div>
+
+      <div class="attach-row">
+        <input type="file" id="fileInput" accept="image/*,video/*" style="display:none;" onchange="handleFile(event)">
+        <button type="button" class="attach-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()">📷 사진 · 🎬 동영상 첨부</button>
+      </div>
+
       <button type="button" class="msg-send-btn" onclick="sendMsg()">보내기 💌</button>
     </div>
   </section>
 </div>
+
+<!-- 사진 확대 -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()"><img id="lightboxImg" src="" alt=""></div>
 
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -614,6 +716,107 @@ db.ref('joy-data').on('value', snap => {
 
 let hubMessages = [];
 let currentSender = 'lily';
+let pendingMedia = null;   // { type:'image'|'video', data:dataURL }
+
+// 동영상 최대 용량 (무료 DB 보호용). 초과 시 안내.
+const MAX_VIDEO_MB = 12;
+
+// ── 첨부 파일 선택 ──
+function handleFile(e) {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = '';           // 같은 파일 다시 선택 가능하도록 초기화
+  if (!file) return;
+
+  const preview = document.getElementById('attachPreview');
+  const isImage = file.type.startsWith('image/');
+  const isVideo = file.type.startsWith('video/');
+  if (!isImage && !isVideo) { showToast('사진 또는 동영상만 첨부할 수 있어요.'); return; }
+
+  preview.style.display = 'block';
+  preview.innerHTML = `<div class="attach-status">⏳ 불러오는 중...</div>`;
+
+  if (isImage) {
+    compressImage(file, 1280, 0.72)
+      .then(dataURL => {
+        pendingMedia = { type: 'image', data: dataURL };
+        showPreview();
+      })
+      .catch(() => { clearAttach(); showToast('사진을 불러오지 못했어요.'); });
+  } else {
+    if (file.size > MAX_VIDEO_MB * 1024 * 1024) {
+      clearAttach();
+      showToast(`동영상은 ${MAX_VIDEO_MB}MB 이하만 보낼 수 있어요.`);
+      return;
+    }
+    fileToDataURL(file)
+      .then(dataURL => {
+        pendingMedia = { type: 'video', data: dataURL };
+        showPreview();
+      })
+      .catch(() => { clearAttach(); showToast('동영상을 불러오지 못했어요.'); });
+  }
+}
+
+// ── 사진 압축 (캔버스로 리사이즈 후 JPEG 변환) ──
+function compressImage(file, maxDim, quality) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = ev => {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > height && width > maxDim) { height = Math.round(height * maxDim / width); width = maxDim; }
+        else if (height >= width && height > maxDim) { width = Math.round(width * maxDim / height); height = maxDim; }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function fileToDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = ev => resolve(ev.target.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// ── 첨부 미리보기 표시 ──
+function showPreview() {
+  const preview = document.getElementById('attachPreview');
+  if (!pendingMedia) { clearAttach(); return; }
+  const media = pendingMedia.type === 'image'
+    ? `<img src="${pendingMedia.data}" alt="첨부 사진">`
+    : `<video src="${pendingMedia.data}" controls playsinline></video>`;
+  preview.innerHTML = media + `<button type="button" class="attach-remove" onclick="clearAttach()" title="첨부 취소">✕</button>`;
+  preview.style.display = 'block';
+}
+
+// ── 첨부 취소 ──
+function clearAttach() {
+  pendingMedia = null;
+  const preview = document.getElementById('attachPreview');
+  preview.innerHTML = '';
+  preview.style.display = 'none';
+}
+
+// ── 사진 확대 ──
+function openLightbox(src) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('show');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('show');
+  document.getElementById('lightboxImg').src = '';
+}
 
 // ── 발신자 선택 ──
 function setSender(who) {
@@ -625,17 +828,25 @@ function setSender(who) {
 // ── 메시지 전송 ──
 function sendMsg() {
   const text = document.getElementById('msgInput').value.trim();
-  if (!text) return;
+  if (!text && !pendingMedia) return;   // 글도 첨부도 없으면 무시
   const now = new Date();
   const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
   const msg = { from: currentSender, text, date: dateStr, ts: now.getTime() };
+  if (pendingMedia) { msg.mediaType = pendingMedia.type; msg.mediaData = pendingMedia.data; }
+
+  const sendBtn = document.querySelector('.msg-send-btn');
+  if (sendBtn) { sendBtn.disabled = true; sendBtn.textContent = '보내는 중... ⏳'; }
 
   db.ref(HUB_REF).push(msg)
     .then(() => {
       document.getElementById('msgInput').value = '';
+      clearAttach();
       showToast(currentSender === 'lily' ? '🧚 Lily의 쪽지가 전송됐어요!' : '🌟 Joy의 쪽지가 전송됐어요!');
     })
-    .catch(() => showToast('전송 실패. 인터넷 연결을 확인해주세요.'));
+    .catch(() => showToast('전송 실패. 인터넷 연결이나 용량을 확인해주세요.'))
+    .finally(() => {
+      if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = '보내기 💌'; }
+    });
 }
 
 // ── 메시지 삭제 ──
@@ -653,11 +864,20 @@ function renderMsgs(msgs) {
   }
   list.innerHTML = msgs.map(m => {
     const senderLabel = m.from === 'lily' ? '🧚 Lily' : '🌟 Joy';
-    const escaped = m.text.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const text = m.text || '';
+    const escaped = text.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    let mediaHtml = '';
+    if (m.mediaType === 'image' && m.mediaData) {
+      mediaHtml = `<img class="msg-media is-image" src="${m.mediaData}" alt="사진" onclick="openLightbox(this.src)">`;
+    } else if (m.mediaType === 'video' && m.mediaData) {
+      mediaHtml = `<video class="msg-media" src="${m.mediaData}" controls playsinline preload="metadata"></video>`;
+    }
+    const textHtml = text ? `<div class="msg-text">${escaped}</div>` : '';
     return `<div class="msg-bubble from-${m.from}">
       <button class="msg-del" onclick="deleteMsg('${m.key}')" title="삭제">✕</button>
       <div class="msg-sender">${senderLabel}</div>
-      <div class="msg-text">${escaped}</div>
+      ${mediaHtml}
+      ${textHtml}
       <div class="msg-date">${m.date}</div>
     </div>`;
   }).join('');
