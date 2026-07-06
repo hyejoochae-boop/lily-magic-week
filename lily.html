@@ -517,9 +517,39 @@
   }
   .cll.done { background: linear-gradient(135deg, #9d6eff, #ff7eb3); color: white; }
   .cll.week-clear { background: linear-gradient(135deg, #ffd76a, #ff9dca); color: #5a3500; }
+
+  /* HUB로 돌아가기 버튼 */
+  .back-to-hub {
+    position: fixed;
+    top: max(14px, env(safe-area-inset-top));
+    right: 14px;
+    z-index: 9999;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 15px 9px 12px;
+    border-radius: 999px;
+    background: var(--violet);
+    color: #fff;
+    font: 900 .82rem 'Noto Sans KR', sans-serif;
+    letter-spacing: .05em;
+    text-decoration: none;
+    border: 2px solid rgba(255,255,255,.65);
+    box-shadow: 0 6px 18px rgba(0,0,0,.28);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    transition: transform .15s, box-shadow .15s, opacity .15s;
+  }
+  .back-to-hub:hover { transform: translateY(-1px); box-shadow: 0 9px 22px rgba(0,0,0,.34); }
+  .back-to-hub:active { transform: translateY(0); opacity: .9; }
+  .back-to-hub .bth-arrow { font-size: 1.1rem; line-height: 1; margin-top: -1px; }
+  @media (max-width: 640px) {
+    .back-to-hub { top: max(10px, env(safe-area-inset-top)); right: 10px; padding: 8px 13px 8px 10px; font-size: .76rem; }
+  }
 </style>
 </head>
 <body>
+<a href="index.html" class="back-to-hub" title="HUB로 돌아가기" aria-label="HUB로 돌아가기"><span class="bth-arrow">←</span>BACK</a>
 <div class="stars" id="stars"></div>
 <div class="weather-drift" id="weatherDrift"></div>
 <div class="toast" id="toast">Magic item unlocked!</div>

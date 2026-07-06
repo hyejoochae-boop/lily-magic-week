@@ -337,7 +337,7 @@
   .msg-send-btn:hover { opacity: .9; transform: translateY(-1px); }
   .msg-send-btn:active { opacity: .85; transform: translateY(0); }
 
-  /* 메시지 안 사진/동영상 */
+  /* 메시지 안 사진 */
   .msg-media {
     display: block;
     max-width: 100%;
@@ -348,7 +348,6 @@
     background: rgba(0,0,0,.15);
   }
   .msg-media.is-image { cursor: zoom-in; object-fit: cover; }
-  video.msg-media { width: 100%; }
   .msg-bubble:has(.msg-media) { max-width: 92%; }
 
   /* 첨부 버튼 & 미리보기 */
@@ -380,7 +379,7 @@
     border: 1.5px solid rgba(255,255,255,.3);
     background: rgba(0,0,0,.18);
   }
-  .attach-preview img, .attach-preview video {
+  .attach-preview img {
     display: block;
     width: 100%;
     max-height: 220px;
@@ -520,8 +519,8 @@
       <div class="attach-preview" id="attachPreview" style="display:none;"></div>
 
       <div class="attach-row">
-        <input type="file" id="fileInput" accept="image/*,video/*" style="display:none;" onchange="handleFile(event)">
-        <button type="button" class="attach-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()">📷 사진 · 🎬 동영상 첨부</button>
+        <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="handleFile(event)">
+        <button type="button" class="attach-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()">📷 사진 첨부</button>
       </div>
 
       <button type="button" class="msg-send-btn" onclick="sendMsg()">보내기 💌</button>
@@ -716,10 +715,7 @@ db.ref('joy-data').on('value', snap => {
 
 let hubMessages = [];
 let currentSender = 'lily';
-let pendingMedia = null;   // { type:'image'|'video', data:dataURL }
-
-// 동영상 최대 용량 (무료 DB 보호용). 초과 시 안내.
-const MAX_VIDEO_MB = 12;
+let pendingMedia = null;   // { type:'image', data:dataURL }
 
 // ── 첨부 파일 선택 ──
 function handleFile(e) {
@@ -729,32 +725,17 @@ function handleFile(e) {
 
   const preview = document.getElementById('attachPreview');
   const isImage = file.type.startsWith('image/');
-  const isVideo = file.type.startsWith('video/');
-  if (!isImage && !isVideo) { showToast('사진 또는 동영상만 첨부할 수 있어요.'); return; }
+  if (!isImage) { showToast('사진만 첨부할 수 있어요.'); return; }
 
   preview.style.display = 'block';
   preview.innerHTML = `<div class="attach-status">⏳ 불러오는 중...</div>`;
 
-  if (isImage) {
-    compressImage(file, 1280, 0.72)
-      .then(dataURL => {
-        pendingMedia = { type: 'image', data: dataURL };
-        showPreview();
-      })
-      .catch(() => { clearAttach(); showToast('사진을 불러오지 못했어요.'); });
-  } else {
-    if (file.size > MAX_VIDEO_MB * 1024 * 1024) {
-      clearAttach();
-      showToast(`동영상은 ${MAX_VIDEO_MB}MB 이하만 보낼 수 있어요.`);
-      return;
-    }
-    fileToDataURL(file)
-      .then(dataURL => {
-        pendingMedia = { type: 'video', data: dataURL };
-        showPreview();
-      })
-      .catch(() => { clearAttach(); showToast('동영상을 불러오지 못했어요.'); });
-  }
+  compressImage(file, 1280, 0.72)
+    .then(dataURL => {
+      pendingMedia = { type: 'image', data: dataURL };
+      showPreview();
+    })
+    .catch(() => { clearAttach(); showToast('사진을 불러오지 못했어요.'); });
 }
 
 // ── 사진 압축 (캔버스로 리사이즈 후 JPEG 변환) ──
@@ -780,22 +761,11 @@ function compressImage(file, maxDim, quality) {
   });
 }
 
-function fileToDataURL(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = ev => resolve(ev.target.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
 // ── 첨부 미리보기 표시 ──
 function showPreview() {
   const preview = document.getElementById('attachPreview');
   if (!pendingMedia) { clearAttach(); return; }
-  const media = pendingMedia.type === 'image'
-    ? `<img src="${pendingMedia.data}" alt="첨부 사진">`
-    : `<video src="${pendingMedia.data}" controls playsinline></video>`;
+  const media = `<img src="${pendingMedia.data}" alt="첨부 사진">`;
   preview.innerHTML = media + `<button type="button" class="attach-remove" onclick="clearAttach()" title="첨부 취소">✕</button>`;
   preview.style.display = 'block';
 }
@@ -869,8 +839,6 @@ function renderMsgs(msgs) {
     let mediaHtml = '';
     if (m.mediaType === 'image' && m.mediaData) {
       mediaHtml = `<img class="msg-media is-image" src="${m.mediaData}" alt="사진" onclick="openLightbox(this.src)">`;
-    } else if (m.mediaType === 'video' && m.mediaData) {
-      mediaHtml = `<video class="msg-media" src="${m.mediaData}" controls playsinline preload="metadata"></video>`;
     }
     const textHtml = text ? `<div class="msg-text">${escaped}</div>` : '';
     return `<div class="msg-bubble from-${m.from}">
