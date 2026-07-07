@@ -852,8 +852,8 @@ function renderMsgs(msgs) {
   list.scrollTop = list.scrollHeight;
 }
 
-// ── Firebase 실시간 리스너 ──
-db.ref(HUB_REF).on('value', snapshot => {
+// ── Firebase 실시간 리스너 (최근 70개만 표시) ──
+db.ref(HUB_REF).limitToLast(70).on('value', snapshot => {
   const val = snapshot.val();
   const msgs = [];
   if (val) {
