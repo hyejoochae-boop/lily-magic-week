@@ -165,9 +165,6 @@
   .rc-draggable.selected .rc-item-emoji { filter: drop-shadow(0 0 8px rgba(255,200,80,.9)); transform: scale(1.1); }
 
   /* FX + dialogue */
-  .rc-fx { position: absolute; inset: 0; pointer-events: none; z-index: 10; overflow: hidden; }
-  .rc-fx-particle { position: absolute; animation: rcFxFloat linear infinite; }
-  @keyframes rcFxFloat { 0%{transform:translateY(0) rotate(0);opacity:.85} 100%{transform:translateY(-110%) rotate(45deg);opacity:0} }
   .rc-dialogue { position: absolute; bottom: 2%; left: 3%; right: 3%; background: rgba(4,2,12,.82); border: 1.5px solid rgba(255,255,255,.22); border-radius: 10px; padding: 6px 10px; z-index: 15; backdrop-filter: blur(4px); }
   .rc-dialogue-text { font: 700 0.6rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.9); line-height: 1.5; }
 
@@ -591,10 +588,6 @@
           <span class="rnb-icon">🌸</span>
           <span class="rnb-label">장식</span>
         </button>
-        <button class="room-nav-btn" title="특별효과" onclick="selectShopCat('special');scrollToShop()">
-          <span class="rnb-icon">✨</span>
-          <span class="rnb-label">효과</span>
-        </button>
       </nav>
       <div class="room-canvas" id="roomCanvas">
         <!-- 꾹 눌러 삭제 컨텍스트 메뉴 -->
@@ -815,7 +808,6 @@ const SHOP_CATS = [
   { key:'pet',       label:'🐾 반려동물' },
   { key:'deco',      label:'🌸 장식품' },
   { key:'food',      label:'🍰 음식' },
-  { key:'special',   label:'✨ 특별 효과' },
   { key:'avatar',    label:'👗 아바타' },
 ];
 const SHOP_ITEMS = [
@@ -880,15 +872,6 @@ const SHOP_ITEMS = [
   { id:'food_pancake',    emoji:'🥞', name:'팬케이크 타워',  cat:'food',    price:95,  desc:'꿀 흘러내리는 팬케이크 10단 타워' },
   { id:'food_juice',      emoji:'🧃', name:'무지개 주스',    cat:'food',    price:60,  desc:'7가지 색이 층층이 쌓인 주스' },
   { id:'food_popcorn',    emoji:'🍿', name:'마법 팝콘',      cat:'food',    price:65,  desc:'먹을수록 새로운 맛이 나는 팝콘' },
-  // ── 특별 효과
-  { id:'fx_sparkle',      emoji:'✨', name:'반짝이 눈 효과',cat:'special',  price:150, desc:'방 안에 반짝이가 떨어져요' },
-  { id:'fx_aura',         emoji:'🌟', name:'골든 아우라',  cat:'special',   price:300, desc:'Lily에게 황금빛 아우라' },
-  { id:'fx_particle',     emoji:'💫', name:'마법 파티클',  cat:'special',   price:200, desc:'마법 가루가 둥둥 떠다녀요' },
-  { id:'fx_firework',     emoji:'🎆', name:'미니 불꽃놀이',cat:'special',   price:250, desc:'방 안에 작은 불꽃놀이' },
-  { id:'fx_bubble',       emoji:'🫧', name:'반짝 버블',    cat:'special',   price:180, desc:'반짝이는 비눗방울이 떠다녀요' },
-  { id:'fx_music',        emoji:'🎵', name:'음표 떠다니기',cat:'special',   price:170, desc:'음표가 방 안을 둥실둥실' },
-  { id:'fx_snow',         emoji:'❄️', name:'실내 눈송이',  cat:'special',   price:220, desc:'방 안에 내리는 예쁜 눈' },
-  { id:'fx_rainbow_glow', emoji:'🌈', name:'무지개 빛 후광',cat:'special',  price:400, desc:'Lily 주변에 무지개 빛이!' },
   // ── 장식품 추가 15개
   { id:'deco_lantern',   emoji:'🏮', name:'홍등',          cat:'deco', price:90,  desc:'따뜻한 빛의 홍등' },
   { id:'deco_crown_d',   emoji:'👑', name:'왕관 장식',     cat:'deco', price:150, desc:'반짝이는 미니 왕관' },
@@ -1364,8 +1347,8 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
         <path d="M178 224 Q200 232 222 224" stroke="#ffd76a" stroke-width="2" fill="none"/>
         <text x="193" y="236" font-size="11">⭐</text>` : ''}
       ${hasRibbon ? `
-        <path d="M193 222 Q200 230 207 222" stroke="#ff8c00" stroke-width="2" fill="none"/>
-        <path d="M188 218 Q196 210 200 218 Q204 210 212 218 Q205 226 200 220 Q195 226 188 218Z" fill="#ff9dca" stroke="#ff8c00" stroke-width="1.5"/>` : ''}
+        <path d="M193 238 Q200 246 207 238" stroke="#ff8c00" stroke-width="2" fill="none"/>
+        <path d="M188 234 Q196 226 200 234 Q204 226 212 234 Q205 242 200 236 Q195 242 188 234Z" fill="#ff9dca" stroke="#ff8c00" stroke-width="1.5"/>` : ''}
       ${hasEarrings ? `
         <text x="144" y="195" font-size="11">⭐</text>
         <text x="237" y="195" font-size="11">⭐</text>` : ''}
@@ -1581,7 +1564,6 @@ function getItemZone(item) {
   if (item.cat === 'theme') return 'bg';
   if (item.cat === 'avatar') return 'avatar';
   if (item.cat === 'pet') return 'pet';
-  if (item.cat === 'special') return 'overlay';
   if (item.cat === 'furniture' || item.cat === 'food') return 'floor';
   if (item.cat === 'deco') {
     return ['deco_blossom','deco_mobile','deco_painting','deco_rainbow','deco_balloon','deco_crystal','deco_clock'].includes(item.id) ? 'wall' : 'floor';
@@ -1631,7 +1613,6 @@ function renderRoom() {
   const wallItems  = ownedItems.filter(it => getItemZone(it) === 'wall');
   const floorItems = ownedItems.filter(it => getItemZone(it) === 'floor');
   const petItems   = ownedItems.filter(it => getItemZone(it) === 'pet');
-  const fxItems    = ownedItems.filter(it => getItemZone(it) === 'overlay');
 
   const wpEmojis = checkerboardWp(theme.wp);
   let html = `
@@ -1687,21 +1668,6 @@ function renderRoom() {
         <span class="rc-item-emoji" style="font-size:2.4rem">${item.emoji}</span>
       </div>`;
     });
-  }
-
-  if (fxItems.length > 0) {
-    html += `<div class="rc-fx">`;
-    fxItems.forEach(item => {
-      const count = item.id === 'fx_snow' ? 12 : item.id === 'fx_sparkle' ? 10 : 7;
-      for (let i = 0; i < count; i++) {
-        const x = 5 + (i / count) * 90;
-        const dur = 2.5 + (i % 4) * 0.7;
-        const delay = -(i * 0.4);
-        const size = 0.7 + (i % 3) * 0.3;
-        html += `<div class="rc-fx-particle" style="left:${x}%;bottom:${(i%5)*18}%;font-size:${size}rem;animation-duration:${dur}s;animation-delay:${delay}s">${item.emoji}</div>`;
-      }
-    });
-    html += `</div>`;
   }
 
   const avatarItems = ownedItems.filter(it => getItemZone(it) === 'avatar');

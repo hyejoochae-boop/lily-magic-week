@@ -165,9 +165,6 @@
   .rc-draggable.selected .rc-item-emoji { filter: drop-shadow(0 0 8px rgba(255,200,80,.9)); transform: scale(1.1); }
 
   /* FX + dialogue */
-  .rc-fx { position: absolute; inset: 0; pointer-events: none; z-index: 10; overflow: hidden; }
-  .rc-fx-particle { position: absolute; animation: rcFxFloat linear infinite; }
-  @keyframes rcFxFloat { 0%{transform:translateY(0) rotate(0);opacity:.85} 100%{transform:translateY(-110%) rotate(45deg);opacity:0} }
   .rc-dialogue { position: absolute; bottom: 2%; left: 3%; right: 3%; background: rgba(4,2,12,.82); border: 1.5px solid rgba(255,255,255,.22); border-radius: 10px; padding: 6px 10px; z-index: 15; backdrop-filter: blur(4px); }
   .rc-dialogue-text { font: 700 0.6rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.9); line-height: 1.5; }
 
@@ -591,10 +588,6 @@
           <span class="rnb-icon">🌸</span>
           <span class="rnb-label">장식</span>
         </button>
-        <button class="room-nav-btn" title="특별효과" onclick="selectShopCat('special');scrollToShop()">
-          <span class="rnb-icon">✨</span>
-          <span class="rnb-label">효과</span>
-        </button>
       </nav>
       <div class="room-canvas" id="roomCanvas">
         <!-- 꾹 눌러 삭제 컨텍스트 메뉴 -->
@@ -815,7 +808,6 @@ const SHOP_CATS = [
   { key:'pet',       label:'🐾 반려동물' },
   { key:'deco',      label:'🌸 장식품' },
   { key:'food',      label:'🍰 음식' },
-  { key:'special',   label:'✨ 특별 효과' },
   { key:'avatar',    label:'👗 아바타' },
 ];
 const SHOP_ITEMS = [
@@ -880,15 +872,6 @@ const SHOP_ITEMS = [
   { id:'food_pancake',    emoji:'🥞', name:'팬케이크 타워',  cat:'food',    price:95,  desc:'꿀 흘러내리는 팬케이크 10단 타워' },
   { id:'food_juice',      emoji:'🧃', name:'무지개 주스',    cat:'food',    price:60,  desc:'7가지 색이 층층이 쌓인 주스' },
   { id:'food_popcorn',    emoji:'🍿', name:'마법 팝콘',      cat:'food',    price:65,  desc:'먹을수록 새로운 맛이 나는 팝콘' },
-  // ── 특별 효과
-  { id:'fx_sparkle',      emoji:'✨', name:'반짝이 눈 효과',cat:'special',  price:150, desc:'방 안에 반짝이가 떨어져요' },
-  { id:'fx_aura',         emoji:'🌟', name:'골든 아우라',  cat:'special',   price:300, desc:'Lily에게 황금빛 아우라' },
-  { id:'fx_particle',     emoji:'💫', name:'마법 파티클',  cat:'special',   price:200, desc:'마법 가루가 둥둥 떠다녀요' },
-  { id:'fx_firework',     emoji:'🎆', name:'미니 불꽃놀이',cat:'special',   price:250, desc:'방 안에 작은 불꽃놀이' },
-  { id:'fx_bubble',       emoji:'🫧', name:'반짝 버블',    cat:'special',   price:180, desc:'반짝이는 비눗방울이 떠다녀요' },
-  { id:'fx_music',        emoji:'🎵', name:'음표 떠다니기',cat:'special',   price:170, desc:'음표가 방 안을 둥실둥실' },
-  { id:'fx_snow',         emoji:'❄️', name:'실내 눈송이',  cat:'special',   price:220, desc:'방 안에 내리는 예쁜 눈' },
-  { id:'fx_rainbow_glow', emoji:'🌈', name:'무지개 빛 후광',cat:'special',  price:400, desc:'Lily 주변에 무지개 빛이!' },
   // ── 장식품 추가 15개
   { id:'deco_lantern',   emoji:'🏮', name:'홍등',          cat:'deco', price:90,  desc:'따뜻한 빛의 홍등' },
   { id:'deco_crown_d',   emoji:'👑', name:'왕관 장식',     cat:'deco', price:150, desc:'반짝이는 미니 왕관' },
@@ -1186,8 +1169,7 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
     activeOutfit.id === 'av_outfit_princess' ? `
       <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#f5d0ff" opacity="0.45"/>
       <path d="M155 305 Q200 328 245 305" fill="none" stroke="rgba(255,255,255,.72)" stroke-width="4"/>
-      <path d="M148 338 Q200 364 252 338" fill="none" stroke="rgba(255,255,255,.72)" stroke-width="3"/>
-      <text x="162" y="268" font-size="10">✨</text><text x="222" y="284" font-size="9">✦</text><text x="184" y="348" font-size="10">⭐</text>` :
+      <path d="M148 338 Q200 364 252 338" fill="none" stroke="rgba(255,255,255,.72)" stroke-width="3"/>` :
     activeOutfit.id === 'av_outfit_rainbow' ? `
       <path d="M172 226 Q200 210 228 226 L229 248 Q200 244 171 248 Z" fill="#FF6B6B" opacity="0.82"/>
       <path d="M171 248 Q200 244 229 248 L231 268 Q200 264 169 268 Z" fill="#FF9F43" opacity="0.82"/>
@@ -1209,22 +1191,15 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
     activeOutfit.id === 'av_outfit_angel' ? `
       <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="white" opacity="0.55"/>
       <path d="M80 240 C60 200 90 170 130 200 C110 230 105 268 120 290 Z" fill="rgba(255,255,255,.55)" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/>
-      <path d="M320 240 C340 200 310 170 270 200 C290 230 295 268 280 290 Z" fill="rgba(255,255,255,.55)" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/>
-      <text x="152" y="310" font-size="10">✦</text><text x="236" y="298" font-size="9">✦</text>
-      <text x="180" y="354" font-size="10">✨</text><text x="205" y="366" font-size="9">✦</text>` :
+      <path d="M320 240 C340 200 310 170 270 200 C290 230 295 268 280 290 Z" fill="rgba(255,255,255,.55)" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/>` :
     activeOutfit.id === 'av_outfit_mermaid' ? `
       <path d="M172 280 Q200 268 228 280 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#00c8a0" opacity="0.65"/>
       <path d="M172 226 Q200 210 228 226 L228 280 Q200 268 172 280 Z" fill="#0084b4" opacity="0.55"/>
       <path d="M157 316 Q200 335 243 316" fill="none" stroke="rgba(0,220,180,.8)" stroke-width="3"/>
-      <path d="M150 342 Q200 362 250 342" fill="none" stroke="rgba(0,200,160,.7)" stroke-width="2.5"/>
-      <text x="165" y="268" font-size="9">🐚</text><text x="218" y="272" font-size="8">🐠</text>
-      <text x="178" y="345" font-size="9">🐚</text><text x="210" y="358" font-size="8">💎</text>` :
+      <path d="M150 342 Q200 362 250 342" fill="none" stroke="rgba(0,200,160,.7)" stroke-width="2.5"/>` :
     activeOutfit.id === 'av_outfit_witch' ? `
       <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#1a0040" opacity="0.72"/>
-      <path d="M157 316 Q200 335 243 316" fill="none" stroke="#9d6eff" stroke-width="2.5" opacity="0.8"/>
-      <text x="163" y="262" font-size="9">✨</text><text x="220" y="274" font-size="8">⭐</text>
-      <text x="180" y="308" font-size="9">✦</text><text x="212" y="340" font-size="8">✨</text>
-      <text x="170" y="358" font-size="9">🌙</text><text x="205" y="366" font-size="8">⭐</text>` :
+      <path d="M157 316 Q200 335 243 316" fill="none" stroke="#9d6eff" stroke-width="2.5" opacity="0.8"/>` :
     activeOutfit.id === 'av_outfit_star' ? `
       <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#4a0080" opacity="0.60"/>
       <circle cx="172" cy="255" r="3" fill="#ffd76a" opacity="0.9"/><circle cx="210" cy="248" r="4" fill="#ffd76a" opacity="0.9"/>
@@ -1234,28 +1209,21 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
       <text x="183" y="278" font-size="10">⭐</text><text x="195" y="322" font-size="11">🌟</text>` :
     activeOutfit.id === 'av_outfit_rose' ? `
       <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#c0003c" opacity="0.55"/>
-      <path d="M157 316 Q200 335 243 316" fill="none" stroke="rgba(255,80,100,.7)" stroke-width="3"/>
-      <text x="162" y="253" font-size="11">🌹</text><text x="208" y="268" font-size="9">🌹</text>
-      <text x="178" y="298" font-size="10">🌹</text><text x="215" y="318" font-size="9">🌹</text>
-      <text x="162" y="344" font-size="10">🌹</text><text x="200" y="358" font-size="9">🌹</text>` :
+      <path d="M157 316 Q200 335 243 316" fill="none" stroke="rgba(255,80,100,.7)" stroke-width="3"/>` :
     activeOutfit.id === 'av_outfit_ballet' ? `
       <path d="M172 226 Q200 210 228 226 L232 268 Q200 258 168 268 Z" fill="#fff0f8" opacity="0.85" stroke="rgba(255,255,255,.9)" stroke-width="1.5"/>
       <ellipse cx="200" cy="300" rx="72" ry="20" fill="#ffd6ec" opacity="0.55"/>
       <ellipse cx="200" cy="316" rx="80" ry="22" fill="#ffe6f5" opacity="0.6"/>
       <ellipse cx="200" cy="334" rx="86" ry="24" fill="#fff0fa" opacity="0.65"/>
       <ellipse cx="200" cy="352" rx="90" ry="24" fill="#ffd6ec" opacity="0.55"/>
-      <path d="M157 316 Q200 340 243 316" fill="none" stroke="#ff9dca" stroke-width="3" opacity="0.85"/>
-      <text x="160" y="252" font-size="10">🎀</text><text x="222" y="256" font-size="9">✨</text>
-      <text x="182" y="360" font-size="10">🩰</text><text x="214" y="358" font-size="9">✨</text>` :
+      <path d="M157 316 Q200 340 243 316" fill="none" stroke="#ff9dca" stroke-width="3" opacity="0.85"/>` :
     activeOutfit.id === 'av_outfit_sporty' ? `
       <path d="M172 226 Q200 210 228 226 L234 288 Q200 280 166 288 Z" fill="#ff2d78" opacity="0.85"/>
       <path d="M166 288 L238 294 L248 330 Q200 344 152 330 L162 294 Z" fill="#1a1a2e" opacity="0.85"/>
       <path d="M152 330 Q200 344 248 330 L255 362 Q200 381 145 362 Z" fill="#00d4ff" opacity="0.8"/>
       <path d="M195 226 L192 362" stroke="#fff4a7" stroke-width="4" opacity="0.85"/>
       <path d="M205 226 L208 362" stroke="#fff4a7" stroke-width="4" opacity="0.85"/>
-      <path d="M160 236 Q200 224 240 236" fill="none" stroke="#fff" stroke-width="3" opacity="0.7"/>
-      <text x="158" y="256" font-size="10">⚡</text><text x="224" y="270" font-size="9">⚡</text>
-      <text x="178" y="352" font-size="10">🌟</text><text x="206" y="358" font-size="9">💪</text>` : '';
+      <path d="M160 236 Q200 224 240 236" fill="none" stroke="#fff" stroke-width="3" opacity="0.7"/>` : '';
 
   // Shoes overlay (replaces default shoes)
   const activeShoes = ownedAvatarItems.find(it => it.id.startsWith('av_shoes_'));
@@ -1384,8 +1352,8 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
         <path d="M178 224 Q200 232 222 224" stroke="#ffd76a" stroke-width="2" fill="none"/>
         <text x="193" y="236" font-size="11">⭐</text>` : ''}
       ${hasRibbon ? `
-        <path d="M193 222 Q200 230 207 222" stroke="#ff7eb3" stroke-width="2" fill="none"/>
-        <path d="M188 218 Q196 210 200 218 Q204 210 212 218 Q205 226 200 220 Q195 226 188 218Z" fill="#ff9dca" stroke="#ff7eb3" stroke-width="1.5"/>` : ''}
+        <path d="M193 238 Q200 246 207 238" stroke="#ff7eb3" stroke-width="2" fill="none"/>
+        <path d="M188 234 Q196 226 200 234 Q204 226 212 234 Q205 242 200 236 Q195 242 188 234Z" fill="#ff9dca" stroke="#ff7eb3" stroke-width="1.5"/>` : ''}
       ${hasEarrings ? `
         <text x="144" y="195" font-size="11">⭐</text>
         <text x="237" y="195" font-size="11">⭐</text>` : ''}
@@ -1601,7 +1569,6 @@ function getItemZone(item) {
   if (item.cat === 'theme') return 'bg';
   if (item.cat === 'avatar') return 'avatar';
   if (item.cat === 'pet') return 'pet';
-  if (item.cat === 'special') return 'overlay';
   if (item.cat === 'furniture' || item.cat === 'food') return 'floor';
   if (item.cat === 'deco') {
     return ['deco_blossom','deco_mobile','deco_painting','deco_rainbow','deco_balloon','deco_crystal','deco_clock'].includes(item.id) ? 'wall' : 'floor';
@@ -1651,7 +1618,6 @@ function renderRoom() {
   const wallItems  = ownedItems.filter(it => getItemZone(it) === 'wall');
   const floorItems = ownedItems.filter(it => getItemZone(it) === 'floor');
   const petItems   = ownedItems.filter(it => getItemZone(it) === 'pet');
-  const fxItems    = ownedItems.filter(it => getItemZone(it) === 'overlay');
 
   const wpEmojis = checkerboardWp(theme.wp);
   let html = `
@@ -1707,21 +1673,6 @@ function renderRoom() {
         <span class="rc-item-emoji" style="font-size:2.4rem">${item.emoji}</span>
       </div>`;
     });
-  }
-
-  if (fxItems.length > 0) {
-    html += `<div class="rc-fx">`;
-    fxItems.forEach(item => {
-      const count = item.id === 'fx_snow' ? 12 : item.id === 'fx_sparkle' ? 10 : 7;
-      for (let i = 0; i < count; i++) {
-        const x = 5 + (i / count) * 90;
-        const dur = 2.5 + (i % 4) * 0.7;
-        const delay = -(i * 0.4);
-        const size = 0.7 + (i % 3) * 0.3;
-        html += `<div class="rc-fx-particle" style="left:${x}%;bottom:${(i%5)*18}%;font-size:${size}rem;animation-duration:${dur}s;animation-delay:${delay}s">${item.emoji}</div>`;
-      }
-    });
-    html += `</div>`;
   }
 
   const avatarItems = ownedItems.filter(it => getItemZone(it) === 'avatar');
