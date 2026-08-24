@@ -848,7 +848,6 @@ const SHOP_ITEMS = [
   { id:'pet_frog',        emoji:'🐸', name:'개구리 왕자',  cat:'pet',       price:180, desc:'왕자님이 변한 개구리' },
   { id:'pet_dragon',      emoji:'🐲', name:'미니 드래곤',  cat:'pet',       price:450, desc:'불을 뿜는 아기 드래곤' },
   { id:'pet_penguin',     emoji:'🐧', name:'펭귄 친구',    cat:'pet',       price:220, desc:'춤추는 귀여운 펭귄' },
-  { id:'pet_unicorn_royal', emoji:'🦄', name:'대형 마법 유니콘', cat:'pet', price:1500, big:true, desc:'전신이 다 보이는 거대하고 화려한 전설의 유니콘' },
   // ── 장식품
   { id:'deco_blossom',    emoji:'🌸', name:'벚꽃 가랜드',  cat:'deco',      price:80,  desc:'방을 화사하게 만드는 가랜드' },
   { id:'deco_mobile',     emoji:'⭐', name:'별빛 모빌',    cat:'deco',      price:100, desc:'천장에서 빙글빙글 도는 모빌' },
@@ -1409,79 +1408,6 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
   </svg>`;
 }
 
-function buildUnicornSVG() {
-  return `<svg viewBox="0 0 300 270" xmlns="http://www.w3.org/2000/svg" aria-label="Unicorn" style="width:100%;height:auto;overflow:visible">
-    <defs>
-      <linearGradient id="uniMane" x1="0" x2="0" y1="0" y2="1">
-        <stop offset="0" stop-color="#ff9dca"/><stop offset="0.4" stop-color="#c9a2ff"/>
-        <stop offset="0.7" stop-color="#7fe0c0"/><stop offset="1" stop-color="#9dccff"/>
-      </linearGradient>
-      <linearGradient id="uniTail" x1="0" x2="1" y1="0" y2="1">
-        <stop offset="0" stop-color="#ff9dca"/><stop offset="0.4" stop-color="#9dccff"/>
-        <stop offset="0.7" stop-color="#7fe0c0"/><stop offset="1" stop-color="#c9a2ff"/>
-      </linearGradient>
-      <linearGradient id="uniHorn" x1="0" x2="0" y1="0" y2="1">
-        <stop offset="0" stop-color="#f3e6ff"/><stop offset="1" stop-color="#c9a2ff"/>
-      </linearGradient>
-      <radialGradient id="uniBody" cx="50%" cy="35%">
-        <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f2e9ff"/>
-      </radialGradient>
-    </defs>
-
-    <path d="M222 175 C266 160 284 190 270 220 C260 240 232 244 214 228 C240 224 252 202 240 184 C234 195 220 200 210 194 Z" fill="url(#uniTail)" stroke="rgba(157,110,255,.35)" stroke-width="2"/>
-    <path d="M222 180 C248 176 258 196 248 214" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="3" stroke-linecap="round"/>
-
-    <ellipse cx="160" cy="200" rx="66" ry="50" fill="url(#uniBody)" stroke="rgba(157,110,255,.3)" stroke-width="2"/>
-
-    <path d="M126 232 L120 258" stroke="#ffffff" stroke-width="17" stroke-linecap="round"/>
-    <path d="M176 234 L184 259" stroke="#ffffff" stroke-width="17" stroke-linecap="round"/>
-    <path d="M118 246 L128 246" stroke="#ff9dca" stroke-width="6" stroke-linecap="round"/>
-    <path d="M178 248 L189 248" stroke="#ff9dca" stroke-width="6" stroke-linecap="round"/>
-    <ellipse cx="120" cy="261" rx="10" ry="6" fill="#ffd6ec"/>
-    <ellipse cx="184" cy="262" rx="10" ry="6" fill="#ffd6ec"/>
-
-    <path d="M108 90 C74 100 62 140 82 168 C92 150 96 128 112 112 C104 130 108 150 124 160 C118 138 122 116 138 100 Z" fill="url(#uniMane)" opacity="0.95"/>
-    <path d="M112 78 C88 96 80 122 92 144" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="3" stroke-linecap="round"/>
-
-    <circle cx="160" cy="120" r="72" fill="url(#uniBody)" stroke="rgba(157,110,255,.3)" stroke-width="2"/>
-
-    <path d="M112 68 C104 46 116 30 132 38 C126 52 122 62 122 74 Z" fill="#ffffff" stroke="rgba(157,110,255,.3)" stroke-width="1.5"/>
-    <path d="M118 62 C114 50 120 42 128 46 C124 54 122 60 122 66 Z" fill="#ffb3d9"/>
-    <path d="M208 68 C216 46 204 30 188 38 C194 52 198 62 198 74 Z" fill="#ffffff" stroke="rgba(157,110,255,.3)" stroke-width="1.5"/>
-    <path d="M202 62 C206 50 200 42 192 46 C196 54 198 60 198 66 Z" fill="#ffb3d9"/>
-
-    <path d="M160 54 L148 14 L172 14 Z" fill="url(#uniHorn)" stroke="#a97fe0" stroke-width="1.5"/>
-    <path d="M153 40 L167 40 M155 30 L165 30 M157 21 L163 21" stroke="#a97fe0" stroke-width="1.3" opacity="0.75"/>
-
-    <path d="M130 60 Q160 44 190 60" fill="none" stroke="#e8c98a" stroke-width="4"/>
-    <circle cx="132" cy="59" r="5" fill="#ff6b6b"/>
-    <circle cx="148" cy="50" r="5" fill="#ffd32a"/>
-    <circle cx="160" cy="47" r="5" fill="#7fe0c0"/>
-    <circle cx="172" cy="50" r="5" fill="#54a0ff"/>
-    <circle cx="188" cy="59" r="5" fill="#c9a2ff"/>
-
-    <ellipse cx="136" cy="122" rx="13" ry="17" fill="#3d2854"/>
-    <ellipse cx="184" cy="122" rx="13" ry="17" fill="#3d2854"/>
-    <circle cx="140" cy="114" r="4" fill="#fff"/>
-    <circle cx="188" cy="114" r="4" fill="#fff"/>
-    <circle cx="132" cy="128" r="2.2" fill="#fff" opacity="0.8"/>
-    <circle cx="180" cy="128" r="2.2" fill="#fff" opacity="0.8"/>
-    <path d="M120 108 Q128 100 138 104" stroke="#3d2854" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-    <path d="M200 108 Q192 100 182 104" stroke="#3d2854" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-
-    <path d="M118 78 C104 92 100 110 112 124 C120 112 128 100 140 92 C132 86 124 82 118 78 Z" fill="url(#uniMane)" opacity="0.95"/>
-
-    <ellipse cx="122" cy="140" rx="10" ry="6.5" fill="#ff9dca" opacity=".55"/>
-    <ellipse cx="198" cy="140" rx="10" ry="6.5" fill="#ff9dca" opacity=".55"/>
-    <path d="M148 144 Q160 154 172 144" stroke="#d64d84" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-
-    <text x="30" y="60" font-size="16">✨</text>
-    <text x="252" y="70" font-size="15">⭐</text>
-    <text x="40" y="200" font-size="13">✦</text>
-    <text x="264" y="150" font-size="14">💫</text>
-  </svg>`;
-}
-
 function createStars() {
   const container = document.getElementById('stars');
   const symbols = ['✦', '✧', '⭐', '✨', '·'];
@@ -1763,12 +1689,9 @@ function renderRoom() {
   if (petItems.length > 0) {
     petItems.forEach((item, i) => {
       const x = 3 + i * 14;
-      const body = item.id === 'pet_unicorn_royal'
-        ? `<div class="rc-item-emoji" style="width:9.5rem">${buildUnicornSVG()}</div>`
-        : `<span class="rc-item-emoji" style="font-size:${item.big ? '5.6rem' : '2.8rem'}">${item.emoji}</span>`;
       html += `<div class="rc-item pet rc-draggable" data-id="${item.id}" style="${itemPosStyleB(item, x, 47)}">
         <button class="rc-del-btn" onclick="removeFromRoom('${item.id}')">×</button>
-        ${body}
+        <span class="rc-item-emoji" style="font-size:2.8rem">${item.emoji}</span>
       </div>`;
     });
   }
