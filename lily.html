@@ -114,9 +114,21 @@
   .rc-wallpaper {
     position: absolute; top: 0; left: 0; right: 0; height: 57%;
     pointer-events: none; z-index: 1;
-    display: flex; align-items: center; justify-content: space-around;
-    flex-wrap: wrap; padding: 4px; gap: 3px; font-size: 1rem; opacity: .13; overflow: hidden;
+    display: grid; grid-template-columns: repeat(5, 1fr); grid-auto-rows: 1fr;
+    padding: 6px; opacity: .5; overflow: hidden;
   }
+  .rc-wallpaper span { display: flex; align-items: center; justify-content: center; font-size: 1.5rem; line-height: 1; }
+  .rc-wallpaper span.empty { visibility: hidden; }
+
+  .rc-glitter { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+  .rc-glitter span {
+    position: absolute; width: 4px; height: 4px; border-radius: 50%;
+    background: var(--glow); box-shadow: 0 0 6px 1.5px var(--glow);
+    animation: rc-twinkle 2.6s ease-in-out infinite; animation-delay: var(--d, 0s);
+  }
+  .rc-glitter span.big { width: 6px; height: 6px; }
+  @keyframes rc-twinkle { 0%, 100% { opacity: .1; transform: scale(.5); } 50% { opacity: 1; transform: scale(1.3); } }
+  @media (prefers-reduced-motion: reduce) { .rc-glitter span { animation: none; opacity: .55; } }
 
   /* Window */
   .rc-window { position: absolute; top: 4%; left: 50%; transform: translateX(-50%); width: 46%; height: 44%; z-index: 3; }
@@ -1637,13 +1649,13 @@ function renderLilyAvatar() {
 
 /* ── ROOM THEME PALETTES ── */
 const ROOM_THEMES = {
-  default:         { wall:'#c8aaee', wall2:'#b090d8', floor:'#9070c0', floor2:'#7858a8', base:'#604898', wp:['✨','🌸','✦'] },
-  theme_spring:    { wall:'#fde8f4', wall2:'#fbd0e8', floor:'#c8e8a8', floor2:'#a8d880', base:'#80b860', wp:['🌸','🌷','🌼'] },
-  theme_ocean:     { wall:'#a8d8f0', wall2:'#80c4e4', floor:'#3a7fa0', floor2:'#206080', base:'#104060', wp:['🌊','🐠','🐚'] },
-  theme_cloud:     { wall:'#eef6ff', wall2:'#d8ecff', floor:'#b8d4f0', floor2:'#98bce0', base:'#78a4d0', wp:['☁️','🌤️','⛅'] },
-  theme_forest:    { wall:'#b8dca0', wall2:'#98c878', floor:'#7a5030', floor2:'#5a3018', base:'#3a1808', wp:['🍄','🌿','🍀'] },
-  theme_starnight: { wall:'#0a0828', wall2:'#060520', floor:'#18104a', floor2:'#100838', base:'#080628', wp:['⭐','🌟','✨'] },
-  theme_candy:     { wall:'#ffb8d8', wall2:'#ff90c0', floor:'#ffd890', floor2:'#ffb850', base:'#ff9030', wp:['🍭','🍬','🧁'] },
+  default:         { wall:'#c8aaee', wall2:'#b090d8', floor:'#9070c0', floor2:'#7858a8', base:'#604898', wp:['✨','🌸','✦'], glow:'#ffffff' },
+  theme_spring:    { wall:'#fde8f4', wall2:'#fbd0e8', floor:'#c8e8a8', floor2:'#a8d880', base:'#80b860', wp:['🌸','🌷','🌼'], glow:'#fff4c2' },
+  theme_ocean:     { wall:'#a8d8f0', wall2:'#80c4e4', floor:'#3a7fa0', floor2:'#206080', base:'#104060', wp:['🐠','🐚'],       glow:'#eafcff' },
+  theme_cloud:     { wall:'#eef6ff', wall2:'#d8ecff', floor:'#b8d4f0', floor2:'#98bce0', base:'#78a4d0', wp:['☁️','💭','🕊️'], glow:'#fff8e0' },
+  theme_forest:    { wall:'#b8dca0', wall2:'#98c878', floor:'#7a5030', floor2:'#5a3018', base:'#3a1808', wp:['🍄','🌿','🍀'], glow:'#e9ffb0' },
+  theme_starnight: { wall:'#0a0828', wall2:'#060520', floor:'#18104a', floor2:'#100838', base:'#080628', wp:['⭐','🌟','✨'], glow:'#ffe9a8' },
+  theme_candy:     { wall:'#ffb8d8', wall2:'#ff90c0', floor:'#ffd890', floor2:'#ffb850', base:'#ff9030', wp:['🍭','🍬','🧁'], glow:'#fff5fb' },
 };
 
 function getActiveTheme() {
@@ -1671,6 +1683,37 @@ function getItemZone(item) {
   return 'floor';
 }
 
+function checkerboardWp(emojis) {
+  // 1행: 홀수 칸만, 2행: 짝수 칸만 ... 반복 + 가로줄마다 아이콘 종류를 바꿔서 사선으로 같은 아이콘이 이어지지 않게 함
+  const cols = 5, rows = 3;
+  let out = '';
+  for (let r = 0; r < rows; r++) {
+    const rowEmoji = emojis[r % emojis.length];
+    for (let c = 0; c < cols; c++) {
+      out += ((r + c) % 2 === 0) ? `<span>${rowEmoji}</span>` : `<span class="empty">·</span>`;
+    }
+  }
+  return out;
+}
+
+const GLITTER_SPOTS = [
+  { top:'8%',  left:'12%', d:'0s',   big:false },
+  { top:'22%', left:'46%', d:'.4s',  big:true  },
+  { top:'14%', left:'78%', d:'.9s',  big:false },
+  { top:'40%', left:'28%', d:'1.3s', big:false },
+  { top:'34%', left:'62%', d:'.2s',  big:false },
+  { top:'50%', left:'88%', d:'1.6s', big:true  },
+  { top:'6%',  left:'60%', d:'1.1s', big:false },
+  { top:'46%', left:'8%',  d:'2s',   big:false },
+  { top:'58%', left:'40%', d:'.7s',  big:false },
+];
+
+function glitterHtml(color) {
+  return GLITTER_SPOTS.map(s =>
+    `<span class="${s.big ? 'big' : ''}" style="top:${s.top};left:${s.left};--d:${s.d};--glow:${color}"></span>`
+  ).join('');
+}
+
 /* ── CYWORLD ROOM RENDER ── */
 function renderRoom() {
   const scene = document.getElementById('roomCanvas');
@@ -1684,12 +1727,13 @@ function renderRoom() {
   const petItems   = ownedItems.filter(it => getItemZone(it) === 'pet');
   const fxItems    = ownedItems.filter(it => getItemZone(it) === 'overlay');
 
-  const wpEmojis = theme.wp.map(e => `<span>${e}</span>`).join('').repeat(8);
+  const wpEmojis = checkerboardWp(theme.wp);
   let html = `
     <div class="rc-wall" style="background:linear-gradient(180deg,${theme.wall},${theme.wall2})"></div>
     <div class="rc-floor" style="background:linear-gradient(180deg,${theme.floor},${theme.floor2})"></div>
     <div class="rc-baseboard" style="background:${theme.base}"></div>
     <div class="rc-wallpaper">${wpEmojis}</div>
+    <div class="rc-glitter">${glitterHtml(theme.glow)}</div>
   `;
 
   function itemPosStyle(item, defaultLeft, defaultTop) {
