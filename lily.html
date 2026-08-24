@@ -1254,13 +1254,12 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
     activeBag.id === 'av_bag_star' ? `
       <path d="M254 306 Q270 286 286 306" stroke="#ffd76a" stroke-width="4" fill="none" stroke-linecap="round"/>` :
     activeBag.id === 'av_bag_heart' ? `
-      <line x1="182" y1="228" x2="266" y2="312" stroke="#a86b3c" stroke-width="4" stroke-linecap="round" opacity="0.9"/>` :
-    activeBag.id === 'av_bag_flower' ? `
-      <path d="M255 304 Q270 285 285 304" stroke="#8a5a2f" stroke-width="4" fill="none" stroke-linecap="round"/>` : '';
+      <line x1="182" y1="228" x2="266" y2="312" stroke="#a86b3c" stroke-width="4" stroke-linecap="round" opacity="0.9"/>` : '';
+  // 바구니(🧺)는 이모지 자체에 손잡이가 그려져 있어 별도 손잡이를 추가하지 않음
   const bagOverlay = !activeBag ? '' :
     activeBag.id === 'av_bag_star' ?   `<text x="270" y="332" font-size="42" text-anchor="middle" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">⭐</text>` :
     activeBag.id === 'av_bag_heart' ?  `<text x="268" y="322" font-size="28" text-anchor="middle" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">💖</text>` :
-    activeBag.id === 'av_bag_flower' ? `<text x="270" y="330" font-size="30" text-anchor="middle" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">🧺</text><text x="260" y="308" font-size="14">🌸</text><text x="278" y="306" font-size="13">🌷</text>` : '';
+    activeBag.id === 'av_bag_flower' ? `<text x="270" y="330" font-size="30" text-anchor="middle" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">🧺</text><text x="270" y="313" font-size="15" text-anchor="middle">🌸</text>` : '';
 
   return `<svg viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg" aria-label="Lily">
     <defs>
