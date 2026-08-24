@@ -1251,6 +1251,9 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
 
   // Bag overlay (near right hand)
   const activeBag = ownedAvatarItems.find(it => it.id.startsWith('av_bag_'));
+  const bagStrap = !activeBag ? '' : `
+    <line x1="182" y1="228" x2="266" y2="312" stroke="#a86b3c" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
+    <path d="M256 302 Q264 289 274 302" stroke="#a86b3c" stroke-width="3" fill="none" stroke-linecap="round"/>`;
   const bagOverlay = !activeBag ? '' :
     activeBag.id === 'av_bag_star' ?    `<text x="270" y="318" font-size="28" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">⭐</text>` :
     activeBag.id === 'av_bag_heart' ?   `<text x="268" y="320" font-size="28" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">💖</text>` :
@@ -1304,6 +1307,7 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
         <circle cx="304" cy="214" r="16" fill="#fff4a7" stroke="${accent}" stroke-width="3"/>
         <text x="295" y="220" font-size="16">💫</text>
         <circle cx="264" cy="306" r="5" fill="#fff4a7"/>` : ''}
+      ${bagStrap}
       ${bagOverlay}
       <path d="M148 174 C136 125 154 92 200 88 C246 92 264 125 252 174 C260 214 252 252 236 282 C242 222 238 178 226 150 C211 134 189 134 174 150 C162 178 158 222 164 282 C148 252 140 214 148 174 Z" fill="url(#lhair)"/>
       <ellipse cx="151" cy="206" rx="12" ry="20" fill="${hair}"/>
@@ -1352,8 +1356,10 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
         <path d="M178 224 Q200 232 222 224" stroke="#ffd76a" stroke-width="2" fill="none"/>
         <text x="193" y="236" font-size="11">⭐</text>` : ''}
       ${hasRibbon ? `
-        <path d="M193 238 Q200 246 207 238" stroke="#ff7eb3" stroke-width="2" fill="none"/>
-        <path d="M188 234 Q196 226 200 234 Q204 226 212 234 Q205 242 200 236 Q195 242 188 234Z" fill="#ff9dca" stroke="#ff7eb3" stroke-width="1.5"/>` : ''}
+        <path d="M175 223 Q200 233 225 223" stroke="#ff9dca" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path d="M195 228 L190 250 L198 244 Z" fill="#ff7eb3"/>
+        <path d="M205 228 L210 250 L202 244 Z" fill="#ff7eb3"/>
+        <path d="M188 220 Q196 212 200 220 Q204 212 212 220 Q205 228 200 222 Q195 228 188 220Z" fill="#ff9dca" stroke="#ff5599" stroke-width="1.5"/>` : ''}
       ${hasEarrings ? `
         <text x="144" y="195" font-size="11">⭐</text>
         <text x="237" y="195" font-size="11">⭐</text>` : ''}
