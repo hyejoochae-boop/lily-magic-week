@@ -829,6 +829,7 @@ const SHOP_ITEMS = [
   { id:'furn_lamp',       emoji:'🪔', name:'요정 램프',    cat:'furniture', price:100, desc:'따뜻한 빛의 마법 램프' },
   { id:'furn_rug',        emoji:'🌺', name:'꽃무늬 러그',  cat:'furniture', price:130, desc:'화사한 꽃무늬 바닥 깔개' },
   { id:'furn_piano',      emoji:'🎹', name:'미니 피아노',  cat:'furniture', price:280, desc:'요정 노래를 연주하는 피아노' },
+  { id:'furn_laptop',     emoji:'💻', name:'미니 노트북',  cat:'furniture', price:140, desc:'책상 위에 어울리는 아담한 노트북' },
   // ── 반려동물
   { id:'pet_cat',         emoji:'🐱', name:'마법 고양이',  cat:'pet',       price:250, desc:'마법을 쓸 줄 아는 고양이' },
   { id:'pet_rabbit',      emoji:'🐰', name:'달빛 토끼',    cat:'pet',       price:200, desc:'달에서 온 귀여운 토끼' },
@@ -848,7 +849,7 @@ const SHOP_ITEMS = [
   { id:'deco_painting',   emoji:'🖼️', name:'요정 그림',    cat:'deco',      price:120, desc:'요정 화가의 특별 그림' },
   { id:'deco_tent',       emoji:'⛺', name:'미니 텐트',    cat:'deco',      price:150, desc:'방 안에 캠핑 느낌 텐트' },
   { id:'deco_rainbow',    emoji:'🌈', name:'무지개 아치',  cat:'deco',      price:130, desc:'방에 걸린 작은 무지개' },
-  { id:'deco_vase',       emoji:'💐', name:'꽃다발 꽃병',  cat:'deco',      price:80,  desc:'예쁜 꽃이 가득한 꽃병' },
+  { id:'deco_vase',       emoji:'💐', name:'꽃다발',       cat:'deco',      price:80,  desc:'예쁜 꽃들로 만든 꽃다발' },
   { id:'deco_bear',       emoji:'🧸', name:'테디베어',     cat:'deco',      price:90,  desc:'포근한 갈색 테디베어' },
   { id:'deco_balloon',    emoji:'🎈', name:'별 풍선',      cat:'deco',      price:60,  desc:'두둥실 별 모양 풍선' },
   { id:'deco_crystal',    emoji:'💎', name:'수정 장식',    cat:'deco',      price:160, desc:'빛을 반짝이게 만드는 수정' },
@@ -873,7 +874,6 @@ const SHOP_ITEMS = [
   { id:'food_juice',      emoji:'🧃', name:'무지개 주스',    cat:'food',    price:60,  desc:'7가지 색이 층층이 쌓인 주스' },
   { id:'food_popcorn',    emoji:'🍿', name:'마법 팝콘',      cat:'food',    price:65,  desc:'먹을수록 새로운 맛이 나는 팝콘' },
   // ── 장식품 추가 15개
-  { id:'deco_lantern',   emoji:'🏮', name:'홍등',          cat:'deco', price:90,  desc:'따뜻한 빛의 홍등' },
   { id:'deco_crown_d',   emoji:'👑', name:'왕관 장식',     cat:'deco', price:150, desc:'반짝이는 미니 왕관' },
   { id:'deco_shell',     emoji:'🐚', name:'조개 장식',     cat:'deco', price:70,  desc:'바다의 소리가 들리는 조개' },
   { id:'deco_mushroom',  emoji:'🍄', name:'버섯 집',       cat:'deco', price:100, desc:'요정이 사는 알록달록 버섯' },
@@ -1604,17 +1604,112 @@ function wardrobeSVG() {
 }
 
 function pianoSVG() {
+  // 그랜드 피아노 위에서 내려다본 실루엣(전형적인 '날개' 모양) + 건반
   return `<svg viewBox="0 0 60 60" width="46" height="46">
-    <path d="M8 44 Q8 20 40 14 L52 18 L52 38 Q30 32 8 44Z" fill="#2b2b2b"/>
-    <rect x="8" y="38" width="30" height="10" rx="1" fill="#1a1a1a"/>
-    <rect x="10" y="39" width="26" height="7" fill="#fff"/>
-    <rect x="12" y="39" width="2" height="7" fill="#222"/>
-    <rect x="16" y="39" width="2" height="7" fill="#222"/>
-    <rect x="20" y="39" width="2" height="7" fill="#222"/>
-    <rect x="24" y="39" width="2" height="7" fill="#222"/>
-    <rect x="28" y="39" width="2" height="7" fill="#222"/>
-    <rect x="32" y="39" width="2" height="7" fill="#222"/>
+    <path d="M9 11 L9 49 Q9 52 12 52 L25 52 Q52 49 55 30 Q55 11 30 9 L12 9 Q9 9 9 11 Z" fill="#1e1e1e"/>
+    <rect x="9" y="14" width="12" height="35" fill="#fdfdfd"/>
+    <rect x="10.5" y="15" width="1.6" height="35" fill="#222"/>
+    <rect x="13.5" y="15" width="1.6" height="35" fill="#222"/>
+    <rect x="16.5" y="15" width="1.6" height="35" fill="#222"/>
+    <rect x="19.5" y="15" width="1.6" height="35" fill="#222"/>
+    <rect x="11" y="50" width="2.4" height="6" fill="#1e1e1e"/>
+    <rect x="24" y="52" width="2.4" height="6" fill="#1e1e1e"/>
+    <rect x="47" y="32" width="2.4" height="6" fill="#1e1e1e" transform="rotate(24 48 34)"/>
   </svg>`;
+}
+
+function deskSVG() {
+  return `<svg viewBox="0 0 60 60" width="46" height="46">
+    <rect x="6" y="18" width="48" height="7" rx="1.5" fill="#6c5ce7" stroke="#4a3ba8" stroke-width="1.5"/>
+    <circle cx="16" cy="21.5" r="1.2" fill="#ffe066"/>
+    <circle cx="30" cy="20" r="1.2" fill="#ffe066"/>
+    <circle cx="44" cy="22" r="1.2" fill="#ffe066"/>
+    <rect x="9" y="25" width="14" height="10" fill="#5a4bd6"/>
+    <rect x="13" y="29" width="6" height="1.5" fill="#3a2ba0"/>
+    <rect x="9" y="25" width="3" height="27" fill="#4a3ba8"/>
+    <rect x="48" y="25" width="3" height="27" fill="#4a3ba8"/>
+  </svg>`;
+}
+
+function bedSVG() {
+  return `<svg viewBox="0 0 60 60" width="48" height="34">
+    <rect x="4" y="14" width="9" height="26" rx="2" fill="#ffffff" stroke="#e2d9c8" stroke-width="1.5"/>
+    <rect x="8" y="30" width="48" height="9" rx="2" fill="#ffffff" stroke="#e2d9c8" stroke-width="1.5"/>
+    <rect x="13" y="24" width="40" height="14" rx="3" fill="#fff3b0" stroke="#f2e08a" stroke-width="1"/>
+    <rect x="14" y="18" width="14" height="9" rx="2.5" fill="#ffb6d5" stroke="#ff9ec9" stroke-width="1"/>
+    <rect x="8" y="39" width="4" height="8" fill="#e2d9c8"/>
+    <rect x="50" y="39" width="4" height="8" fill="#e2d9c8"/>
+  </svg>`;
+}
+
+function pinwheelSVG() {
+  return `<svg viewBox="0 0 60 60" width="38" height="38">
+    <line x1="30" y1="30" x2="30" y2="56" stroke="#8a5a2f" stroke-width="3" stroke-linecap="round"/>
+    <path d="M30 30 L30 10 Q40 10 40 20 Q40 30 30 30" fill="#ff6b6b"/>
+    <path d="M30 30 L50 30 Q50 20 40 20 Q30 20 30 30" fill="#ffd43b"/>
+    <path d="M30 30 L30 50 Q20 50 20 40 Q20 30 30 30" fill="#4dabf7"/>
+    <path d="M30 30 L10 30 Q10 40 20 40 Q30 40 30 30" fill="#69db7c"/>
+    <circle cx="30" cy="30" r="4" fill="#fff" stroke="#8a5a2f" stroke-width="1.5"/>
+  </svg>`;
+}
+
+function mobileSVG() {
+  return `<svg viewBox="0 0 60 60" width="38" height="38">
+    <line x1="30" y1="4" x2="30" y2="10" stroke="#8a5a2f" stroke-width="2"/>
+    <line x1="10" y1="10" x2="50" y2="10" stroke="#8a5a2f" stroke-width="2.5"/>
+    <line x1="14" y1="10" x2="14" y2="24" stroke="#8a5a2f" stroke-width="1.5"/>
+    <line x1="30" y1="10" x2="30" y2="32" stroke="#8a5a2f" stroke-width="1.5"/>
+    <line x1="46" y1="10" x2="46" y2="20" stroke="#8a5a2f" stroke-width="1.5"/>
+    <path d="M14 24 L15.2 27.6 19 28 16 30.6 17 34.4 14 32.2 11 34.4 12 30.6 9 28 12.8 27.6Z" fill="#ffd76a"/>
+    <path d="M30 32 L31.6 37 36 37.6 32.6 40.8 33.6 45.2 30 42.6 26.4 45.2 27.4 40.8 24 37.6 28.4 37Z" fill="#ff9dca"/>
+    <path d="M46 20 L47 23 50.6 23.4 48 25.6 48.7 29 46 27.2 43.3 29 44 25.6 41.4 23.4 45 23Z" fill="#9dccff"/>
+  </svg>`;
+}
+
+function garlandSVG() {
+  return `<svg viewBox="0 0 60 34" width="46" height="26">
+    <path d="M3 8 Q30 26 57 8" stroke="#a8703a" stroke-width="1.4" fill="none"/>
+    <text x="0" y="17" font-size="12">🌸</text>
+    <text x="14" y="26" font-size="12">🌸</text>
+    <text x="27" y="30" font-size="12">🌸</text>
+    <text x="38" y="26" font-size="12">🌸</text>
+    <text x="49" y="17" font-size="12">🌸</text>
+  </svg>`;
+}
+
+function musicBoxSVG() {
+  return `<svg viewBox="0 0 60 60" width="40" height="40">
+    <text x="21" y="16" font-size="14">🎵</text>
+    <path d="M12 28 Q30 17 48 28" fill="#ff9dca" stroke="#e8a0c4" stroke-width="1.5"/>
+    <rect x="12" y="28" width="36" height="20" rx="3" fill="#f7d9ec" stroke="#e8a0c4" stroke-width="1.5"/>
+    <rect x="42" y="37" width="2" height="9" fill="#c07bde"/>
+    <circle cx="43" cy="37" r="2.6" fill="#c07bde"/>
+  </svg>`;
+}
+
+function bluebirdSVG() {
+  return `<svg viewBox="0 0 60 60" width="40" height="40">
+    <ellipse cx="28" cy="34" rx="16" ry="13" fill="#4dabf7"/>
+    <circle cx="42" cy="24" r="10" fill="#4dabf7"/>
+    <path d="M50 22 L58 25 L50 28Z" fill="#ffa94d"/>
+    <circle cx="45" cy="21" r="1.6" fill="#1a1a1a"/>
+    <path d="M14 34 Q4 30 4 22 Q14 24 18 32Z" fill="#3793e0"/>
+    <path d="M20 44 L16 52 M28 46 L26 54 M36 45 L36 53" stroke="#f7b733" stroke-width="2" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function customItemIcon(id) {
+  return id === 'furn_bookshelf' ? bookshelfSVG() :
+    id === 'furn_wardrobe' ? wardrobeSVG() :
+    id === 'furn_piano' ? pianoSVG() :
+    id === 'furn_desk' ? deskSVG() :
+    id === 'furn_bed' ? bedSVG() :
+    id === 'deco_pinwheel' ? pinwheelSVG() :
+    id === 'deco_mobile' ? mobileSVG() :
+    id === 'deco_blossom' ? garlandSVG() :
+    id === 'deco_music_box' ? musicBoxSVG() :
+    id === 'pet_bird' ? bluebirdSVG() :
+    null;
 }
 
 function checkerboardWp(emojis) {
@@ -1686,9 +1781,10 @@ function renderRoom() {
     wallItems.forEach((item, i) => {
       const x = 4 + i * spread;
       const y = 6 + (i % 2) * 16;
+      const body = customItemIcon(item.id) || `<span class="rc-item-emoji" style="font-size:2.6rem">${item.emoji}</span>`;
       html += `<div class="rc-item rc-draggable" data-id="${item.id}" style="${itemPosStyle(item, x, y)}">
         <button class="rc-del-btn" onclick="removeFromRoom('${item.id}')">×</button>
-        <span class="rc-item-emoji" style="font-size:2.6rem">${item.emoji}</span>
+        ${body}
       </div>`;
     });
   }
@@ -1696,9 +1792,10 @@ function renderRoom() {
   if (petItems.length > 0) {
     petItems.forEach((item, i) => {
       const x = 3 + i * 14;
+      const body = customItemIcon(item.id) || `<span class="rc-item-emoji" style="font-size:2.8rem">${item.emoji}</span>`;
       html += `<div class="rc-item pet rc-draggable" data-id="${item.id}" style="${itemPosStyleB(item, x, 47)}">
         <button class="rc-del-btn" onclick="removeFromRoom('${item.id}')">×</button>
-        <span class="rc-item-emoji" style="font-size:2.8rem">${item.emoji}</span>
+        ${body}
       </div>`;
     });
   }
@@ -1709,10 +1806,7 @@ function renderRoom() {
     floorItems.forEach((item, i) => {
       const x = startX + i * spread;
       const yOff = (i % 2) * 4;
-      const body = item.id === 'furn_bookshelf' ? bookshelfSVG() :
-        item.id === 'furn_wardrobe' ? wardrobeSVG() :
-        item.id === 'furn_piano' ? pianoSVG() :
-        `<span class="rc-item-emoji" style="font-size:2.4rem">${item.emoji}</span>`;
+      const body = customItemIcon(item.id) || `<span class="rc-item-emoji" style="font-size:2.4rem">${item.emoji}</span>`;
       html += `<div class="rc-item rc-draggable" data-id="${item.id}" style="${itemPosStyleB(item, x, 46 + yOff)}">
         <button class="rc-del-btn" onclick="removeFromRoom('${item.id}')">×</button>
         ${body}
@@ -1952,7 +2046,7 @@ function renderShop() {
       }
     }
     return `<div class="shop-item-card ${owned ? 'owned' : ''} ${!owned && !canAfford ? 'unaffordable' : ''}">
-      <div class="shop-item-emoji">${item.emoji}</div>
+      <div class="shop-item-emoji">${customItemIcon(item.id) || item.emoji}</div>
       <div class="shop-item-name">${item.name}</div>
       <div class="shop-item-desc">${item.desc}</div>
       <div class="shop-item-price">💰 ${item.price} pt</div>
