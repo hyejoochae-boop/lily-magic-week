@@ -1579,6 +1579,50 @@ function getItemZone(item) {
   return 'floor';
 }
 
+function bookshelfSVG() {
+  return `<svg viewBox="0 0 60 60" width="42" height="42">
+    <rect x="4" y="4" width="52" height="52" rx="4" fill="#c98a4b" stroke="#8a5a2f" stroke-width="2"/>
+    <rect x="8" y="8" width="44" height="18" fill="#fff3e0"/>
+    <rect x="8" y="30" width="44" height="18" fill="#fff3e0"/>
+    <rect x="8" y="26" width="44" height="4" fill="#8a5a2f"/>
+    <rect x="10" y="10" width="5" height="14" fill="#ff6b6b"/>
+    <rect x="16" y="9" width="5" height="15" fill="#4dabf7"/>
+    <rect x="22" y="11" width="5" height="13" fill="#ffd43b"/>
+    <rect x="28" y="10" width="5" height="14" fill="#69db7c"/>
+    <rect x="34" y="9" width="6" height="15" fill="#9775fa"/>
+    <rect x="41" y="11" width="9" height="13" fill="#ff922b" rx="1"/>
+    <rect x="10" y="32" width="6" height="14" fill="#38d9a9"/>
+    <rect x="17" y="31" width="5" height="15" fill="#f783ac"/>
+    <rect x="23" y="33" width="5" height="13" fill="#845ef7"/>
+    <rect x="29" y="32" width="5" height="14" fill="#5c7cfa"/>
+    <rect x="35" y="31" width="14" height="15" fill="#ffa94d" rx="1"/>
+  </svg>`;
+}
+
+function wardrobeSVG() {
+  return `<svg viewBox="0 0 60 60" width="42" height="42">
+    <rect x="6" y="4" width="48" height="52" rx="3" fill="#f7d9ec" stroke="#e8a0c4" stroke-width="2"/>
+    <line x1="30" y1="6" x2="30" y2="54" stroke="#e8a0c4" stroke-width="2"/>
+    <circle cx="24" cy="30" r="2" fill="#c07bde"/>
+    <circle cx="36" cy="30" r="2" fill="#c07bde"/>
+    <path d="M26 10 Q24 6 27 4 Q30 2 30 5 Q30 2 33 4 Q36 6 34 10 Q32 8 30 8 Q28 8 26 10Z" fill="#ff9dca" stroke="#ff5599" stroke-width="1"/>
+  </svg>`;
+}
+
+function pianoSVG() {
+  return `<svg viewBox="0 0 60 60" width="46" height="46">
+    <path d="M8 44 Q8 20 40 14 L52 18 L52 38 Q30 32 8 44Z" fill="#2b2b2b"/>
+    <rect x="8" y="38" width="30" height="10" rx="1" fill="#1a1a1a"/>
+    <rect x="10" y="39" width="26" height="7" fill="#fff"/>
+    <rect x="12" y="39" width="2" height="7" fill="#222"/>
+    <rect x="16" y="39" width="2" height="7" fill="#222"/>
+    <rect x="20" y="39" width="2" height="7" fill="#222"/>
+    <rect x="24" y="39" width="2" height="7" fill="#222"/>
+    <rect x="28" y="39" width="2" height="7" fill="#222"/>
+    <rect x="32" y="39" width="2" height="7" fill="#222"/>
+  </svg>`;
+}
+
 function checkerboardWp(emojis) {
   // 1행: 홀수 칸만, 2행: 짝수 칸만 ... 반복 + 가로줄마다 아이콘 종류를 바꿔서 사선으로 같은 아이콘이 이어지지 않게 함
   const cols = 5, rows = 3;
@@ -1671,9 +1715,13 @@ function renderRoom() {
     floorItems.forEach((item, i) => {
       const x = startX + i * spread;
       const yOff = (i % 2) * 4;
+      const body = item.id === 'furn_bookshelf' ? bookshelfSVG() :
+        item.id === 'furn_wardrobe' ? wardrobeSVG() :
+        item.id === 'furn_piano' ? pianoSVG() :
+        `<span class="rc-item-emoji" style="font-size:2.4rem">${item.emoji}</span>`;
       html += `<div class="rc-item rc-draggable" data-id="${item.id}" style="${itemPosStyleB(item, x, 46 + yOff)}">
         <button class="rc-del-btn" onclick="removeFromRoom('${item.id}')">×</button>
-        <span class="rc-item-emoji" style="font-size:2.4rem">${item.emoji}</span>
+        ${body}
       </div>`;
     });
   }
