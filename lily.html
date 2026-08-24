@@ -916,11 +916,9 @@ const SHOP_ITEMS = [
   { id:'av_shoes_rainbow',  emoji:'🌈', name:'무지개 스니커즈',cat:'avatar', price:120, desc:'무지개 색 귀여운 스니커즈' },
   { id:'av_shoes_flower',   emoji:'🌸', name:'꽃 샌들',        cat:'avatar', price:110, desc:'꽃 장식이 달린 예쁜 샌들' },
   { id:'av_shoes_moon',     emoji:'🌙', name:'달빛 슬리퍼',   cat:'avatar', price:100, desc:'달빛을 담은 포근한 슬리퍼' },
-  { id:'av_bag_star',       emoji:'⭐', name:'별 미니백',       cat:'avatar', price:140, desc:'별 모양 반짝이 미니백' },
-  { id:'av_bag_heart',      emoji:'💖', name:'하트 핸드백',    cat:'avatar', price:160, desc:'사랑스러운 하트 핸드백' },
-  { id:'av_bag_rainbow',    emoji:'🌈', name:'무지개 배낭',    cat:'avatar', price:130, desc:'알록달록 무지개 배낭' },
-  { id:'av_bag_flower',     emoji:'🌷', name:'꽃바구니 백',    cat:'avatar', price:120, desc:'꽃이 담긴 예쁜 바구니 백' },
-  { id:'av_bag_magic',      emoji:'🪄', name:'마법사 가방',    cat:'avatar', price:180, desc:'신비로운 마법사 가방' },
+  { id:'av_bag_star',       emoji:'⭐', name:'별 미니백',       cat:'avatar', price:140, desc:'노란 손잡이가 달린 별 모양 반짝이 미니백' },
+  { id:'av_bag_heart',      emoji:'💖', name:'하트 크로스백',  cat:'avatar', price:160, desc:'끈으로 어깨에 메는 사랑스러운 하트 크로스백' },
+  { id:'av_bag_flower',     emoji:'🧺', name:'꽃바구니 백',    cat:'avatar', price:120, desc:'꽃이 담긴 예쁜 바구니 백' },
 ];
 
 let currentDay = 'Mon';
@@ -1251,15 +1249,18 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
 
   // Bag overlay (near right hand)
   const activeBag = ownedAvatarItems.find(it => it.id.startsWith('av_bag_'));
-  const bagStrap = !activeBag ? '' : `
-    <line x1="182" y1="228" x2="266" y2="312" stroke="#a86b3c" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
-    <path d="M256 302 Q264 289 274 302" stroke="#a86b3c" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+  // 가방 종류별로 끈 또는 손잡이 중 하나만, 아이콘 위치에 실제로 맞닿게 연결
+  const bagAttachment = !activeBag ? '' :
+    activeBag.id === 'av_bag_star' ? `
+      <path d="M254 306 Q270 286 286 306" stroke="#ffd76a" stroke-width="4" fill="none" stroke-linecap="round"/>` :
+    activeBag.id === 'av_bag_heart' ? `
+      <line x1="182" y1="228" x2="266" y2="312" stroke="#a86b3c" stroke-width="4" stroke-linecap="round" opacity="0.9"/>` :
+    activeBag.id === 'av_bag_flower' ? `
+      <path d="M255 304 Q270 285 285 304" stroke="#8a5a2f" stroke-width="4" fill="none" stroke-linecap="round"/>` : '';
   const bagOverlay = !activeBag ? '' :
-    activeBag.id === 'av_bag_star' ?    `<text x="270" y="318" font-size="28" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">⭐</text>` :
-    activeBag.id === 'av_bag_heart' ?   `<text x="268" y="320" font-size="28" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">💖</text>` :
-    activeBag.id === 'av_bag_rainbow' ? `<text x="266" y="318" font-size="28" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">🌈</text>` :
-    activeBag.id === 'av_bag_flower' ?  `<text x="268" y="320" font-size="26" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">🌷</text>` :
-    activeBag.id === 'av_bag_magic' ?   `<text x="268" y="318" font-size="26" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">🪄</text>` : '';
+    activeBag.id === 'av_bag_star' ?   `<text x="270" y="332" font-size="42" text-anchor="middle" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">⭐</text>` :
+    activeBag.id === 'av_bag_heart' ?  `<text x="268" y="322" font-size="28" text-anchor="middle" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">💖</text>` :
+    activeBag.id === 'av_bag_flower' ? `<text x="270" y="330" font-size="30" text-anchor="middle" style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))">🧺</text><text x="260" y="308" font-size="14">🌸</text><text x="278" y="306" font-size="13">🌷</text>` : '';
 
   return `<svg viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg" aria-label="Lily">
     <defs>
@@ -1307,7 +1308,7 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
         <circle cx="304" cy="214" r="16" fill="#fff4a7" stroke="${accent}" stroke-width="3"/>
         <text x="295" y="220" font-size="16">💫</text>
         <circle cx="264" cy="306" r="5" fill="#fff4a7"/>` : ''}
-      ${bagStrap}
+      ${bagAttachment}
       ${bagOverlay}
       <path d="M148 174 C136 125 154 92 200 88 C246 92 264 125 252 174 C260 214 252 252 236 282 C242 222 238 178 226 150 C211 134 189 134 174 150 C162 178 158 222 164 282 C148 252 140 214 148 174 Z" fill="url(#lhair)"/>
       <ellipse cx="151" cy="206" rx="12" ry="20" fill="${hair}"/>
@@ -1324,7 +1325,7 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
         <ellipse cx="157" cy="192" rx="9" ry="7" fill="#ff7eb3" stroke="#ff5599" stroke-width="1"/>
         <ellipse cx="243" cy="192" rx="9" ry="7" fill="#ff7eb3" stroke="#ff5599" stroke-width="1"/>` : ''}
       ${hasHairBow ? `
-        <text x="200" y="90" text-anchor="middle" font-size="34" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))">🎀</text>` : ''}
+        <text x="158" y="150" text-anchor="middle" font-size="28" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))">🎀</text>` : ''}
       ${hasHairStar ? `
         <text x="148" y="166" font-size="15">⭐</text>
         <text x="232" y="162" font-size="13">⭐</text>` : ''}
