@@ -1600,27 +1600,36 @@ function bookshelfSVG() {
 }
 
 function wardrobeSVG() {
+  // 참고 이미지: 하트 손잡이 2개짜리 도어 + 하트 손잡이 서랍 + 짧은 다리의 동글동글한 핑크 옷장
   return `<svg viewBox="0 0 60 60" width="42" height="42">
-    <rect x="6" y="4" width="48" height="52" rx="3" fill="#f7d9ec" stroke="#e8a0c4" stroke-width="2"/>
-    <line x1="30" y1="6" x2="30" y2="54" stroke="#e8a0c4" stroke-width="2"/>
-    <circle cx="24" cy="30" r="2" fill="#c07bde"/>
-    <circle cx="36" cy="30" r="2" fill="#c07bde"/>
-    <path d="M26 10 Q24 6 27 4 Q30 2 30 5 Q30 2 33 4 Q36 6 34 10 Q32 8 30 8 Q28 8 26 10Z" fill="#ff9dca" stroke="#ff5599" stroke-width="1"/>
+    <rect x="8" y="4" width="44" height="42" rx="8" fill="#ffc2dc" stroke="#e888b3" stroke-width="2"/>
+    <rect x="12" y="8" width="17" height="30" rx="5" fill="#ffd6e8" stroke="#e888b3" stroke-width="1.5"/>
+    <rect x="31" y="8" width="17" height="30" rx="5" fill="#ffd6e8" stroke="#e888b3" stroke-width="1.5"/>
+    <path d="M19 20 C17 17 13 19 14 23 C15 26 19 28 19 28 C19 28 23 26 24 23 C25 19 21 17 19 20Z" fill="#ff8fb8"/>
+    <path d="M38 20 C36 17 32 19 33 23 C34 26 38 28 38 28 C38 28 42 26 43 23 C44 19 40 17 38 20Z" fill="#ff8fb8"/>
+    <rect x="10" y="40" width="40" height="8" rx="3" fill="#ffd6e8" stroke="#e888b3" stroke-width="1.5"/>
+    <path d="M28.5 42.5 C27.3 41 25 42.2 25.5 44 C26 45.4 28.5 46.5 28.5 46.5 C28.5 46.5 31 45.4 31.5 44 C32 42.2 29.7 41 28.5 42.5Z" fill="#ff8fb8"/>
+    <rect x="12" y="48" width="4" height="6" rx="1" fill="#e888b3"/>
+    <rect x="44" y="48" width="4" height="6" rx="1" fill="#e888b3"/>
   </svg>`;
 }
 
 function pianoSVG() {
-  // 그랜드 피아노 위에서 내려다본 실루엣(전형적인 '날개' 모양) + 건반
+  // 참고 이미지: 정면에서 본 그랜드피아노 - 물결치는 뚜껑 실루엣 + 열린 뚜껑 속 삼각 공간 + 건반 + 다리
   return `<svg viewBox="0 0 60 60" width="46" height="46">
-    <path d="M9 11 L9 49 Q9 52 12 52 L25 52 Q52 49 55 30 Q55 11 30 9 L12 9 Q9 9 9 11 Z" fill="#1e1e1e"/>
-    <rect x="9" y="14" width="12" height="35" fill="#fdfdfd"/>
-    <rect x="10.5" y="15" width="1.6" height="35" fill="#222"/>
-    <rect x="13.5" y="15" width="1.6" height="35" fill="#222"/>
-    <rect x="16.5" y="15" width="1.6" height="35" fill="#222"/>
-    <rect x="19.5" y="15" width="1.6" height="35" fill="#222"/>
-    <rect x="11" y="50" width="2.4" height="6" fill="#1e1e1e"/>
-    <rect x="24" y="52" width="2.4" height="6" fill="#1e1e1e"/>
-    <rect x="47" y="32" width="2.4" height="6" fill="#1e1e1e" transform="rotate(24 48 34)"/>
+    <path d="M6 26 Q6 8 20 8 Q30 8 34 14 Q38 8 48 8 Q54 8 54 20 L54 34 L6 34 Z" fill="#232323" stroke="#111" stroke-width="1"/>
+    <path d="M36 16 L48 14 L54 22 L40 26 Z" fill="#4a4a4a"/>
+    <rect x="6" y="34" width="48" height="14" rx="1.5" fill="#1a1a1a"/>
+    <rect x="9" y="36" width="42" height="10" fill="#fff"/>
+    <rect x="12" y="36" width="2" height="10" fill="#1a1a1a"/>
+    <rect x="17" y="36" width="2" height="10" fill="#1a1a1a"/>
+    <rect x="22" y="36" width="2" height="10" fill="#1a1a1a"/>
+    <rect x="29" y="36" width="2" height="10" fill="#1a1a1a"/>
+    <rect x="34" y="36" width="2" height="10" fill="#1a1a1a"/>
+    <rect x="39" y="36" width="2" height="10" fill="#1a1a1a"/>
+    <rect x="44" y="36" width="2" height="10" fill="#1a1a1a"/>
+    <rect x="10" y="48" width="3" height="8" fill="#1a1a1a"/>
+    <rect x="47" y="48" width="3" height="8" fill="#1a1a1a"/>
   </svg>`;
 }
 
