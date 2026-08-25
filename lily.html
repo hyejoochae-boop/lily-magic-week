@@ -1647,7 +1647,8 @@ function deskSVG() {
 }
 
 function bedSVG() {
-  return `<svg viewBox="0 0 60 60" width="48" height="34">
+  // 책장/옷장(42x42)과 비슷한 시각적 비중이 되도록 콘텐츠에 맞춰 viewBox를 좁히고 크기 확대
+  return `<svg viewBox="2 12 56 38" width="56" height="38">
     <rect x="4" y="14" width="9" height="26" rx="2" fill="#ffffff" stroke="#e2d9c8" stroke-width="1.5"/>
     <rect x="8" y="30" width="48" height="9" rx="2" fill="#ffffff" stroke="#e2d9c8" stroke-width="1.5"/>
     <rect x="13" y="24" width="40" height="14" rx="3" fill="#fff3b0" stroke="#f2e08a" stroke-width="1"/>
@@ -1713,12 +1714,28 @@ function bluebirdSVG() {
   </svg>`;
 }
 
+function sofaSVG() {
+  // 기존 소파 아이콘 형태는 유지하되 몸체를 흰색으로, 쿠션만 무지개색 포인트로
+  return `<svg viewBox="0 0 60 60" width="46" height="30">
+    <rect x="6" y="26" width="48" height="8" rx="2" fill="#ffffff" stroke="#e0dcd4" stroke-width="1.5"/>
+    <rect x="6" y="14" width="10" height="22" rx="3" fill="#ffffff" stroke="#e0dcd4" stroke-width="1.5"/>
+    <rect x="44" y="14" width="10" height="22" rx="3" fill="#ffffff" stroke="#e0dcd4" stroke-width="1.5"/>
+    <rect x="14" y="16" width="32" height="18" rx="3" fill="#fdfdfd" stroke="#e0dcd4" stroke-width="1.5"/>
+    <rect x="16" y="20" width="9" height="12" rx="2.5" fill="#ff8a8a"/>
+    <rect x="26" y="20" width="9" height="12" rx="2.5" fill="#ffd76a"/>
+    <rect x="36" y="20" width="9" height="12" rx="2.5" fill="#7ec8f7"/>
+    <rect x="6" y="36" width="4" height="6" fill="#e0dcd4"/>
+    <rect x="50" y="36" width="4" height="6" fill="#e0dcd4"/>
+  </svg>`;
+}
+
 function customItemIcon(id) {
   return id === 'furn_bookshelf' ? bookshelfSVG() :
     id === 'furn_wardrobe' ? wardrobeSVG() :
     id === 'furn_piano' ? pianoSVG() :
     id === 'furn_desk' ? deskSVG() :
     id === 'furn_bed' ? bedSVG() :
+    id === 'furn_sofa' ? sofaSVG() :
     id === 'deco_pinwheel' ? pinwheelSVG() :
     id === 'deco_mobile' ? mobileSVG() :
     id === 'deco_blossom' ? garlandSVG() :
