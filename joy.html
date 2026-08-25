@@ -1709,8 +1709,24 @@ function bluebirdSVG() {
   </svg>`;
 }
 
+function sofaLampSVG() {
+  // 원래 이모지(소파+램프) 구도는 그대로 유지하고 소파 몸체만 흰색으로
+  return `<svg viewBox="0 0 60 60" width="46" height="26">
+    <ellipse cx="48" cy="50" rx="7" ry="2" fill="#9a9a9a"/>
+    <line x1="48" y1="48" x2="48" y2="20" stroke="#b0b0b0" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M41 20 L55 20 L51 9 L45 9 Z" fill="#ffd85e" stroke="#e0ac1c" stroke-width="1"/>
+    <rect x="3" y="34" width="38" height="9" rx="3" fill="#ffffff" stroke="#d8d4cc" stroke-width="1.6"/>
+    <rect x="2" y="24" width="9" height="19" rx="3.5" fill="#ffffff" stroke="#d8d4cc" stroke-width="1.6"/>
+    <rect x="32" y="24" width="9" height="19" rx="3.5" fill="#ffffff" stroke="#d8d4cc" stroke-width="1.6"/>
+    <rect x="8" y="19" width="28" height="17" rx="4" fill="#fbfbfb" stroke="#d8d4cc" stroke-width="1.6"/>
+    <rect x="4" y="43" width="3.4" height="6" rx="1" fill="#c9c4ba"/>
+    <rect x="35" y="43" width="3.4" height="6" rx="1" fill="#c9c4ba"/>
+  </svg>`;
+}
+
 function customItemIcon(id) {
-  return id === 'furn_bookshelf' ? bookshelfSVG() :
+  return id === 'furn_sofa' ? sofaLampSVG() :
+    id === 'furn_bookshelf' ? bookshelfSVG() :
     id === 'furn_wardrobe' ? wardrobeSVG() :
     id === 'furn_piano' ? pianoSVG() :
     id === 'furn_desk' ? deskSVG() :
