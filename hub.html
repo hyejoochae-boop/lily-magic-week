@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Joy & Lily">
 <meta name="theme-color" content="#9d6eff">
 
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Emilys+Candy&display=swap" rel="stylesheet">
 <style>
   :root {
     --ink: #4b2a68;
@@ -22,13 +22,13 @@
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body { min-height: 100%; overscroll-behavior: none; -webkit-touch-callout: none; }
   body {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Emilys Candy', 'Gowun Dodum', sans-serif;
     color: white;
-    background:
-      radial-gradient(circle at 12% 12%, rgba(255, 237, 152, 0.78) 0 9%, transparent 22%),
-      radial-gradient(circle at 85% 10%, rgba(164, 222, 255, 0.72) 0 11%, transparent 26%),
-      radial-gradient(circle at 72% 78%, rgba(255, 126, 179, 0.54) 0 14%, transparent 32%),
-      linear-gradient(180deg, #8064d9 0%, #b784e8 42%, #ffd5ec 100%);
+    background-color: #b784e8;
+    background-image: url('lily2_assets/skin_left.png');
+    background-repeat: repeat-y;
+    background-position: left top;
+    background-size: 100% auto;
     overflow-x: hidden;
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
@@ -54,7 +54,7 @@
   /* ── 헤더 ── */
   header { text-align: center; margin-bottom: 44px; }
   .title-main {
-    font-family: 'Pacifico', cursive;
+    font-family: 'Emilys Candy', 'Gowun Dodum', cursive;
     font-size: clamp(1.8rem, 5.5vw, 3.2rem);
     color: #fff7cf;
     text-shadow: 0 3px 0 #b858ba, 0 9px 26px rgba(63, 36, 120, 0.38), 0 0 28px rgba(255,255,255,0.75);
@@ -69,12 +69,12 @@
     background: linear-gradient(90deg, rgba(255,126,179,.9), rgba(157,110,255,.92), rgba(114,205,255,.9));
     border: 2px solid rgba(255,255,255,.72);
     box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 8px 24px rgba(83,48,130,.28);
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Emilys Candy', 'Gowun Dodum', sans-serif;
     font-size: clamp(.85rem, 2.4vw, 1.05rem);
     font-weight: 700;
   }
   .title-sub {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Emilys Candy', 'Gowun Dodum', sans-serif;
     font-size: 1.05rem;
     font-weight: 700;
     color: rgba(255,255,255,.88);
@@ -136,7 +136,7 @@
   .char-fairy svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 8px 18px rgba(0,0,0,.22)); }
 
   .char-name {
-    font-family: 'Pacifico', cursive;
+    font-family: 'Emilys Candy', 'Gowun Dodum', cursive;
     font-size: 2.2rem;
     line-height: 1;
     text-shadow: 0 3px 0 rgba(0,0,0,.18);
@@ -145,7 +145,7 @@
   .joy-btn  .char-name { color: #fff8e8; text-shadow: 0 3px 0 #c05010; }
 
   .char-tagline {
-    font: 700 .95rem 'Noto Sans KR', sans-serif;
+    font: 700 .95rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     color: rgba(255,255,255,.88);
     margin-top: -4px;
   }
@@ -155,7 +155,7 @@
     border: 2px solid rgba(255,255,255,.65);
     border-radius: 999px;
     padding: 8px 24px;
-    font: 700 .92rem 'Noto Sans KR', sans-serif;
+    font: 700 .92rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     color: white;
     transition: background .15s;
   }
@@ -174,7 +174,7 @@
     margin-bottom: 24px;
   }
   .board-header h2 {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Emilys Candy', 'Gowun Dodum', sans-serif;
     font-weight: 900;
     font-size: clamp(1.4rem, 4vw, 1.85rem);
     color: #fff7cf;
@@ -182,7 +182,7 @@
     margin-bottom: 6px;
   }
   .board-header p {
-    font: 700 .88rem 'Noto Sans KR', sans-serif;
+    font: 700 .88rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     color: rgba(255,255,255,.65);
   }
 
@@ -203,7 +203,7 @@
   .msg-empty {
     text-align: center;
     padding: 28px;
-    font: 700 1rem 'Noto Sans KR', sans-serif;
+    font: 700 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     color: rgba(255,255,255,.42);
   }
   .msg-empty .empty-icon { display: block; font-size: 2.4rem; margin-bottom: 8px; }
@@ -230,20 +230,20 @@
     border-bottom-right-radius: 6px;
   }
   .msg-sender {
-    font: 700 .72rem 'Noto Sans KR', sans-serif;
+    font: 700 .72rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     margin-bottom: 4px;
     opacity: .88;
   }
   .from-lily .msg-sender { color: #d8b4ff; }
   .from-joy  .msg-sender { color: #ffd08a; }
   .msg-text {
-    font: 500 .95rem 'Noto Sans KR', sans-serif;
+    font: 500 .95rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     color: rgba(255,255,255,.95);
     line-height: 1.55;
     white-space: pre-wrap;
   }
   .msg-date {
-    font: 500 .66rem 'Noto Sans KR', sans-serif;
+    font: 500 .66rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     color: rgba(255,255,255,.42);
     margin-top: 5px;
     text-align: right;
@@ -270,7 +270,7 @@
     border: 1.5px solid rgba(255,255,255,.22);
   }
   .compose-title {
-    font: 700 .82rem 'Noto Sans KR', sans-serif;
+    font: 700 .82rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     color: rgba(255,255,255,.65);
     margin-bottom: 10px;
     text-align: center;
@@ -287,7 +287,7 @@
     border: 2px solid rgba(255,255,255,.28);
     background: rgba(255,255,255,.1);
     color: rgba(255,255,255,.72);
-    font: 700 .92rem 'Noto Sans KR', sans-serif;
+    font: 700 .92rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     cursor: pointer;
     transition: all .18s;
   }
@@ -310,7 +310,7 @@
     border: 1.5px solid rgba(255,255,255,.25);
     border-radius: 12px;
     color: white;
-    font: 500 1rem 'Noto Sans KR', sans-serif;
+    font: 500 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     padding: 12px 14px;
     resize: none;
     box-sizing: border-box;
@@ -329,7 +329,7 @@
     border: none;
     background: linear-gradient(135deg, #9d6eff, #ff7eb3);
     color: white;
-    font: 700 1rem 'Noto Sans KR', sans-serif;
+    font: 700 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     cursor: pointer;
     box-shadow: 0 6px 18px rgba(100,60,160,.25);
     transition: opacity .15s, transform .12s;
@@ -363,7 +363,7 @@
     border: 1.5px dashed rgba(255,255,255,.4);
     background: rgba(255,255,255,.08);
     color: rgba(255,255,255,.8);
-    font: 700 .92rem 'Noto Sans KR', sans-serif;
+    font: 700 .92rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     cursor: pointer;
     transition: all .18s;
   }
@@ -404,7 +404,7 @@
   .attach-status {
     padding: 12px;
     text-align: center;
-    font: 700 .88rem 'Noto Sans KR', sans-serif;
+    font: 700 .88rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     color: rgba(255,255,255,.8);
   }
 
@@ -438,7 +438,7 @@
     background: linear-gradient(135deg, #fff4a7, #ff9dca);
     color: var(--ink); border: 3px solid white;
     box-shadow: 0 12px 28px rgba(85,45,122,.28);
-    font: 700 .95rem 'Noto Sans KR', sans-serif;
+    font: 700 .95rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -542,23 +542,48 @@ const LILY_WEEK_ITEMS = [
   ['🏰','Fairy Castle','bg'],['🦋','Butterfly Wings','char'],['⭐','Star Shower','bg'],['🌟','Full Magic','char']
 ];
 
-const AVATAR_ITEMS = [
-  {id:'av_hair_bow',cat:'avatar'},{id:'av_hair_pink',cat:'avatar'},{id:'av_hair_star',cat:'avatar'},{id:'av_hair_flower',cat:'avatar'},
-  {id:'av_outfit_princess',cat:'avatar'},{id:'av_outfit_rainbow',cat:'avatar'},{id:'av_outfit_galaxy',cat:'avatar'},
-  {id:'av_outfit_pink',cat:'avatar'},{id:'av_outfit_angel',cat:'avatar'},{id:'av_outfit_mermaid',cat:'avatar'},
-  {id:'av_outfit_witch',cat:'avatar'},{id:'av_outfit_star',cat:'avatar'},{id:'av_outfit_rose',cat:'avatar'},
-  {id:'av_acc_tiara',cat:'avatar'},{id:'av_acc_necklace',cat:'avatar'},{id:'av_acc_glasses',cat:'avatar'},
-  {id:'av_acc_ribbon',cat:'avatar'},{id:'av_acc_earrings',cat:'avatar'},
-  {id:'av_shoes_glass',cat:'avatar'},{id:'av_shoes_star',cat:'avatar'},{id:'av_shoes_rainbow',cat:'avatar'},
-  {id:'av_shoes_flower',cat:'avatar'},{id:'av_shoes_moon',cat:'avatar'},
-  {id:'av_bag_star',cat:'avatar'},{id:'av_bag_heart',cat:'avatar'},{id:'av_bag_rainbow',cat:'avatar'},
-  {id:'av_bag_flower',cat:'avatar'},{id:'av_bag_magic',cat:'avatar'}
-];
-
-const CHAR_COLORS = {
-  lily: { hair:'#d98b27', hairDark:'#9f6320', skin:'#ffe2c2', accent:'#c07bde', dress:'#e090ff', dressDark:'#a855d8' },
-  joy:  { hair:'#d98b27', hairDark:'#9f6320', skin:'#ffe2c2', accent:'#f7a916', dress:'#ffc23d', dressDark:'#f39a16' }
+const AV_ASSETS = 'lily2_assets/';
+const AV_FIT = {
+  av_hair_bow:    { img:'av_hair_bow.png',    scale:0.443, ox:24.80, oy:-31.30 },
+  av_hair_pink:   { img:'av_hair_band.png',   scale:0.803, scaleX:1.185, ox:0.00, oy:-10.30 },
+  av_hair_star:   { img:'av_hair_star.png',   scale:0.694, ox:22.70, oy:-33.20 },
+  av_hair_flower: { img:'av_hair_flower.png', scale:0.735, ox:-0.20, oy:-13.59 },
+  av_outfit_princess: { img:'av_outfit_princess.png', scale:0.953, ox:-0.20, oy:13.10 },
+  av_outfit_rainbow:  { img:'av_outfit_rainbow.png',  scale:1.102, ox:0, oy:1.80 },
+  av_outfit_galaxy:   { img:'av_outfit_galaxy.png',   scale:0.900, scaleX:1.300, ox:0.00, oy:-0.70 },
+  av_outfit_angel:    { img:'av_outfit_angel.png',    scale:1.0485, ox:0, oy:1.22 },
+  av_outfit_witch:    { img:'av_outfit_witch.png',    scale:0.900, scaleX:1.040, ox:0.60, oy:-0.70 },
+  av_outfit_star:     { img:'av_outfit_star.png',     scale:0.900, ox:0, oy:13.10 },
+  av_outfit_rose:      { img:'av_outfit_rose.png',    scale:0.900, scaleX:1.155, ox:0.00, oy:0.20 },
+  av_outfit_ballet:    { img:'av_outfit_ballet.png',  scale:1.112, ox:-0.20, oy:1.20 },
+  av_outfit_sporty:    { img:'av_outfit_sporty.png',  scale:1.137, ox:0.00, oy:2.20 },
+  av_outfit_school1:   { img:'av_outfit_school1.png', scale:1.003, scaleX:1.000, ox:0.00, oy:0.70 },
+  av_outfit_school2:   { img:'av_outfit_school2.png', scale:0.995, scaleX:1.050, ox:0.20, oy:-0.20 },
+  av_acc_tiara:    { img:'av_acc_tiara.png',    scale:0.489, ox:-0.50, oy:-41.30 },
+  av_acc_necklace: { img:'av_acc_necklace.png', scale:0.326, ox:0.00, oy:-1.70 },
+  av_acc_glasses:  { img:'av_acc_glasses.png',  scale:0.560, ox:0.60,  oy:-22.20 },
+  av_acc_ribbon:   { img:'av_acc_ribbon.png',   scale:0.242, ox:0.40,  oy:-0.20 },
+  av_shoes_star:    { img:'av_shoes_star.png',    scale:0.602, ox:-0.10, oy:34.20 },
+  av_shoes_rainbow: { img:'av_shoes_rainbow.png', scale:0.644, ox:-0.10, oy:33.20 },
+  av_shoes_flower:  { img:'av_shoes_ribbon_extra.png', scale:1, ox:0, oy:0 },
+  av_shoes_rainbow2: { img:'av_shoes_rainbow2.png', scale:0.970, scaleX:1.000, ox:0.00, oy:2.20 },
+  av_shoes_rose:     { img:'av_shoes_rose.png',     scale:1.012, scaleX:1.000, ox:0.00, oy:0.20 },
+  av_shoes_star2:    { img:'av_shoes_star2.png',    scale:1.020, scaleX:1.000, ox:0.00, oy:-0.70 },
+  av_shoes_blackmaryjane: { img:'av_shoes_blackmaryjane.png', scale:0.6, ox:0, oy:34 },
+  av_acc_shellpin:   { img:'av_acc_shellpin.png',   scale:1.145, scaleX:1.165, ox:-10.40, oy:3.10 },
+  av_acc_witchhat:   { img:'av_acc_witchhat.png',   scale:0.769, scaleX:1.000, ox:9.60, oy:-21.30 },
+  av_bag_star:   { img:'av_bag_star.png',   scale:0.836, ox:36.70, oy:23.20 },
+  av_bag_flower: { img:'av_bag_flower.png', scale:0.4,   ox:22,    oy:15 },
 };
+const AV_HAIR_IDS = ['av_hair_bow','av_hair_pink','av_hair_star','av_hair_flower'];
+const AV_ACC_IDS  = ['av_acc_tiara','av_acc_necklace','av_acc_glasses','av_acc_ribbon','av_bag_star','av_bag_flower','av_acc_shellpin','av_acc_witchhat'];
+
+function avLayer(id) {
+  const f = AV_FIT[id];
+  if (!f) return '';
+  const sx = f.scaleX !== undefined ? f.scaleX : 1;
+  return `<img src="${AV_ASSETS}${f.img}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;transform-origin:center center;transform:translate(${f.ox}%, ${f.oy}%) scale(${f.scale*sx}, ${f.scale});">`;
+}
 
 function getUnlockedItems(history) {
   const count = Math.min((history || []).filter(w => w.success).length, LILY_WEEK_ITEMS.length);
@@ -566,127 +591,37 @@ function getUnlockedItems(history) {
 }
 
 function getAvatarItems(roomPlaced) {
-  return (roomPlaced || []).map(id => AVATAR_ITEMS.find(it => it.id === id)).filter(Boolean);
+  return (roomPlaced || []).map(id => ({ id }));
 }
 
-function buildAvatarSVG(who, unlockedItems, ownedAvatarItems) {
+function buildAvatarImage(who, unlockedItems, ownedAvatarItems) {
   ownedAvatarItems = ownedAvatarItems || [];
-  const C = CHAR_COLORS[who];
-  const { hair, hairDark, skin, accent, dress, dressDark } = C;
-  const id = s => `${s}-${who}`;
+  const baseImg = who === 'joy' ? 'joy_final.png' : 'lily_final.png';
+  const av = id => ownedAvatarItems.some(it => it.id === id);
+  const hasId = ids => ownedAvatarItems.find(it => ids.includes(it.id) && AV_FIT[it.id]);
 
-  const count = unlockedItems.length;
+  const activeOutfit = ownedAvatarItems.find(it => it.id.startsWith('av_outfit_') && AV_FIT[it.id]);
+  const activeShoes  = ownedAvatarItems.find(it => it.id.startsWith('av_shoes_') && AV_FIT[it.id]);
+  const activeHair   = hasId(AV_HAIR_IDS);
+
+  let html = `<div style="position:relative;width:100%;height:100%;">`;
+  html += `<img src="${AV_ASSETS}${baseImg}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;">`;
+  if (activeShoes)  html += avLayer(activeShoes.id);
+  if (activeOutfit) html += avLayer(activeOutfit.id);
+  if (activeHair)   html += avLayer(activeHair.id);
+  ownedAvatarItems.forEach(it => { if (AV_ACC_IDS.includes(it.id) && AV_FIT[it.id]) html += avLayer(it.id); });
+
   const hasCrown     = unlockedItems.some(it => it[1] === 'Flower Crown');
   const hasWand      = unlockedItems.some(it => it[1] === 'Sparkle Wand');
   const hasButterfly = unlockedItems.some(it => it[1] === 'Butterfly Wings');
   const hasGlow      = unlockedItems.some(it => it[1] === 'Full Magic');
-  const wingOpacity  = count >= 1 ? .82 : .26;
+  if (hasCrown)     html += `<span style="position:absolute;top:2%;left:50%;transform:translateX(-50%);font-size:22px;">🌸</span>`;
+  if (hasWand)      html += `<span style="position:absolute;top:55%;left:12%;font-size:18px;">💫</span>`;
+  if (hasButterfly) html += `<span style="position:absolute;top:28%;right:10%;font-size:18px;">🦋</span>`;
+  if (hasGlow)      html += `<div style="position:absolute;inset:0;box-shadow:inset 0 0 30px 8px rgba(255,215,106,.4);border-radius:50%;pointer-events:none;"></div>`;
 
-  const av = i => ownedAvatarItems.some(it => it.id === i);
-  const activeOutfit = ownedAvatarItems.find(it => it.id.startsWith('av_outfit_'));
-  const hasHairBow    = av('av_hair_bow');
-  const hasHairPink   = av('av_hair_pink');
-  const hasHairStar   = av('av_hair_star');
-  const hasHairFlower = av('av_hair_flower');
-  const hasTiara      = av('av_acc_tiara');
-  const hasNecklace   = av('av_acc_necklace');
-  const hasGlasses    = av('av_acc_glasses');
-  const hasRibbon     = av('av_acc_ribbon');
-  const hasEarrings   = av('av_acc_earrings');
-
-  // 드레스 오버레이
-  const outfitOverlay = !activeOutfit ? '' :
-    activeOutfit.id === 'av_outfit_princess' ? `<path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#f5d0ff" opacity="0.45"/><path d="M155 305 Q200 328 245 305" fill="none" stroke="rgba(255,255,255,.72)" stroke-width="4"/><text x="184" y="268" font-size="10">✨</text>` :
-    activeOutfit.id === 'av_outfit_rainbow' ? `<path d="M172 226 Q200 210 228 226 L229 248 Q200 244 171 248 Z" fill="#FF6B6B" opacity=".82"/><path d="M171 248 Q200 244 229 248 L231 268 Q200 264 169 268 Z" fill="#FF9F43" opacity=".82"/><path d="M169 268 Q200 264 231 268 L233 288 Q200 284 167 288 Z" fill="#FFD32A" opacity=".82"/><path d="M167 288 L237 292 L242 318 Q200 330 158 318 L163 292 Z" fill="#1DD1A1" opacity=".72"/><path d="M158 318 Q200 330 242 318 L252 360 Q200 380 148 360 Z" fill="#54A0FF" opacity=".72"/>` :
-    activeOutfit.id === 'av_outfit_galaxy' ? `<path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#0d0030" opacity=".68"/><circle cx="202" cy="266" r="1" fill="white" opacity=".9"/><circle cx="227" cy="248" r="1.5" fill="white" opacity=".9"/><circle cx="213" cy="316" r="1.5" fill="white" opacity=".9"/><text x="199" y="318" font-size="9" opacity=".65">⭐</text>` :
-    activeOutfit.id === 'av_outfit_pink' ? `<path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#FFB6C1" opacity=".55"/><text x="164" y="253" font-size="11">🌸</text><text x="210" y="270" font-size="9">🌸</text><text x="164" y="344" font-size="10">🌸</text>` :
-    activeOutfit.id === 'av_outfit_angel' ? `<path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="white" opacity=".55"/><path d="M80 240 C60 200 90 170 130 200 C110 230 105 268 120 290 Z" fill="rgba(255,255,255,.55)"/><path d="M320 240 C340 200 310 170 270 200 C290 230 295 268 280 290 Z" fill="rgba(255,255,255,.55)"/><text x="180" y="354" font-size="10">✨</text>` :
-    activeOutfit.id === 'av_outfit_mermaid' ? `<path d="M172 280 Q200 268 228 280 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#00c8a0" opacity=".65"/><path d="M172 226 Q200 210 228 226 L228 280 Q200 268 172 280 Z" fill="#0084b4" opacity=".55"/><text x="165" y="268" font-size="9">🐚</text>` :
-    activeOutfit.id === 'av_outfit_witch' ? `<path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#1a0040" opacity=".72"/><text x="163" y="262" font-size="9">✨</text><text x="170" y="358" font-size="9">🌙</text>` :
-    activeOutfit.id === 'av_outfit_star' ? `<path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#4a0080" opacity=".60"/><circle cx="210" cy="248" r="4" fill="#ffd76a" opacity=".9"/><circle cx="200" cy="305" r="4" fill="#ffd76a" opacity=".9"/><text x="195" y="322" font-size="11">🌟</text>` :
-    activeOutfit.id === 'av_outfit_rose' ? `<path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#c0003c" opacity=".55"/><text x="162" y="253" font-size="11">🌹</text><text x="208" y="268" font-size="9">🌹</text>` : '';
-
-  // 신발 오버레이
-  const activeShoes = ownedAvatarItems.find(it => it.id.startsWith('av_shoes_'));
-  const shoesOverlay = !activeShoes ? `<path d="M166 430 Q184 419 197 432 Q194 445 171 443 Z" fill="${accent}"/><path d="M203 432 Q216 419 234 430 Q229 443 206 445 Z" fill="${accent}"/>` :
-    activeShoes.id === 'av_shoes_glass'   ? `<path d="M166 430 Q184 419 197 432 Q194 445 171 443 Z" fill="rgba(180,230,255,.82)" stroke="rgba(255,255,255,.9)" stroke-width="1.5"/><path d="M203 432 Q216 419 234 430 Q229 443 206 445 Z" fill="rgba(180,230,255,.82)" stroke="rgba(255,255,255,.9)" stroke-width="1.5"/>` :
-    activeShoes.id === 'av_shoes_star'    ? `<path d="M163 432 Q182 419 197 432 Q193 446 168 444 Z" fill="#3a1060" stroke="#ffd76a" stroke-width="1.5"/><path d="M203 432 Q218 419 237 432 Q232 446 207 445 Z" fill="#3a1060" stroke="#ffd76a" stroke-width="1.5"/><text x="170" y="441" font-size="7">⭐</text><text x="210" y="441" font-size="7">⭐</text>` :
-    activeShoes.id === 'av_shoes_rainbow' ? `<path d="M164 430 Q183 419 197 432 Q194 445 170 443 Z" fill="white" stroke="#ff9dca" stroke-width="1.5"/><path d="M203 432 Q217 419 235 430 Q230 443 206 445 Z" fill="white" stroke="#9dccff" stroke-width="1.5"/><text x="169" y="441" font-size="7">🌈</text><text x="209" y="441" font-size="7">🌈</text>` :
-    activeShoes.id === 'av_shoes_flower'  ? `<path d="M165 430 Q183 419 197 432 Q194 445 170 443 Z" fill="#ff9dca" stroke="#ff7eb3" stroke-width="1.5"/><path d="M203 432 Q217 419 234 430 Q229 443 206 445 Z" fill="#ff9dca" stroke="#ff7eb3" stroke-width="1.5"/><text x="170" y="441" font-size="7">🌸</text><text x="210" y="441" font-size="7">🌸</text>` :
-    `<path d="M165 430 Q183 419 197 432 Q194 445 170 443 Z" fill="#c8a0f8" stroke="#9d6eff" stroke-width="1.5"/><path d="M203 432 Q217 419 234 430 Q229 443 206 445 Z" fill="#c8a0f8" stroke="#9d6eff" stroke-width="1.5"/><text x="170" y="441" font-size="7">🌙</text><text x="210" y="441" font-size="7">🌙</text>`;
-
-  // 가방
-  const activeBag = ownedAvatarItems.find(it => it.id.startsWith('av_bag_'));
-  const bagOverlay = !activeBag ? '' :
-    activeBag.id === 'av_bag_star'    ? `<text x="270" y="318" font-size="28">⭐</text>` :
-    activeBag.id === 'av_bag_heart'   ? `<text x="268" y="320" font-size="28">💖</text>` :
-    activeBag.id === 'av_bag_rainbow' ? `<text x="266" y="318" font-size="28">🌈</text>` :
-    activeBag.id === 'av_bag_flower'  ? `<text x="268" y="320" font-size="26">🌷</text>` :
-    `<text x="268" y="318" font-size="26">🪄</text>`;
-
-  return `<svg viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;overflow:visible">
-    <defs>
-      <radialGradient id="${id('lhalo')}" cx="50%" cy="45%"><stop offset="0%" stop-color="#fff" stop-opacity=".9"/><stop offset="55%" stop-color="#f0d8ff" stop-opacity=".45"/><stop offset="100%" stop-color="${accent}" stop-opacity=".0"/></radialGradient>
-      <linearGradient id="${id('ldress')}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${dress}"/><stop offset="1" stop-color="${dressDark}"/></linearGradient>
-      <linearGradient id="${id('lwing')}" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".92"/><stop offset="1" stop-color="#f0d8ff" stop-opacity=".72"/></linearGradient>
-      <linearGradient id="${id('lhair')}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${hair}"/><stop offset="1" stop-color="${hairDark}"/></linearGradient>
-      ${hasGlow ? `<radialGradient id="${id('lglow')}" cx="50%" cy="50%"><stop offset="0%" stop-color="#ffd76a" stop-opacity=".6"/><stop offset="100%" stop-color="#ff9dca" stop-opacity="0"/></radialGradient>` : ''}
-    </defs>
-    ${hasGlow ? `<circle cx="200" cy="240" r="200" fill="url(#${id('lglow')})"/>` : ''}
-    <circle cx="200" cy="238" r="178" fill="url(#${id('lhalo')})"/>
-    <g class="floating">
-      ${hasGlow ? `<ellipse cx="200" cy="244" rx="168" ry="204" fill="none" stroke="${accent}" stroke-width="3" stroke-dasharray="6 8" opacity=".55"/>` : ''}
-      <g class="wings-anim" opacity="${wingOpacity}">
-        <path d="M176 206 C104 138 58 190 80 258 C96 300 145 288 181 250 Z" fill="url(#${id('lwing')})" stroke="${accent}" stroke-width="2"/>
-        <path d="M177 258 C111 274 92 332 138 354 C170 346 186 310 194 276 Z" fill="url(#${id('lwing')})" stroke="${accent}" stroke-width="2"/>
-        <path d="M224 206 C296 138 342 190 320 258 C304 300 255 288 219 250 Z" fill="url(#${id('lwing')})" stroke="${accent}" stroke-width="2"/>
-        <path d="M223 258 C289 274 308 332 262 354 C230 346 214 310 206 276 Z" fill="url(#${id('lwing')})" stroke="${accent}" stroke-width="2"/>
-      </g>
-      ${hasButterfly ? `<g class="wings-anim" opacity=".7"><path d="M170 220 C90 150 42 200 68 270 C82 308 138 295 177 256 Z" fill="rgba(255,200,255,.6)" stroke="#ff9dca" stroke-width="2.5"/><path d="M230 220 C310 150 358 200 332 270 C318 308 262 295 223 256 Z" fill="rgba(200,220,255,.6)" stroke="#9dccff" stroke-width="2.5"/><text x="56" y="225" font-size="18">🦋</text><text x="312" y="222" font-size="16">🦋</text></g>` : ''}
-      <path d="M186 348 L181 430" stroke="${skin}" stroke-width="12" stroke-linecap="round"/>
-      <path d="M214 348 L219 430" stroke="${skin}" stroke-width="12" stroke-linecap="round"/>
-      ${shoesOverlay}
-      <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="url(#${id('ldress')})" stroke="rgba(255,255,255,.7)" stroke-width="2"/>
-      <path d="M157 316 Q200 340 243 316" fill="none" stroke="#fff" stroke-width="3" opacity=".55"/>
-      <circle cx="182" cy="318" r="4" fill="#fff4a7"/><circle cx="206" cy="333" r="4" fill="#fff4a7"/><circle cx="225" cy="314" r="4" fill="#fff4a7"/>
-      ${outfitOverlay}
-      <path d="M172 232 Q146 264 140 304" stroke="${skin}" stroke-width="11" stroke-linecap="round" fill="none"/>
-      <path d="M228 232 Q256 266 264 306" stroke="${skin}" stroke-width="11" stroke-linecap="round" fill="none"/>
-      <circle cx="140" cy="306" r="7" fill="${skin}"/>
-      <circle cx="264" cy="306" r="7" fill="${skin}"/>
-      ${hasWand ? `<line x1="264" y1="306" x2="304" y2="224" stroke="${accent}" stroke-width="4" stroke-linecap="round"/><circle cx="304" cy="214" r="16" fill="#fff4a7" stroke="${accent}" stroke-width="3"/><text x="295" y="220" font-size="16">💫</text><circle cx="264" cy="306" r="5" fill="#fff4a7"/>` : ''}
-      ${bagOverlay}
-      <path d="M148 174 C136 125 154 92 200 88 C246 92 264 125 252 174 C260 214 252 252 236 282 C242 222 238 178 226 150 C211 134 189 134 174 150 C162 178 158 222 164 282 C148 252 140 214 148 174 Z" fill="url(#${id('lhair')})"/>
-      <ellipse cx="151" cy="206" rx="12" ry="20" fill="${hair}"/>
-      <ellipse cx="249" cy="206" rx="12" ry="20" fill="${hair}"/>
-      <rect x="194" y="200" width="12" height="22" fill="${skin}"/>
-      <ellipse cx="200" cy="168" rx="47" ry="54" fill="${skin}"/>
-      <path d="M151 149 C158 120 180 106 204 112 C231 112 247 129 251 150 C234 148 219 154 205 166 C187 151 169 151 151 149 Z" fill="url(#${id('lhair')})"/>
-      <path d="M158 145 C174 126 195 123 218 132 C199 135 183 148 170 168 C165 160 161 153 158 145 Z" fill="${hair}"/>
-      <ellipse cx="160" cy="174" rx="11" ry="17" fill="${hair}"/>
-      <ellipse cx="240" cy="174" rx="11" ry="17" fill="${hair}"/>
-      ${hasHairPink ? `<path d="M154 190 Q128 215 125 252 Q128 278 142 285 Q138 262 142 238 Q148 218 159 204" fill="#ff9dca" stroke="#ff7eb3" stroke-width="1.5" opacity="0.9"/><path d="M246 190 Q272 215 275 252 Q272 278 258 285 Q262 262 258 238 Q252 218 241 204" fill="#ff9dca" stroke="#ff7eb3" stroke-width="1.5" opacity="0.9"/>` : ''}
-      ${hasHairBow ? `<path d="M185 96 Q182 77 192 69 Q200 63 208 69 Q218 77 215 96 Q208 83 200 81 Q192 83 185 96Z" fill="#ff9dca" stroke="#ff5599" stroke-width="1.5" opacity=".95"/><path d="M182 85 Q174 73 176 65 Q184 58 190 66 Q184 74 182 85Z" fill="#ff7eb3" stroke="#ff5599" stroke-width="1.5"/><path d="M218 85 Q226 73 224 65 Q216 58 210 66 Q216 74 218 85Z" fill="#ff7eb3" stroke="#ff5599" stroke-width="1.5"/><ellipse cx="200" cy="83" rx="9" ry="7" fill="#ff9dca" stroke="#ff5599" stroke-width="1.5"/>` : ''}
-      ${hasHairStar ? `<text x="148" y="166" font-size="15">⭐</text><text x="232" y="162" font-size="13">⭐</text>` : ''}
-      ${hasHairFlower ? `<text x="152" y="143" font-size="12">🌸</text><text x="175" y="129" font-size="13">🌸</text><text x="198" y="123" font-size="12">🌸</text><text x="220" y="128" font-size="13">🌸</text><text x="240" y="143" font-size="12">🌸</text>` : ''}
-      <ellipse cx="181" cy="176" rx="7" ry="10" fill="#fff"/>
-      <ellipse cx="219" cy="176" rx="7" ry="10" fill="#fff"/>
-      <ellipse cx="181" cy="178" rx="4.8" ry="7" fill="#3d2854"/>
-      <ellipse cx="219" cy="178" rx="4.8" ry="7" fill="#3d2854"/>
-      <circle cx="183" cy="174" r="2" fill="#fff"/>
-      <circle cx="221" cy="174" r="2" fill="#fff"/>
-      <path d="M188 206 Q200 216 212 206" stroke="#d64d84" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <ellipse cx="169" cy="198" rx="9" ry="6" fill="#ff9dca" opacity=".55"/>
-      <ellipse cx="231" cy="198" rx="9" ry="6" fill="#ff9dca" opacity=".55"/>
-      ${hasGlasses ? `<circle cx="181" cy="176" r="12" fill="rgba(157,110,255,.12)" stroke="#9d6eff" stroke-width="2.5"/><circle cx="219" cy="176" r="12" fill="rgba(157,110,255,.12)" stroke="#9d6eff" stroke-width="2.5"/><path d="M193 176 Q200 179 207 176" stroke="#9d6eff" stroke-width="2.5" fill="none"/><path d="M169 175 L153 172" stroke="#9d6eff" stroke-width="2.5"/><path d="M231 175 L247 172" stroke="#9d6eff" stroke-width="2.5"/>` : ''}
-      ${hasNecklace ? `<path d="M178 224 Q200 232 222 224" stroke="#ffd76a" stroke-width="2" fill="none"/><text x="193" y="236" font-size="11">⭐</text>` : ''}
-      ${hasRibbon ? `<path d="M188 218 Q196 210 200 218 Q204 210 212 218 Q205 226 200 220 Q195 226 188 218Z" fill="#ff9dca" stroke="#ff7eb3" stroke-width="1.5"/>` : ''}
-      ${hasEarrings ? `<text x="144" y="195" font-size="11">⭐</text><text x="237" y="195" font-size="11">⭐</text>` : ''}
-      ${hasGlow ? `<text x="64" y="148" font-size="22" style="animation:twinkle 2s 0s infinite">✨</text><text x="310" y="150" font-size="20" style="animation:twinkle 2s .4s infinite">⭐</text><text x="190" y="56" font-size="22" style="animation:twinkle 2s .6s infinite">🌟</text>` : ''}
-      ${hasCrown ? `<path d="M163 118 L176 98 L190 114 L200 88 L210 114 L224 98 L237 118 L200 127 Z" fill="#ff9dca" stroke="${accent}" stroke-width="2"/><circle cx="200" cy="107" r="5" fill="#fff4a7"/><text x="183" y="118" font-size="13">🌸</text>` : ''}
-      ${hasTiara ? `<path d="M162 136 L172 114 L182 132 L200 106 L218 132 L228 114 L238 136" stroke="#ffd76a" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="200" cy="108" r="6" fill="#ffd76a" stroke="white" stroke-width="1.5"/>` : ''}
-    </g>
-  </svg>`;
+  html += `</div>`;
+  return html;
 }
 
 // ── Firebase 초기화 ──────────────────────────────
@@ -706,11 +641,11 @@ const HUB_REF = 'hub-messages';
 // ── 아바타 실시간 로딩 ──
 db.ref('lily-data').on('value', snap => {
   const d = snap.val() || {};
-  document.getElementById('avLily').innerHTML = buildAvatarSVG('lily', getUnlockedItems(d.history || []), getAvatarItems(d.roomPlaced || []));
+  document.getElementById('avLily').innerHTML = buildAvatarImage('lily', getUnlockedItems(d.history || []), getAvatarItems(d.roomPlaced || []));
 });
 db.ref('joy-data').on('value', snap => {
   const d = snap.val() || {};
-  document.getElementById('avJoy').innerHTML = buildAvatarSVG('joy', getUnlockedItems(d.history || []), getAvatarItems(d.roomPlaced || []));
+  document.getElementById('avJoy').innerHTML = buildAvatarImage('joy', getUnlockedItems(d.history || []), getAvatarItems(d.roomPlaced || []));
 });
 
 let hubMessages = [];

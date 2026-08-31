@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -9,9 +9,9 @@
 <meta name="apple-mobile-web-app-title" content="Joy's Week">
 <meta name="theme-color" content="#f7a916">
 
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Emilys+Candy&display=swap" rel="stylesheet">
 <style>
-  :root { --sys-font: 'Noto Sans KR', sans-serif; }
+  :root { --sys-font: 'Emilys Candy', 'Gowun Dodum', sans-serif; }
 </style>
 <style>
   :root {
@@ -26,13 +26,9 @@
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body { min-height: 100%; overscroll-behavior: none; -webkit-touch-callout: none; }
   body {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Emilys Candy', 'Gowun Dodum', sans-serif;
     color: white;
-    background:
-      radial-gradient(circle at 12% 12%, rgba(255, 237, 152, 0.78) 0 9%, transparent 22%),
-      radial-gradient(circle at 85% 10%, rgba(255, 190, 30, 0.65) 0 11%, transparent 26%),
-      radial-gradient(circle at 72% 78%, rgba(255, 140, 20, 0.52) 0 14%, transparent 32%),
-      linear-gradient(180deg, #c96a00 0%, #e89030 42%, #ffe8a0 100%);
+    background-color: #e89030;
     overflow-x: hidden;
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
@@ -49,22 +45,22 @@
 
   .container { max-width: 1180px; margin: 0 auto; padding: 22px 16px 92px; position: relative; z-index: 2; }
   header { text-align: center; margin-bottom: 18px; }
-  .title-main { font-family: 'Pacifico', cursive; font-size: clamp(1.9rem, 6vw, 3.6rem); color: #fff7cf; text-shadow: 0 3px 0 #c87800, 0 9px 26px rgba(120, 65, 0, 0.38), 0 0 28px rgba(255,255,255,0.75); line-height: 1.1; margin-bottom: 10px; }
-  .title-ribbon { display: inline-block; margin: 0 auto 8px; padding: 5px 28px 7px; border-radius: 999px; background: linear-gradient(90deg, rgba(255,140,0,.9), rgba(247,169,22,.92), rgba(114,205,255,.9)); border: 2px solid rgba(255,255,255,.72); box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 8px 24px rgba(130,70,0,.28); font-family: 'Noto Sans KR', sans-serif; font-size: clamp(.85rem, 2.4vw, 1.1rem); font-weight: 700; }
-  .title-sub { font-family: 'Noto Sans KR', sans-serif; font-size: 1.25rem; font-weight: 700; text-shadow: 0 2px 8px rgba(100,55,0,.35); }
+  .title-main { font-family: 'Emilys Candy', 'Gowun Dodum', cursive; font-weight: 700; font-size: clamp(1.9rem, 6vw, 3.6rem); color: #fff7cf; text-shadow: 0 3px 0 #c87800, 0 9px 26px rgba(120, 65, 0, 0.38), 0 0 28px rgba(255,255,255,0.75); line-height: 1.1; margin-bottom: 10px; }
+  .title-ribbon { display: inline-block; margin: 0 auto 8px; padding: 5px 28px 7px; border-radius: 999px; background: linear-gradient(90deg, rgba(255,140,0,.9), rgba(247,169,22,.92), rgba(114,205,255,.9)); border: 2px solid rgba(255,255,255,.72); box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 8px 24px rgba(130,70,0,.28); font-family: 'Emilys Candy', 'Gowun Dodum', sans-serif; font-size: clamp(.85rem, 2.4vw, 1.1rem); font-weight: 700; }
+  .title-sub { font-family: 'Emilys Candy', 'Gowun Dodum', sans-serif; font-size: 1.25rem; font-weight: 700; text-shadow: 0 2px 8px rgba(100,55,0,.35); }
 
-  /* ── PAGE LAYOUT: 3:7 분할 ── */
+  /* ── PAGE LAYOUT: 4:6 분할 ── */
   .page-layout {
     display: flex; height: 100vh; height: 100dvh;
     overflow: hidden; position: relative; z-index: 1;
   }
 
-  /* ── LEFT 30%: Room Sidebar ── */
+  /* ── LEFT 40%: Room Sidebar ── */
   .room-sidebar {
-    width: 30%; min-width: 210px; max-width: 340px;
+    width: 40%; min-width: 210px; max-width: 460px;
     height: 100%; display: flex; flex-direction: column;
     overflow: hidden; flex-shrink: 0;
-    background: linear-gradient(180deg, rgba(170,85,0,0.9) 0%, rgba(130,60,0,0.95) 100%);
+    background: linear-gradient(180deg, rgba(170,85,0,0.55) 0%, rgba(130,60,0,0.65) 100%), url('lily2_assets/skin_joyleft.png') no-repeat center / cover;
     border-right: 5px solid rgba(255,255,255,.35);
     box-shadow: 4px 0 16px rgba(0,0,0,.35);
     position: relative; z-index: 5;
@@ -74,9 +70,9 @@
     padding: 9px 10px 7px; background: rgba(0,0,0,.32);
     border-bottom: 1px solid rgba(255,255,255,.13); flex-shrink: 0;
   }
-  .room-title-text { font: 700 0.78rem 'Noto Sans KR', sans-serif; color: white; }
+  .room-title-text { font: 700 0.78rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: white; }
   .room-pts-badge {
-    font: 900 0.8rem 'Noto Sans KR', sans-serif; color: #ffd76a;
+    font: 900 0.8rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: #ffd76a;
     background: rgba(0,0,0,.38); padding: 3px 9px; border-radius: 999px;
     border: 1px solid rgba(255,215,106,.35);
   }
@@ -101,7 +97,7 @@
     background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.36);
   }
   .room-nav-btn .rnb-icon { font-size: 1.1rem; line-height: 1; }
-  .room-nav-btn .rnb-label { font: 700 0.46rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.72); text-align: center; }
+  .room-nav-btn .rnb-label { font: 700 0.46rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.72); text-align: center; }
 
   /* ── ROOM CANVAS ── */
   .room-canvas { flex: 1; position: relative; overflow: hidden; }
@@ -148,7 +144,7 @@
   @keyframes lampGlow { 0%,100%{filter:drop-shadow(0 0 5px rgba(255,220,100,.3))} 50%{filter:drop-shadow(0 0 14px rgba(255,220,100,.75))} }
 
   /* Lily in room */
-  .rc-lily { position: absolute; width: 90%; max-width: 200px; z-index: 8; cursor: grab; touch-action: none; }
+  .rc-lily { position: absolute; width: 63%; max-width: 140px; z-index: 8; cursor: grab; touch-action: none; }
   .rc-lily svg { width: 100%; height: auto; overflow: visible; }
 
   /* Room items */
@@ -158,7 +154,7 @@
   .rc-item.pet .rc-item-emoji { animation: petBounce2 1.8s ease-in-out infinite; }
   @keyframes petBounce2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
   .rc-draggable { cursor: grab; touch-action: none; }
-  .rc-draggable:hover .rc-item-emoji { filter: drop-shadow(0 6px 14px rgba(157,110,255,.7)) drop-shadow(0 2px 4px rgba(0,0,0,.4)); transform: scale(1.12); transition: transform .15s; }
+  .rc-draggable:hover .rc-item-emoji { filter: drop-shadow(0 6px 14px rgba(247,169,22,.7)) drop-shadow(0 2px 4px rgba(0,0,0,.4)); transform: scale(1.12); transition: transform .15s; }
   .rc-draggable.dragging { cursor: grabbing; opacity: .88; }
   .rc-del-btn { display: none; position: absolute; top: -8px; right: -8px; width: 20px; height: 20px; border-radius: 50%; background: rgba(220,50,50,.9); color: #fff; font-size: .75rem; font-weight: 700; border: 1.5px solid #fff; cursor: pointer; align-items: center; justify-content: center; z-index: 30; line-height: 1; }
   .rc-draggable.selected .rc-del-btn { display: flex; }
@@ -166,43 +162,43 @@
 
   /* FX + dialogue */
   .rc-dialogue { position: absolute; bottom: 2%; left: 3%; right: 3%; background: rgba(4,2,12,.82); border: 1.5px solid rgba(255,255,255,.22); border-radius: 10px; padding: 6px 10px; z-index: 15; backdrop-filter: blur(4px); }
-  .rc-dialogue-text { font: 700 0.6rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.9); line-height: 1.5; }
+  .rc-dialogue-text { font: 700 0.6rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.9); line-height: 1.5; }
 
   /* ── 쪽지 보드 ── */
   .room-msg-board { flex-shrink: 0; background: rgba(255,255,255,.13); border-top: 1px solid rgba(255,255,255,.2); padding: 10px 10px 8px; }
   .rmb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-  .rmb-title { font: 700 .68rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.9); }
+  .rmb-title { font: 700 .68rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.9); }
   .rmb-add-btn { background: rgba(255,255,255,.22); border: 1px solid rgba(255,255,255,.4); border-radius: 50%; width: 22px; height: 22px; color: white; font-size: .9rem; cursor: pointer; line-height: 1; display: flex; align-items: center; justify-content: center; }
   .rmb-add-btn:hover { background: rgba(255,255,255,.38); }
-  .rmb-card { background: rgba(255,255,255,.15); border-radius: 8px; padding: 8px 10px; min-height: 68px; font: 500 .68rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.95); line-height: 1.45; word-break: break-all; }
+  .rmb-card { background: rgba(255,255,255,.15); border-radius: 8px; padding: 8px 10px; min-height: 68px; font: 500 .68rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.95); line-height: 1.45; word-break: break-all; }
   .rmb-card.empty { color: rgba(255,255,255,.45); text-align: center; padding-top: 20px; font-size: .63rem; }
-  .rmb-from { font: 700 .6rem 'Noto Sans KR', sans-serif; color: rgba(255,230,150,.9); margin-bottom: 2px; }
+  .rmb-from { font: 700 .6rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: rgba(255,230,150,.9); margin-bottom: 2px; }
   .rmb-nav { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 5px; }
   .rmb-nav-btn { background: rgba(255,255,255,.18); border: none; border-radius: 50%; width: 22px; height: 22px; color: white; font-size: .75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .rmb-nav-btn:hover { background: rgba(255,255,255,.32); }
   .rmb-nav-btn:disabled { opacity: .3; cursor: default; }
-  .rmb-counter { font: 600 .62rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.6); min-width: 28px; text-align: center; }
+  .rmb-counter { font: 600 .62rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.6); min-width: 28px; text-align: center; }
   .rmb-del-btn { background: rgba(255,80,80,.25); border: none; border-radius: 50%; width: 22px; height: 22px; color: rgba(255,180,180,.9); font-size: .7rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .rmb-del-btn:hover { background: rgba(255,80,80,.45); }
   /* 쪽지 입력 오버레이 */
   .rmb-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.6); z-index: 40; display: flex; align-items: flex-end; -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
   .rmb-input-box { background: #2d1060; border-radius: 14px 14px 0 0; padding: 14px 14px 18px; width: 100%; border-top: 2px solid rgba(255,255,255,.25); }
   .rmb-from-row { display: flex; gap: 6px; margin-bottom: 9px; }
-  .rmb-from-btn { flex: 1; padding: 6px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1); color: rgba(255,255,255,.7); font: 700 1rem 'Noto Sans KR', sans-serif; cursor: pointer; touch-action: manipulation; }
+  .rmb-from-btn { flex: 1; padding: 6px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1); color: rgba(255,255,255,.7); font: 700 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif; cursor: pointer; touch-action: manipulation; }
   .rmb-from-btn.active { background: rgba(255,215,106,.25); border-color: #ffd76a; color: #ffd76a; }
-  .rmb-textarea { width: 100%; background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.25); border-radius: 8px; color: white; font: 500 1rem 'Noto Sans KR', sans-serif; padding: 8px 10px; resize: none; box-sizing: border-box; outline: none; touch-action: manipulation; }
+  .rmb-textarea { width: 100%; background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.25); border-radius: 8px; color: white; font: 500 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif; padding: 8px 10px; resize: none; box-sizing: border-box; outline: none; touch-action: manipulation; }
   .rmb-textarea::placeholder { color: rgba(255,255,255,.35); }
   .rmb-submit-row { display: flex; gap: 6px; margin-top: 8px; }
-  .rmb-cancel-btn { flex: 1; padding: 8px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,.25); background: rgba(255,255,255,.08); color: rgba(255,255,255,.7); font: 700 1rem 'Noto Sans KR', sans-serif; cursor: pointer; touch-action: manipulation; }
-  .rmb-send-btn { flex: 2; padding: 8px; border-radius: 8px; border: none; background: linear-gradient(90deg, #f7a916, #ff9dca); color: white; font: 700 1rem 'Noto Sans KR', sans-serif; cursor: pointer; touch-action: manipulation; }
+  .rmb-cancel-btn { flex: 1; padding: 8px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,.25); background: rgba(255,255,255,.08); color: rgba(255,255,255,.7); font: 700 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif; cursor: pointer; touch-action: manipulation; }
+  .rmb-send-btn { flex: 2; padding: 8px; border-radius: 8px; border: none; background: linear-gradient(90deg, #f7a916, #ff9dca); color: white; font: 700 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif; cursor: pointer; touch-action: manipulation; }
   /* 꾹 눌러 삭제 컨텍스트 메뉴 */
   .rc-ctx-menu { position: absolute; z-index: 50; background: rgba(20,5,45,.95); border: 1.5px solid rgba(255,255,255,.25); border-radius: 10px; padding: 6px; display: flex; flex-direction: column; gap: 4px; backdrop-filter: blur(6px); min-width: 100px; }
-  .rc-ctx-btn { background: rgba(255,255,255,.1); border: none; border-radius: 7px; color: white; font: 600 .72rem 'Noto Sans KR', sans-serif; padding: 7px 10px; cursor: pointer; text-align: left; }
+  .rc-ctx-btn { background: rgba(255,255,255,.1); border: none; border-radius: 7px; color: white; font: 600 .72rem 'Emilys Candy', 'Gowun Dodum', sans-serif; padding: 7px 10px; cursor: pointer; text-align: left; }
   .rc-ctx-btn:hover { background: rgba(255,255,255,.2); }
   .rc-ctx-btn.danger { color: #ff9dca; }
   .rc-ctx-btn.danger:hover { background: rgba(255,80,100,.25); }
   /* 배치하기 버튼 (상점) */
-  .shop-place-btn { background: linear-gradient(90deg,#4caf82,#3d9970); color: white; border: none; border-radius: 8px; padding: 6px 10px; font: 700 .8rem 'Noto Sans KR',sans-serif; cursor: pointer; width: 100%; margin-top: 4px; }
+  .shop-place-btn { background: linear-gradient(90deg,#4caf82,#3d9970); color: white; border: none; border-radius: 8px; padding: 6px 10px; font: 700 .8rem 'Emilys Candy', 'Gowun Dodum', sans-serif; cursor: pointer; width: 100%; margin-top: 4px; }
   .shop-place-btn:hover { opacity: .85; }
 
   /* Room footer */
@@ -210,27 +206,34 @@
   .room-unlock-slots { display: flex; gap: 3px; flex-wrap: wrap; justify-content: center; margin-bottom: 3px; }
   .rus-slot { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid rgba(255,255,255,.35); background: rgba(255,255,255,.1); font-size: .65rem; }
   .rus-slot.filled { background: rgba(255,255,255,.75); border-color: rgba(255,255,255,.9); box-shadow: 0 0 7px rgba(255,215,106,.5); animation: slotAppear .5s ease; }
-  .room-week-label { text-align: center; font: 700 0.58rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.6); }
+  .room-week-label { text-align: center; font: 700 0.58rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.6); }
 
-  /* ── RIGHT 70%: Main scroll ── */
-  .main-scroll { flex: 1; height: 100%; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+  /* ── RIGHT 60%: Main scroll ── */
+  .main-scroll {
+    flex: 1; height: 100%; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch;
+    background-color: #e89030;
+    background-image: url('lily2_assets/skin_joyleft.png');
+    background-repeat: repeat-y;
+    background-position: left top;
+    background-size: 100% auto;
+  }
   .main-scroll::-webkit-scrollbar { width: 5px; }
   .main-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,.05); }
   .main-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,.22); border-radius: 3px; }
 
   @keyframes slotAppear { 0%{transform:scale(0) rotate(-20deg);filter:brightness(2)} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
   @keyframes badgePop { 0%{transform:scale(0) rotate(-10deg)} 60%{transform:scale(1.12)} 100%{transform:scale(1)} }
-  .lily-item-badge { padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,.72); border: 2px solid rgba(255,255,255,.9); font: 700 .72rem 'Noto Sans KR', sans-serif; color: var(--ink); animation: badgePop .4s ease; white-space: nowrap; }
+  .lily-item-badge { padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,.72); border: 2px solid rgba(255,255,255,.9); font: 700 .72rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: var(--ink); animation: badgePop .4s ease; white-space: nowrap; }
 
   /* ─────────────── rest of styles (unchanged) ─────────────── */
   .mode-switch { display: flex; justify-content: center; gap: 10px; margin: 16px 0; flex-wrap: wrap; }
-  .mode-btn { min-height: 44px; border: 2px solid rgba(255,255,255,.68); border-radius: 999px; padding: 10px 18px; background: rgba(255,255,255,.2); color: white; font: 700 1rem 'Noto Sans KR', sans-serif; cursor: pointer; box-shadow: 0 6px 16px rgba(105,58,0,.18); }
+  .mode-btn { min-height: 44px; border: 2px solid rgba(255,255,255,.68); border-radius: 999px; padding: 10px 18px; background: rgba(255,255,255,.2); color: white; font: 700 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif; cursor: pointer; box-shadow: 0 6px 16px rgba(105,58,0,.18); }
   .mode-btn.active { background: linear-gradient(135deg, #fff4b5, #ffb830); color: var(--ink); transform: translateY(-1px); }
 
   .weekly-sky { position: relative; overflow: hidden; margin-bottom: 18px; border-radius: 26px; border: 2px solid rgba(255,255,255,.58); background: linear-gradient(180deg, rgba(232,165,60,.78), rgba(255,235,150,.72)), linear-gradient(90deg, #c97000, #ffd76a); box-shadow: 0 18px 44px rgba(102,58,0,.24), inset 0 1px 0 rgba(255,255,255,.45); padding: 18px; min-height: 190px; }
   .weekly-sky.complete { animation: completedGlow 2.6s ease-in-out infinite; }
-  .weekly-sky h2 { font-family: 'Noto Sans KR', sans-serif; font-weight: 900; font-size: 1.65rem; text-shadow: 0 2px 12px rgba(70,35,120,.45); }
-  .weekly-sub { margin-top: 4px; font-family: 'Noto Sans KR', sans-serif; font-size: 1.12rem; font-weight: 700; }
+  .weekly-sky h2 { font-family: 'Emilys Candy', 'Gowun Dodum', sans-serif; font-weight: 900; font-size: 1.65rem; text-shadow: 0 2px 12px rgba(70,35,120,.45); }
+  .weekly-sub { margin-top: 4px; font-family: 'Emilys Candy', 'Gowun Dodum', sans-serif; font-size: 1.12rem; font-weight: 700; }
   .weather-path { position: absolute; left: 24px; right: 24px; bottom: 18px; height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
   .weather-step { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font-size: 1.35rem; background: rgba(255,255,255,.44); border: 2px solid rgba(255,255,255,.65); color: var(--ink); z-index: 2; cursor: pointer; }
   .weather-step.done { background: linear-gradient(135deg, #fff4a7, #fff); box-shadow: 0 0 20px rgba(255,235,130,.9); transform: scale(1.06); }
@@ -238,11 +241,11 @@
   .rainbow-arc { position: absolute; right: -40px; bottom: -74px; width: 420px; height: 210px; border-radius: 420px 420px 0 0; border-top: 18px solid #ff6a9f; border-left: 18px solid transparent; border-right: 18px solid transparent; opacity: .55; }
   .rainbow-arc:before { content: ''; position: absolute; inset: 13px 11px auto; height: 170px; border-radius: 360px 360px 0 0; border-top: 16px solid #ffd76a; }
   .rainbow-arc:after { content: ''; position: absolute; inset: 40px 38px auto; height: 125px; border-radius: 300px 300px 0 0; border-top: 15px solid #7fe0ff; }
-  .weekly-complete-panel { position: absolute; right: 18px; top: 18px; width: min(315px, calc(100% - 36px)); padding: 14px 16px; border-radius: 18px; background: rgba(255,255,255,.74); color: var(--ink); border: 2px solid rgba(255,255,255,.8); text-align: center; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
-  .next-week-btn { display: none; width: 100%; margin: 4px 0 20px; padding: 15px 12px; border: 0; border-radius: 18px; color: #fff; background: linear-gradient(135deg,#9d6eff,#ff7eb3); font: 800 1.08rem 'Noto Sans KR', sans-serif; cursor: pointer; box-shadow: 0 6px 18px rgba(100,60,160,.3); animation: nextWeekPulse 1.8s ease-in-out infinite; }
+  .weekly-complete-panel { position: absolute; right: 18px; top: 18px; width: min(315px, calc(100% - 36px)); padding: 14px 16px; border-radius: 18px; background: rgba(255,255,255,.74); color: var(--ink); border: 2px solid rgba(255,255,255,.8); text-align: center; font-family: 'Emilys Candy', 'Gowun Dodum', sans-serif; font-weight: 700; }
+  .next-week-btn { display: none; width: 100%; margin: 4px 0 20px; padding: 15px 12px; border: 0; border-radius: 18px; color: #fff; background: linear-gradient(135deg,#f7a916,#ff8c00); font: 800 1.08rem 'Emilys Candy', 'Gowun Dodum', sans-serif; cursor: pointer; box-shadow: 0 6px 18px rgba(100,60,160,.3); animation: nextWeekPulse 1.8s ease-in-out infinite; }
   .next-week-btn:hover { opacity: .92; transform: translateY(-1px); }
   .next-week-btn:active { transform: translateY(0); }
-  @keyframes nextWeekPulse { 0%,100% { box-shadow: 0 6px 18px rgba(100,60,160,.3); } 50% { box-shadow: 0 6px 26px rgba(255,126,179,.6); } }
+  @keyframes nextWeekPulse { 0%,100% { box-shadow: 0 6px 18px rgba(100,60,160,.3); } 50% { box-shadow: 0 6px 26px rgba(255,140,0,.6); } }
   .fairy-silhouettes { margin-top: 8px; display: flex; justify-content: center; gap: 4px; }
   .fairy-dot { width: 24px; height: 34px; display: grid; place-items: center; opacity: .38; filter: grayscale(.65); }
   .fairy-dot.done { opacity: 1; filter: none; text-shadow: 0 0 10px rgba(255,255,255,.95); }
@@ -251,25 +254,26 @@
   .mini-card { border: 2px solid rgba(255,255,255,.62); border-radius: 8px; min-height: 188px; padding: 10px 8px; color: var(--ink); background: linear-gradient(160deg, var(--light), rgba(255,255,255,.86)); box-shadow: 0 10px 24px rgba(110,60,0,.18), inset 0 1px 0 rgba(255,255,255,.8); cursor: pointer; position: relative; overflow: hidden; }
   .mini-card.active { border-color: #fff4a7; box-shadow: 0 0 0 3px rgba(255,215,106,.62), 0 15px 32px rgba(110,60,0,.24); transform: translateY(-2px); }
   .mini-card.done { animation: completedGlow 2.3s ease-in-out infinite; }
-  .mini-card-name { font: 700 1.06rem 'Noto Sans KR', sans-serif; line-height: 1.05; }
-  .mini-card-title { font: 700 .78rem 'Noto Sans KR', sans-serif; opacity: .86; min-height: 28px; }
+  .mini-card-name { font: 700 1.06rem 'Emilys Candy', 'Gowun Dodum', sans-serif; line-height: 1.05; }
+  .mini-card-title { font: 700 .78rem 'Emilys Candy', 'Gowun Dodum', sans-serif; opacity: .86; min-height: 28px; }
   .mini-fairy { height: 96px; display: grid; place-items: center; }
   .mini-fairy svg { width: 82px; height: 96px; overflow: visible; }
-  .mini-progress { display: flex; align-items: center; gap: 7px; margin-top: 7px; font: 700 .85rem 'Noto Sans KR', sans-serif; }
+  .mini-fairy img { width: 100%; height: 100%; object-fit: contain; }
+  .mini-progress { display: flex; align-items: center; gap: 7px; margin-top: 7px; font: 700 .85rem 'Emilys Candy', 'Gowun Dodum', sans-serif; }
   .mini-bar { flex: 1; height: 8px; border-radius: 999px; background: rgba(130,80,0,.15); overflow: hidden; border: 1px solid rgba(255,255,255,.7); }
   .mini-fill { height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--accent), #fff4a7); }
 
-  .main-layout { display: grid; grid-template-columns: minmax(0, 1.28fr) minmax(300px, .72fr); gap: 18px; align-items: start; }
+  .main-layout { display: grid; grid-template-columns: 1fr; gap: 18px; align-items: start; }
   .fairy-card, .todo-card, .collection-card { border-radius: 8px; border: 2px solid rgba(255,255,255,.62); background: var(--card); color: var(--ink); box-shadow: 0 18px 42px rgba(110,60,0,.23), inset 0 1px 0 rgba(255,255,255,.72); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
   .fairy-card { padding: 18px; position: relative; overflow: hidden; background: linear-gradient(145deg, rgba(255,255,255,.78), var(--fairy-light)); }
   .fairy-card.done { animation: completedGlow 2.4s ease-in-out infinite; }
   @keyframes completedGlow { 0%, 100% { box-shadow: 0 18px 42px rgba(110,60,0,.23), 0 0 0 rgba(255,255,255,0); } 50% { box-shadow: 0 18px 42px rgba(110,60,0,.23), 0 0 34px rgba(255,244,167,.92); } }
   .fairy-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-  .fairy-name { font-family: 'Pacifico', cursive; font-size: clamp(1.35rem, 3.2vw, 2rem); color: var(--accent); text-shadow: 0 2px 0 rgba(255,255,255,.8); line-height: 1.15; }
-  .fairy-title { font: 700 .82rem 'Noto Sans KR', sans-serif; color: var(--ink); opacity: .82; margin-top: 5px; }
-  .day-badge { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,.68); border: 2px solid rgba(255,255,255,.86); font: 700 .95rem 'Noto Sans KR', sans-serif; white-space: nowrap; }
-  .showcase { display: grid; grid-template-columns: minmax(250px, .9fr) minmax(280px, 1.1fr); gap: 14px; align-items: center; }
-  .fairy-stage { position: relative; min-height: 438px; display: grid; place-items: center; border-radius: 8px; overflow: hidden; background: radial-gradient(circle at 50% 32%, rgba(255,255,255,.9), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.38), rgba(255,255,255,.08)); }
+  .fairy-name { font-family: 'Emilys Candy', 'Gowun Dodum', cursive; font-size: clamp(1.35rem, 3.2vw, 2rem); color: var(--accent); text-shadow: 0 2px 0 rgba(255,255,255,.8); line-height: 1.15; }
+  .fairy-title { font: 700 .82rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: var(--ink); opacity: .82; margin-top: 5px; }
+  .day-badge { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,.68); border: 2px solid rgba(255,255,255,.86); font: 700 .95rem 'Emilys Candy', 'Gowun Dodum', sans-serif; white-space: nowrap; }
+  .showcase { display: grid; grid-template-columns: minmax(250px, 1.3fr) minmax(240px, 0.7fr); gap: 14px; align-items: center; }
+  .fairy-stage { position: relative; min-height: 520px; display: grid; place-items: center; border-radius: 8px; overflow: hidden; background: radial-gradient(circle at 50% 32%, rgba(255,255,255,.9), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.38), rgba(255,255,255,.08)); }
   .fairy-stage svg { width: min(360px, 100%); height: auto; overflow: visible; filter: drop-shadow(0 16px 22px rgba(130,80,0,.24)); }
   .magic-effect { position: absolute; inset: 0; pointer-events: none; opacity: .9; }
   .magic-effect .effect-symbol { position: absolute; animation: floatUp 2.4s ease-in-out infinite; }
@@ -278,30 +282,30 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .collection-card { padding: 16px; background: rgba(255,255,255,.66); }
   .collection-title { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 12px; }
-  .collection-title h2 { font-family: 'Noto Sans KR', sans-serif; font-weight: 900; color: var(--accent); font-size: 1.1rem; white-space: nowrap; }
-  .item-progress { font: 700 .82rem 'Noto Sans KR', sans-serif; color: var(--ink); white-space: nowrap; text-align: right; }
+  .collection-title h2 { font-family: 'Emilys Candy', 'Gowun Dodum', sans-serif; font-weight: 900; color: var(--accent); font-size: 1.1rem; white-space: nowrap; }
+  .item-progress { font: 700 .82rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: var(--ink); white-space: nowrap; text-align: right; }
   .item-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
-  .item-slot { aspect-ratio: 1; min-height: 52px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center; border: 2px solid rgba(145,90,0,.16); background: rgba(255,255,255,.52); position: relative; overflow: hidden; }
+  .item-slot { aspect-ratio: 1.4; min-height: 38px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center; border: 2px solid rgba(145,90,0,.16); background: rgba(255,255,255,.52); position: relative; overflow: hidden; }
   .item-slot.locked { filter: grayscale(.9); opacity: .45; }
   .item-slot.unlocked { background: linear-gradient(145deg, #fff8cf, #fff); border-color: var(--accent); box-shadow: 0 0 14px rgba(255,215,106,.48); }
   .item-slot.new { animation: slotSparkle 1.2s ease-out; }
   @keyframes slotSparkle { 0% { transform: scale(.72) rotate(-4deg); filter: brightness(1.8); } 55% { transform: scale(1.09) rotate(2deg); } 100% { transform: scale(1); } }
   .item-emoji { font-size: 1.4rem; line-height: 1; }
-  .item-name { font: 700 .62rem 'Noto Sans KR', sans-serif; line-height: 1.05; padding: 0 2px; }
-  .next-item-hint { margin-top: 12px; padding: 11px 12px; border-radius: 8px; background: rgba(255,255,255,.62); border: 1px solid rgba(255,255,255,.86); font: 700 1rem 'Noto Sans KR', sans-serif; text-align: center; }
-  .progress-wrap { margin-top: 14px; }
+  .item-name { font: 700 .62rem 'Emilys Candy', 'Gowun Dodum', sans-serif; line-height: 1.05; padding: 0 2px; }
+  .next-item-hint { margin-top: 10px; padding: 9px 12px; border-radius: 8px; background: rgba(255,255,255,.62); border: 1px solid rgba(255,255,255,.86); font: 700 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif; text-align: center; }
+  .progress-wrap { margin-top: 10px; }
   .progress-bar { height: 15px; background: rgba(112,65,0,.14); border-radius: 999px; overflow: hidden; border: 2px solid rgba(255,255,255,.76); }
   .progress-fill { height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, #ff8c00, #ffd76a, #ffb830, #ffe066); transition: width .45s ease; }
-  .progress-text { text-align: center; margin-top: 8px; font: 700 1rem 'Noto Sans KR', sans-serif; }
+  .progress-text { text-align: center; margin-top: 8px; font: 700 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif; }
 
   .todo-card { padding: 18px; background: rgba(255,255,255,.9); }
   .todo-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
-  .todo-header h2 { font-family: 'Pacifico', cursive; color: var(--accent); font-size: 1.55rem; line-height: 1.05; }
-  .count-badge { border-radius: 999px; background: linear-gradient(135deg, var(--accent), #ff9dca); color: white; padding: 6px 12px; font: 700 .95rem 'Noto Sans KR', sans-serif; white-space: nowrap; }
+  .todo-header h2 { font-family: 'Emilys Candy', 'Gowun Dodum', cursive; color: var(--accent); font-size: 1.55rem; line-height: 1.05; }
+  .count-badge { border-radius: 999px; background: linear-gradient(135deg, var(--accent), #ff9dca); color: white; padding: 6px 12px; font: 700 .95rem 'Emilys Candy', 'Gowun Dodum', sans-serif; white-space: nowrap; }
   .mom-input { display: flex; gap: 8px; margin-bottom: 12px; }
-  .mom-input input { flex: 1; min-width: 0; padding: 12px 13px; border-radius: 8px; border: 2px solid rgba(170,100,0,.32); font: 700 1.08rem 'Noto Sans KR', sans-serif; color: var(--ink); outline: none; touch-action: manipulation; }
+  .mom-input input { flex: 1; min-width: 0; padding: 12px 13px; border-radius: 8px; border: 2px solid rgba(170,100,0,.32); font: 700 1.08rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: var(--ink); outline: none; touch-action: manipulation; }
   .mom-input input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(247,169,22,.14); }
-  .mom-input button { border: 0; border-radius: 8px; padding: 0 16px; min-height: 48px; color: white; background: linear-gradient(135deg, var(--accent), #ff8c00); font: 700 1rem 'Noto Sans KR', sans-serif; cursor: pointer; }
+  .mom-input button { border: 0; border-radius: 8px; padding: 0 16px; min-height: 48px; color: white; background: linear-gradient(135deg, var(--accent), #ff8c00); font: 700 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif; cursor: pointer; }
   .mom-input button:disabled, .mom-input input:disabled { opacity: .55; cursor: not-allowed; }
   .todo-list { list-style: none; }
   .todo-item, .mom-todo-item { display: flex; align-items: center; gap: 11px; min-height: 56px; margin-bottom: 9px; padding: 11px 12px; border-radius: 8px; background: linear-gradient(135deg, #fff, var(--fairy-light)); border: 2px solid rgba(170,100,0,.1); box-shadow: 0 4px 12px rgba(83,46,120,.1); }
@@ -309,22 +313,22 @@
   .todo-item.done { border-color: var(--accent); background: linear-gradient(135deg, #fff8c8, #fff); }
   .checkbox { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; background: white; border: 3px solid var(--accent); color: white; font-weight: 700; }
   .todo-item.done .checkbox { background: linear-gradient(135deg, var(--accent), #ffd76a); box-shadow: 0 0 14px rgba(255,215,106,.72); }
-  .todo-text, .mom-todo-item .text { flex: 1; font: 700 1.12rem 'Noto Sans KR', sans-serif; color: var(--ink); }
+  .todo-text, .mom-todo-item .text { flex: 1; font: 700 1.12rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: var(--ink); }
   .todo-item.done .todo-text { text-decoration: line-through; color: #8c74a4; }
   .task-reward { font-size: 1.45rem; width: 32px; text-align: center; flex-shrink: 0; }
   .delete-btn { width: 36px; height: 36px; border-radius: 50%; border: 0; background: #ffe1ed; color: #d73778; font-weight: 700; cursor: pointer; }
-  .empty-msg { text-align: center; padding: 28px 14px; color: #7c6294; font: 700 1.05rem 'Noto Sans KR', sans-serif; }
+  .empty-msg { text-align: center; padding: 28px 14px; color: #7c6294; font: 700 1.05rem 'Emilys Candy', 'Gowun Dodum', sans-serif; }
   .empty-msg .big-emoji { display: block; font-size: 3rem; margin-bottom: 8px; }
-  .help-tip { margin-top: 12px; padding: 11px 12px; border-radius: 8px; background: rgba(247,169,22,.11); color: #654286; font: 700 1rem 'Noto Sans KR', sans-serif; text-align: center; }
+  .help-tip { margin-top: 12px; padding: 11px 12px; border-radius: 8px; background: rgba(247,169,22,.11); color: #654286; font: 700 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif; text-align: center; }
 
-  .toast { position: fixed; top: 78px; left: 50%; transform: translateX(-50%) translateY(-100px); z-index: 210; opacity: 0; transition: all .45s cubic-bezier(.34,1.56,.64,1); max-width: 92vw; white-space: nowrap; padding: 14px 20px; border-radius: 999px; background: linear-gradient(135deg, #fff4a7, #ff9dca); color: var(--ink); border: 3px solid white; box-shadow: 0 12px 28px rgba(122,72,0,.28); font: 700 1rem 'Noto Sans KR', sans-serif; }
+  .toast { position: fixed; top: 78px; left: 50%; transform: translateX(-50%) translateY(-100px); z-index: 210; opacity: 0; transition: all .45s cubic-bezier(.34,1.56,.64,1); max-width: 92vw; white-space: nowrap; padding: 14px 20px; border-radius: 999px; background: linear-gradient(135deg, #fff4a7, #ff9dca); color: var(--ink); border: 3px solid white; box-shadow: 0 12px 28px rgba(122,72,0,.28); font: 700 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif; }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   .celebration { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 120; background: rgba(104,60,0,.58); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 18px; }
   .celebration.show { display: flex; }
   .celebration-box { width: min(460px, 94vw); text-align: center; padding: 30px 24px; border-radius: 24px; border: 3px solid white; background: linear-gradient(145deg, #fff8c8, #ffdced 42%, #dff5ff); color: var(--ink); box-shadow: 0 24px 70px rgba(82,45,0,.32); animation: bounceIn .55s ease; }
-  .celebration-box h2 { font-family: 'Pacifico', cursive; color: var(--violet); font-size: 2rem; margin: 8px 0; }
-  .celebration-box p { font: 700 1.15rem 'Noto Sans KR', sans-serif; margin-bottom: 18px; }
-  .celebration-box button { border: 0; border-radius: 999px; padding: 13px 28px; color: white; background: linear-gradient(135deg, var(--violet), var(--pink)); font: 700 1rem 'Noto Sans KR', sans-serif; cursor: pointer; }
+  .celebration-box h2 { font-family: 'Emilys Candy', 'Gowun Dodum', cursive; color: var(--violet); font-size: 2rem; margin: 8px 0; }
+  .celebration-box p { font: 700 1.15rem 'Emilys Candy', 'Gowun Dodum', sans-serif; margin-bottom: 18px; }
+  .celebration-box button { border: 0; border-radius: 999px; padding: 13px 28px; color: white; background: linear-gradient(135deg, var(--violet), var(--pink)); font: 700 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif; cursor: pointer; }
   @keyframes bounceIn { 0% { opacity: 0; transform: scale(.55); } 65% { transform: scale(1.04); } 100% { opacity: 1; transform: scale(1); } }
   .confetti { position: fixed; top: -12px; width: 11px; height: 11px; pointer-events: none; z-index: 115; animation: fall 3.2s linear forwards; }
   @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
@@ -338,20 +342,20 @@
   /* ── HISTORY ── */
   .history-section { margin-top: 28px; border-radius: 26px; overflow: hidden; border: 2px solid rgba(255,255,255,.58); background: linear-gradient(160deg, rgba(255,255,255,.18), rgba(255,220,100,.12)); box-shadow: 0 18px 44px rgba(102,58,0,.2), inset 0 1px 0 rgba(255,255,255,.4); padding: 20px 22px 24px; }
   .history-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
-  .history-header h2 { font-family: 'Pacifico', cursive; font-size: 1.6rem; color: #fff7cf; text-shadow: 0 2px 0 #c87800, 0 6px 16px rgba(120,65,0,.3); }
-  .history-week-count { padding: 6px 14px; border-radius: 999px; background: rgba(255,255,255,.22); border: 2px solid rgba(255,255,255,.58); font: 700 .95rem 'Noto Sans KR', sans-serif; }
+  .history-header h2 { font-family: 'Emilys Candy', 'Gowun Dodum', cursive; font-size: 1.6rem; color: #fff7cf; text-shadow: 0 2px 0 #c87800, 0 6px 16px rgba(120,65,0,.3); }
+  .history-week-count { padding: 6px 14px; border-radius: 999px; background: rgba(255,255,255,.22); border: 2px solid rgba(255,255,255,.58); font: 700 .95rem 'Emilys Candy', 'Gowun Dodum', sans-serif; }
   .history-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
   .history-week-card { border-radius: 16px; padding: 14px 12px; border: 2px solid rgba(255,255,255,.48); background: rgba(255,255,255,.14); text-align: center; position: relative; overflow: hidden; }
   .history-week-card.success { background: linear-gradient(145deg, rgba(255,244,167,.35), rgba(255,200,220,.28)); border-color: rgba(255,215,106,.6); box-shadow: 0 8px 22px rgba(200,150,50,.18); }
   .history-week-card.fail { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.28); opacity: .72; }
-  .history-week-num { font-family: 'Pacifico', cursive; font-size: 1.25rem; color: #fff7cf; text-shadow: 0 2px 8px rgba(120,65,0,.35); }
+  .history-week-num { font-family: 'Emilys Candy', 'Gowun Dodum', cursive; font-size: 1.25rem; color: #fff7cf; text-shadow: 0 2px 8px rgba(120,65,0,.35); }
   .history-week-status { font-size: 1.8rem; margin: 4px 0; }
   .history-week-days { display: flex; justify-content: center; gap: 3px; margin-top: 6px; }
   .history-day-dot { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: .72rem; border: 1.5px solid rgba(255,255,255,.4); background: rgba(255,255,255,.15); }
   .history-day-dot.done { background: linear-gradient(135deg, #ffd76a, #ff9dca); border-color: rgba(255,255,255,.7); }
-  .history-week-date { font: 700 .78rem 'Noto Sans KR', sans-serif; opacity: .72; margin-top: 5px; }
-  .history-week-label { font: 700 .82rem 'Noto Sans KR', sans-serif; opacity: .85; margin-top: 3px; }
-  .history-empty { text-align: center; padding: 28px; font: 700 1.08rem 'Noto Sans KR', sans-serif; opacity: .65; }
+  .history-week-date { font: 700 .78rem 'Emilys Candy', 'Gowun Dodum', sans-serif; opacity: .72; margin-top: 5px; }
+  .history-week-label { font: 700 .82rem 'Emilys Candy', 'Gowun Dodum', sans-serif; opacity: .85; margin-top: 3px; }
+  .history-empty { text-align: center; padding: 28px; font: 700 1.08rem 'Emilys Candy', 'Gowun Dodum', sans-serif; opacity: .65; }
 
   /* ── POINTS BADGE ── */
   .points-badge {
@@ -360,7 +364,7 @@
     background: linear-gradient(135deg, #ffd76a, #ffb830);
     border: 2.5px solid rgba(255,255,255,.9);
     box-shadow: 0 4px 14px rgba(200,130,0,.28);
-    font: 700 1.2rem 'Noto Sans KR', sans-serif; color: #5a3500;
+    font: 700 1.2rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: #5a3500;
     white-space: nowrap; margin-top: 8px;
   }
   .points-badge .pt-num { font-size: 1.4rem; }
@@ -381,19 +385,19 @@
     padding: 20px 22px 28px;
   }
   .shop-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
-  .shop-header h2 { font-family: 'Pacifico', cursive; font-size: 1.6rem; color: #fff7cf; text-shadow: 0 2px 0 #c87800, 0 6px 16px rgba(120,65,0,.3); }
+  .shop-header h2 { font-family: 'Emilys Candy', 'Gowun Dodum', cursive; font-size: 1.6rem; color: #fff7cf; text-shadow: 0 2px 0 #c87800, 0 6px 16px rgba(120,65,0,.3); }
   .shop-points-display {
     padding: 7px 18px; border-radius: 999px;
     background: linear-gradient(135deg, #ffd76a, #ffb830);
     border: 2px solid rgba(255,255,255,.8);
-    font: 700 1.1rem 'Noto Sans KR', sans-serif; color: #5a3500;
+    font: 700 1.1rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: #5a3500;
   }
   .shop-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
   .shop-tab {
     min-height: 38px; padding: 7px 16px; border-radius: 999px;
     border: 2px solid rgba(255,255,255,.55);
     background: rgba(255,255,255,.18); color: white;
-    font: 700 .9rem 'Noto Sans KR', sans-serif; cursor: pointer;
+    font: 700 .9rem 'Emilys Candy', 'Gowun Dodum', sans-serif; cursor: pointer;
   }
   .shop-tab.active { background: linear-gradient(135deg, #fff4b5, #ffb830); color: var(--ink); border-color: rgba(255,255,255,.9); }
   .shop-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
@@ -407,26 +411,26 @@
   .shop-item-card.owned { background: linear-gradient(145deg, #fff8cf, #fff); border-color: #ffd76a; }
   .shop-item-card.unaffordable { opacity: .65; }
   .shop-item-emoji { font-size: 2.4rem; line-height: 1.1; }
-  .shop-item-name { font: 700 .95rem 'Noto Sans KR', sans-serif; }
-  .shop-item-desc { font: 700 .78rem 'Noto Sans KR', sans-serif; color: #7c6294; min-height: 26px; }
-  .shop-item-price { font: 700 .9rem 'Noto Sans KR', sans-serif; color: #5a3500; background: linear-gradient(135deg,#ffeea0,#ffd76a); padding: 3px 12px; border-radius: 999px; }
+  .shop-item-name { font: 700 .95rem 'Emilys Candy', 'Gowun Dodum', sans-serif; }
+  .shop-item-desc { font: 700 .78rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: #7c6294; min-height: 26px; }
+  .shop-item-price { font: 700 .9rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: #5a3500; background: linear-gradient(135deg,#ffeea0,#ffd76a); padding: 3px 12px; border-radius: 999px; }
   .shop-buy-btn {
     margin-top: 4px; border: 0; border-radius: 999px;
     padding: 7px 18px; color: white;
     background: linear-gradient(135deg, #f7a916, #ff8c00);
-    font: 700 .88rem 'Noto Sans KR', sans-serif; cursor: pointer;
+    font: 700 .88rem 'Emilys Candy', 'Gowun Dodum', sans-serif; cursor: pointer;
   }
   .shop-buy-btn:disabled { background: rgba(140,120,160,.35); color: rgba(255,255,255,.6); cursor: not-allowed; }
   .shop-owned-badge {
     margin-top: 4px; padding: 5px 14px; border-radius: 999px;
     background: linear-gradient(135deg, #ffd76a, #ffb830);
-    font: 700 .85rem 'Noto Sans KR', sans-serif; color: #5a3500;
+    font: 700 .85rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: #5a3500;
   }
 
   @media (max-width: 980px) {
     .fairy-strip { grid-template-columns: repeat(4, minmax(116px, 1fr)); }
     .main-layout, .showcase { grid-template-columns: 1fr; }
-    .fairy-stage { min-height: 390px; }
+    .fairy-stage { min-height: 460px; }
     .weekly-complete-panel { position: relative; inset: auto; margin: 12px 0 78px auto; }
     .room-sidebar { max-width: 260px; }
   }
@@ -465,7 +469,7 @@
     margin-bottom: 14px;
   }
   .cal-header span {
-    font: 900 1.25rem 'Noto Sans KR', sans-serif; color: #fff7cf;
+    font: 900 1.25rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: #fff7cf;
     text-shadow: 0 2px 0 #c87800, 0 6px 16px rgba(120,65,0,.3);
     min-width: 120px; text-align: center;
   }
@@ -481,7 +485,7 @@
     margin-bottom: 6px;
   }
   .cal-day-headers span {
-    text-align: center; font: 700 .82rem 'Noto Sans KR', sans-serif;
+    text-align: center; font: 700 .82rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     color: rgba(255,255,255,.65); padding: 4px 0;
   }
   .cal-grid {
@@ -490,7 +494,7 @@
   .cal-day {
     aspect-ratio: 1; border-radius: 50%; display: flex; flex-direction: column;
     align-items: center; justify-content: center; position: relative;
-    font: 700 .82rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.82);
+    font: 700 .82rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.82);
     cursor: default; transition: transform .12s;
   }
   .cal-day.other-month { opacity: .28; }
@@ -502,7 +506,7 @@
   .cal-day.status-done {
     background: linear-gradient(135deg, #f7a916, #ff8c00);
     color: white;
-    box-shadow: 0 3px 10px rgba(157,110,255,.45);
+    box-shadow: 0 3px 10px rgba(247,169,22,.45);
   }
   .cal-day.status-done .cal-date-num { font-size: .72rem; }
   .cal-day.week-clear-row {
@@ -521,7 +525,7 @@
     display: flex; gap: 16px; justify-content: center; margin-top: 14px; flex-wrap: wrap;
   }
   .cll {
-    font: 700 .8rem 'Noto Sans KR', sans-serif; padding: 4px 12px; border-radius: 999px;
+    font: 700 .8rem 'Emilys Candy', 'Gowun Dodum', sans-serif; padding: 4px 12px; border-radius: 999px;
     border: 1.5px solid rgba(255,255,255,.4);
   }
   .cll.done { background: linear-gradient(135deg, #f7a916, #ff8c00); color: white; }
@@ -540,7 +544,7 @@
     border-radius: 999px;
     background: var(--violet);
     color: #fff;
-    font: 900 .82rem 'Noto Sans KR', sans-serif;
+    font: 900 .82rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     letter-spacing: .05em;
     text-decoration: none;
     border: 2px solid rgba(255,255,255,.65);
@@ -564,7 +568,7 @@
 <div class="toast" id="toast">Magic item unlocked!</div>
 
 <div class="page-layout">
-  <!-- ── LEFT 30%: Lily's Room Sidebar ── -->
+  <!-- ── LEFT 40%: Lily's Room Sidebar ── -->
   <aside class="room-sidebar" id="roomSidebar">
     <div class="room-header">
       <span class="room-title-text">✨ Joy's Room</span>
@@ -572,11 +576,7 @@
     </div>
     <div class="room-body">
       <nav class="room-nav">
-        <button class="room-nav-btn active" title="아바타">
-          <span class="rnb-icon">👗</span>
-          <span class="rnb-label">아바타</span>
-        </button>
-        <button class="room-nav-btn" title="가구" onclick="selectShopCat('furniture');scrollToShop()">
+        <button class="room-nav-btn active" title="가구" onclick="selectShopCat('furniture');scrollToShop()">
           <span class="rnb-icon">🛋️</span>
           <span class="rnb-label">가구</span>
         </button>
@@ -584,9 +584,21 @@
           <span class="rnb-icon">🐾</span>
           <span class="rnb-label">펫</span>
         </button>
-        <button class="room-nav-btn" title="장식" onclick="selectShopCat('deco');scrollToShop()">
-          <span class="rnb-icon">🌸</span>
+        <button class="room-nav-btn" title="옷" onclick="selectShopCat('av_outfit');scrollToShop()">
+          <span class="rnb-icon">👗</span>
+          <span class="rnb-label">옷</span>
+        </button>
+        <button class="room-nav-btn" title="헤어" onclick="selectShopCat('av_hair');scrollToShop()">
+          <span class="rnb-icon">💇</span>
+          <span class="rnb-label">헤어</span>
+        </button>
+        <button class="room-nav-btn" title="장식" onclick="selectShopCat('av_acc');scrollToShop()">
+          <span class="rnb-icon">✨</span>
           <span class="rnb-label">장식</span>
+        </button>
+        <button class="room-nav-btn" title="신발" onclick="selectShopCat('av_shoes');scrollToShop()">
+          <span class="rnb-icon">👟</span>
+          <span class="rnb-label">신발</span>
         </button>
       </nav>
       <div class="room-canvas" id="roomCanvas">
@@ -631,7 +643,7 @@
     </div>
   </aside>
 
-  <!-- ── RIGHT 70%: Main content ── -->
+  <!-- ── RIGHT 60%: Main content ── -->
   <div class="main-scroll" id="mainScroll">
   <div class="container">
   <header>
@@ -802,121 +814,82 @@ const LILY_WEEK_ITEMS = [
 ];
 
 /* ── SHOP DATA ── */
+const AVATAR_CATS = ['av_outfit', 'av_hair', 'av_acc', 'av_shoes'];
 const SHOP_CATS = [
   { key:'theme',     label:'🏠 방 테마' },
   { key:'furniture', label:'🛋️ 가구' },
   { key:'pet',       label:'🐾 반려동물' },
-  { key:'deco',      label:'🌸 장식품' },
   { key:'food',      label:'🍰 음식' },
-  { key:'avatar',    label:'👗 아바타' },
+  { key:'av_outfit', label:'👗 옷' },
+  { key:'av_hair',   label:'💇 헤어' },
+  { key:'av_acc',    label:'✨ 장식' },
+  { key:'av_shoes',  label:'👟 신발' },
 ];
 const SHOP_ITEMS = [
   // ── 방 테마
-  { id:'theme_spring',    emoji:'🌸', name:'봄 정원',      cat:'theme',     price:300, desc:'꽃이 만발한 봄날의 방' },
-  { id:'theme_ocean',     emoji:'🌊', name:'바닷속 왕국',  cat:'theme',     price:400, desc:'아름다운 산호초와 물고기' },
-  { id:'theme_cloud',     emoji:'☁️', name:'구름 나라',    cat:'theme',     price:400, desc:'폭신폭신 구름 위의 방' },
-  { id:'theme_forest',    emoji:'🍄', name:'마법 숲',      cat:'theme',     price:500, desc:'반짝이는 마법의 숲속 방' },
-  { id:'theme_starnight', emoji:'🌙', name:'별빛 밤하늘',  cat:'theme',     price:600, desc:'쏟아지는 별들의 밤방' },
-  { id:'theme_candy',     emoji:'🍭', name:'캔디 나라',    cat:'theme',     price:500, desc:'달콤한 사탕으로 가득한 방' },
+  { id:'theme_spring',    emoji:'🌸', name:'봄 정원',      cat:'theme',     price:750, desc:'꽃이 만발한 봄날의 방' },
+  { id:'theme_ocean',     emoji:'🌊', name:'바닷속 왕국',  cat:'theme',     price:1000, desc:'아름다운 산호초와 물고기' },
+  { id:'theme_cloud',     emoji:'☁️', name:'구름 나라',    cat:'theme',     price:1000, desc:'폭신폭신 구름 위의 방' },
+  { id:'theme_forest',    emoji:'🍄', name:'마법 숲',      cat:'theme',     price:1250, desc:'반짝이는 마법의 숲속 방' },
+  { id:'theme_starnight', emoji:'🌙', name:'별빛 밤하늘',  cat:'theme',     price:1500, desc:'쏟아지는 별들의 밤방' },
+  { id:'theme_candy',     emoji:'🍭', name:'캔디 나라',    cat:'theme',     price:1250, desc:'달콤한 사탕으로 가득한 방' },
   // ── 가구
-  { id:'furn_bed',        emoji:'🛏️', name:'핑크 침대',    cat:'furniture', price:150, desc:'푹신한 핑크 공주 침대' },
-  { id:'furn_bookshelf',  emoji:'📚', name:'마법 책장',    cat:'furniture', price:120, desc:'마법 책들이 가득한 책장' },
-  { id:'furn_chair',      emoji:'🪑', name:'보라 의자',    cat:'furniture', price:80,  desc:'귀여운 보라색 의자' },
-  { id:'furn_sofa',       emoji:'🛋️', name:'무지개 소파',  cat:'furniture', price:200, desc:'색색의 쿠션이 있는 소파' },
-  { id:'furn_mirror',     emoji:'🪞', name:'마법 거울',    cat:'furniture', price:180, desc:'진실을 말해주는 거울' },
-  { id:'furn_desk',       emoji:'🖥️', name:'별빛 책상',    cat:'furniture', price:160, desc:'반짝이는 별 모양 책상' },
-  { id:'furn_wardrobe',   emoji:'🎀', name:'리본 옷장',    cat:'furniture', price:200, desc:'예쁜 리본이 달린 옷장' },
-  { id:'furn_lamp',       emoji:'🪔', name:'요정 램프',    cat:'furniture', price:100, desc:'따뜻한 빛의 마법 램프' },
-  { id:'furn_rug',        emoji:'🌺', name:'꽃무늬 러그',  cat:'furniture', price:130, desc:'화사한 꽃무늬 바닥 깔개' },
-  { id:'furn_piano',      emoji:'🎹', name:'미니 피아노',  cat:'furniture', price:280, desc:'요정 노래를 연주하는 피아노' },
-  { id:'furn_laptop',     emoji:'💻', name:'미니 노트북',  cat:'furniture', price:140, desc:'책상 위에 어울리는 아담한 노트북' },
+  { id:'furn_canopybed',   emoji:'🛏️', name:'캐노피 침대',   cat:'furniture', price:1000, desc:'커튼이 드리운 공주풍 캐노피 침대' },
+  { id:'furn_clock',       emoji:'🕐', name:'무지개 벽시계', cat:'furniture', price:380, desc:'반짝이는 무지개 무늬 벽시계' },
+  { id:'furn_pastelpiano', emoji:'🎹', name:'파스텔 피아노', cat:'furniture', price:880, desc:'무지개 빛이 어른거리는 업라이트 피아노' },
+  { id:'furn_teatable',    emoji:'🍵', name:'티 테이블 세트', cat:'furniture', price:630, desc:'의자 두 개와 다과가 놓인 티 테이블' },
+  { id:'furn_flowerstand', emoji:'🌷', name:'장미 스탠드',   cat:'furniture', price:300, desc:'별이 매달린 장미 조명 스탠드' },
   // ── 반려동물
-  { id:'pet_cat',         emoji:'🐱', name:'마법 고양이',  cat:'pet',       price:250, desc:'마법을 쓸 줄 아는 고양이' },
-  { id:'pet_rabbit',      emoji:'🐰', name:'달빛 토끼',    cat:'pet',       price:200, desc:'달에서 온 귀여운 토끼' },
-  { id:'pet_hamster',     emoji:'🐹', name:'햄스터',       cat:'pet',       price:150, desc:'볼 터지도록 먹는 햄스터' },
-  { id:'pet_butterfly',   emoji:'🦋', name:'나비 친구',    cat:'pet',       price:220, desc:'반짝이는 날개의 나비' },
-  { id:'pet_fox',         emoji:'🦊', name:'마법 여우',    cat:'pet',       price:350, desc:'꼬리가 아홉 개인 여우' },
-  { id:'pet_bird',        emoji:'🐦', name:'파랑새',       cat:'pet',       price:180, desc:'행복을 가져다주는 파랑새' },
-  { id:'pet_unicorn',     emoji:'🦄', name:'미니 유니콘',  cat:'pet',       price:500, desc:'전설의 미니 유니콘' },
-  { id:'pet_frog',        emoji:'🐸', name:'개구리 왕자',  cat:'pet',       price:180, desc:'왕자님이 변한 개구리' },
-  { id:'pet_dragon',      emoji:'🐲', name:'미니 드래곤',  cat:'pet',       price:450, desc:'불을 뿜는 아기 드래곤' },
-  { id:'pet_penguin',     emoji:'🐧', name:'펭귄 친구',    cat:'pet',       price:220, desc:'춤추는 귀여운 펭귄' },
+  { id:'pet_cat',         emoji:'🐱', name:'마법 고양이',  cat:'pet',       price:630, desc:'마법을 쓸 줄 아는 고양이' },
+  { id:'pet_rabbit',      emoji:'🐰', name:'달빛 토끼',    cat:'pet',       price:500, desc:'달에서 온 귀여운 토끼' },
+  { id:'pet_hamster',     emoji:'🐹', name:'햄스터',       cat:'pet',       price:380, desc:'볼 터지도록 먹는 햄스터' },
+  { id:'pet_butterfly',   emoji:'🦋', name:'나비 친구',    cat:'pet',       price:550, desc:'반짝이는 날개의 나비' },
+  { id:'pet_fox',         emoji:'🦊', name:'마법 여우',    cat:'pet',       price:880, desc:'꼬리가 아홉 개인 여우' },
+  { id:'pet_unicorn',     emoji:'🦄', name:'미니 유니콘',  cat:'pet',       price:1250, desc:'전설의 미니 유니콘' },
+  { id:'pet_frog',        emoji:'🐸', name:'개구리 왕자',  cat:'pet',       price:450, desc:'왕자님이 변한 개구리' },
+  { id:'pet_dragon',      emoji:'🐲', name:'미니 드래곤',  cat:'pet',       price:1130, desc:'불을 뿜는 아기 드래곤' },
+  { id:'pet_penguin',     emoji:'🐧', name:'펭귄 친구',    cat:'pet',       price:550, desc:'춤추는 귀여운 펭귄' },
   // ── 장식품
-  { id:'deco_blossom',    emoji:'🌸', name:'벚꽃 가랜드',  cat:'deco',      price:80,  desc:'방을 화사하게 만드는 가랜드' },
-  { id:'deco_mobile',     emoji:'⭐', name:'별빛 모빌',    cat:'deco',      price:100, desc:'천장에서 빙글빙글 도는 모빌' },
-  { id:'deco_candle',     emoji:'🕯️', name:'요정 촛불',    cat:'deco',      price:70,  desc:'따뜻한 요정의 빛' },
-  { id:'deco_wand',       emoji:'🪄', name:'미니 마법봉',  cat:'deco',      price:90,  desc:'작지만 강력한 마법봉' },
-  { id:'deco_painting',   emoji:'🖼️', name:'요정 그림',    cat:'deco',      price:120, desc:'요정 화가의 특별 그림' },
-  { id:'deco_tent',       emoji:'⛺', name:'미니 텐트',    cat:'deco',      price:150, desc:'방 안에 캠핑 느낌 텐트' },
-  { id:'deco_rainbow',    emoji:'🌈', name:'무지개 아치',  cat:'deco',      price:130, desc:'방에 걸린 작은 무지개' },
-  { id:'deco_vase',       emoji:'💐', name:'꽃다발',       cat:'deco',      price:80,  desc:'예쁜 꽃들로 만든 꽃다발' },
-  { id:'deco_bear',       emoji:'🧸', name:'테디베어',     cat:'deco',      price:90,  desc:'포근한 갈색 테디베어' },
-  { id:'deco_balloon',    emoji:'🎈', name:'별 풍선',      cat:'deco',      price:60,  desc:'두둥실 별 모양 풍선' },
-  { id:'deco_crystal',    emoji:'💎', name:'수정 장식',    cat:'deco',      price:160, desc:'빛을 반짝이게 만드는 수정' },
-  { id:'deco_clock',      emoji:'⏰', name:'꽃 시계',      cat:'deco',      price:110, desc:'꽃 모양 귀여운 벽시계' },
   // ── 음식
-  { id:'food_cake',       emoji:'🎂', name:'생일 케이크',  cat:'food',      price:100, desc:'언제나 특별한 생일 케이크' },
-  { id:'food_cupcake',    emoji:'🧁', name:'컵케이크 세트',cat:'food',      price:80,  desc:'알록달록 컵케이크 5개' },
-  { id:'food_tea',        emoji:'🫖', name:'마법 티세트',  cat:'food',      price:120, desc:'마법의 꽃잎으로 우린 차' },
-  { id:'food_candy',      emoji:'🍬', name:'사탕 바구니',  cat:'food',      price:60,  desc:'달콤한 사탕이 가득' },
-  { id:'food_parfait',    emoji:'🍓', name:'딸기 파르페',  cat:'food',      price:90,  desc:'딸기가 한가득 파르페' },
-  { id:'food_donut',      emoji:'🍩', name:'도넛 탑',      cat:'food',      price:70,  desc:'탑처럼 쌓인 알록달록 도넛' },
-  { id:'food_macaron',    emoji:'🍡', name:'마카롱 세트',  cat:'food',      price:85,  desc:'프랑스식 알록달록 마카롱' },
-  { id:'food_icecream',   emoji:'🍦', name:'요정 아이스크림',cat:'food',    price:75,  desc:'무지개 맛 요정 아이스크림' },
-  { id:'food_lollipop',   emoji:'🍭', name:'무지개 막대사탕',cat:'food',    price:65,  desc:'빙글빙글 무지개 색 막대사탕' },
-  { id:'food_waffle',     emoji:'🧇', name:'하트 와플',      cat:'food',    price:80,  desc:'버터 듬뿍 하트 모양 와플' },
-  { id:'food_choco',      emoji:'🍫', name:'마법 초콜릿',    cat:'food',    price:70,  desc:'먹으면 행복해지는 마법 초콜릿' },
-  { id:'food_cookie',     emoji:'🍪', name:'별 모양 쿠키',   cat:'food',    price:55,  desc:'반짝이 설탕을 뿌린 별 쿠키' },
-  { id:'food_pudding',    emoji:'🍮', name:'요정 푸딩',      cat:'food',    price:75,  desc:'촉촉하고 달달한 요정 캐러멜 푸딩' },
-  { id:'food_pie',        emoji:'🥧', name:'딸기 파이',      cat:'food',    price:90,  desc:'딸기 듬뿍 바삭한 파이' },
-  { id:'food_bingsu',     emoji:'🍧', name:'요정 빙수',      cat:'food',    price:85,  desc:'알록달록 토핑이 가득한 빙수' },
-  { id:'food_pancake',    emoji:'🥞', name:'팬케이크 타워',  cat:'food',    price:95,  desc:'꿀 흘러내리는 팬케이크 10단 타워' },
-  { id:'food_juice',      emoji:'🧃', name:'무지개 주스',    cat:'food',    price:60,  desc:'7가지 색이 층층이 쌓인 주스' },
-  { id:'food_popcorn',    emoji:'🍿', name:'마법 팝콘',      cat:'food',    price:65,  desc:'먹을수록 새로운 맛이 나는 팝콘' },
+  { id:'food_cake',       emoji:'🎂', name:'생일 케이크',  cat:'food',      price:250, desc:'언제나 특별한 생일 케이크' },
+  { id:'food_cupcake',    emoji:'🧁', name:'컵케이크 세트',cat:'food',      price:200,  desc:'알록달록 컵케이크 5개' },
+  { id:'food_parfait',    emoji:'🍓', name:'딸기 파르페',  cat:'food',      price:230,  desc:'딸기가 한가득 파르페' },
+  { id:'food_macaron',    emoji:'🍡', name:'마카롱 세트',  cat:'food',      price:210,  desc:'프랑스식 알록달록 마카롱' },
+  { id:'food_icecream',   emoji:'🍦', name:'요정 아이스크림',cat:'food',    price:190,  desc:'무지개 맛 요정 아이스크림' },
   // ── 장식품 추가 15개
-  { id:'deco_crown_d',   emoji:'👑', name:'왕관 장식',     cat:'deco', price:150, desc:'반짝이는 미니 왕관' },
-  { id:'deco_shell',     emoji:'🐚', name:'조개 장식',     cat:'deco', price:70,  desc:'바다의 소리가 들리는 조개' },
-  { id:'deco_mushroom',  emoji:'🍄', name:'버섯 집',       cat:'deco', price:100, desc:'요정이 사는 알록달록 버섯' },
-  { id:'deco_clover',    emoji:'🍀', name:'네잎클로버',    cat:'deco', price:65,  desc:'행운을 가져다주는 클로버' },
-  { id:'deco_gem2',      emoji:'💜', name:'보라 보석',     cat:'deco', price:160, desc:'신비로운 빛을 내는 보석' },
-  { id:'deco_feather',   emoji:'🪶', name:'마법 깃털',     cat:'deco', price:95,  desc:'무지개 빛 요정의 깃털' },
-  { id:'deco_hourglass', emoji:'⏳', name:'모래시계',      cat:'deco', price:110, desc:'마법 가루가 담긴 모래시계' },
-  { id:'deco_telescope', emoji:'🔭', name:'미니 망원경',   cat:'deco', price:130, desc:'별을 관찰하는 망원경' },
-  { id:'deco_music_box', emoji:'🎵', name:'오르골',        cat:'deco', price:145, desc:'아름다운 멜로디의 오르골' },
-  { id:'deco_butterfly2',emoji:'🦋', name:'나비 모빌',     cat:'deco', price:85,  desc:'날갯짓하는 나비 모빌' },
-  { id:'deco_sunflower', emoji:'🌻', name:'해바라기',      cat:'deco', price:75,  desc:'태양을 닮은 해바라기' },
-  { id:'deco_pinwheel',  emoji:'🌀', name:'바람개비',      cat:'deco', price:80,  desc:'빙글빙글 도는 바람개비' },
-  { id:'deco_map',       emoji:'🗺️', name:'보물 지도',     cat:'deco', price:120, desc:'숨겨진 보물로 가는 지도' },
-  { id:'deco_potion',    emoji:'🧪', name:'마법 물약',     cat:'deco', price:140, desc:'색이 변하는 신기한 물약' },
   // ── 아바타 꾸미기
-  { id:'av_hair_bow',    emoji:'🎀', name:'핑크 리본 헤어',  cat:'avatar', price:120, desc:'큰 핑크 리본이 달린 헤어' },
-  { id:'av_hair_pink',   emoji:'💗', name:'분홍 트윈테일',   cat:'avatar', price:150, desc:'양쪽으로 묶은 분홍 트윈테일' },
-  { id:'av_hair_star',   emoji:'⭐', name:'별 핀 헤어',      cat:'avatar', price:90,  desc:'반짝이는 별 모양 머리핀' },
-  { id:'av_hair_flower', emoji:'🌸', name:'꽃 화환 헤어',    cat:'avatar', price:140, desc:'꽃으로 장식한 화환 헤어' },
-  { id:'av_outfit_princess', emoji:'👸', name:'프린세스 드레스', cat:'avatar', price:200, desc:'반짝이는 공주 드레스' },
-  { id:'av_outfit_rainbow',  emoji:'🌈', name:'무지개 드레스',   cat:'avatar', price:220, desc:'무지개색 줄무늬 드레스' },
-  { id:'av_outfit_galaxy',   emoji:'🌌', name:'갤럭시 드레스',   cat:'avatar', price:280, desc:'밤하늘 별빛 드레스' },
-  { id:'av_outfit_pink',     emoji:'🌸', name:'벚꽃 드레스',     cat:'avatar', price:200, desc:'벚꽃이 흩날리는 드레스' },
-  { id:'av_acc_tiara',    emoji:'👑', name:'골드 티아라',    cat:'avatar', price:180, desc:'황금빛 빛나는 티아라' },
-  { id:'av_acc_necklace', emoji:'💫', name:'별 목걸이',      cat:'avatar', price:100, desc:'반짝이는 별 모양 목걸이' },
-  { id:'av_acc_glasses',  emoji:'👓', name:'동그란 안경',    cat:'avatar', price:90,  desc:'귀여운 동그란 안경' },
-  { id:'av_acc_ribbon',   emoji:'💝', name:'리본 목걸이',    cat:'avatar', price:110, desc:'예쁜 리본 목걸이' },
-  { id:'av_acc_earrings', emoji:'✨', name:'별 귀걸이',      cat:'avatar', price:80,  desc:'반짝이는 별 귀걸이' },
+  { id:'av_hair_bow',    emoji:'🎀', name:'핑크 리본 헤어',  cat:'av_hair', price:300, desc:'큰 핑크 리본이 달린 헤어' },
+  { id:'av_hair_pink',   emoji:'💗', name:'분홍 트윈테일',   cat:'av_hair', price:380, desc:'양쪽으로 묶은 분홍 트윈테일' },
+  { id:'av_hair_star',   emoji:'⭐', name:'별 핀 헤어',      cat:'av_hair', price:230,  desc:'반짝이는 별 모양 머리핀' },
+  { id:'av_hair_flower', emoji:'🌸', name:'꽃 화환 헤어',    cat:'av_hair', price:350, desc:'꽃으로 장식한 화환 헤어' },
+  { id:'av_outfit_princess', emoji:'👸', name:'프린세스 드레스', cat:'av_outfit', price:500, desc:'반짝이는 공주 드레스' },
+  { id:'av_outfit_rainbow',  emoji:'🌈', name:'무지개 드레스',   cat:'av_outfit', price:550, desc:'무지개색 줄무늬 드레스' },
+  { id:'av_outfit_galaxy',   emoji:'🌌', name:'갤럭시 드레스',   cat:'av_outfit', price:700, desc:'밤하늘 별빛 드레스' },
+  { id:'av_acc_tiara',    emoji:'👑', name:'골드 티아라',    cat:'av_acc', price:450, desc:'황금빛 빛나는 티아라' },
+  { id:'av_acc_necklace', emoji:'💫', name:'별 목걸이',      cat:'av_acc', price:250, desc:'반짝이는 별 모양 목걸이' },
+  { id:'av_acc_glasses',  emoji:'👓', name:'동그란 안경',    cat:'av_acc', price:230,  desc:'귀여운 동그란 안경' },
+  { id:'av_acc_ribbon',   emoji:'💝', name:'리본 목걸이',    cat:'av_acc', price:280, desc:'예쁜 리본 목걸이' },
+  { id:'av_acc_shellpin', emoji:'🐚', name:'조개 핀',        cat:'av_acc', price:230,  desc:'귀여운 조개 모양 머리핀' },
+  { id:'av_acc_witchhat', emoji:'🎩', name:'마녀 모자',      cat:'av_acc', price:330,  desc:'귀여운 마녀 모자' },
   // ── 아바타 옷 추가 5개
-  { id:'av_outfit_angel',   emoji:'🤍', name:'천사 드레스',   cat:'avatar', price:240, desc:'새하얀 천사 날개 드레스' },
-  { id:'av_outfit_mermaid', emoji:'🧜', name:'인어 드레스',   cat:'avatar', price:260, desc:'비늘 무늬 반짝이 인어 드레스' },
-  { id:'av_outfit_witch',   emoji:'🧙', name:'마녀 드레스',   cat:'avatar', price:220, desc:'별빛 반짝이는 마녀 드레스' },
-  { id:'av_outfit_star',    emoji:'🌟', name:'별빛 드레스',   cat:'avatar', price:230, desc:'온몸에 별이 반짝이는 드레스' },
-  { id:'av_outfit_rose',    emoji:'🌹', name:'장미 드레스',   cat:'avatar', price:210, desc:'붉은 장미 꽃잎 드레스' },
+  { id:'av_outfit_angel',   emoji:'🤍', name:'천사 드레스',   cat:'av_outfit', price:600, desc:'새하얀 천사 날개 드레스' },
+  { id:'av_outfit_witch',   emoji:'🧙', name:'마녀 드레스',   cat:'av_outfit', price:550, desc:'별빛 반짝이는 마녀 드레스' },
+  { id:'av_outfit_star',    emoji:'🌟', name:'별빛 드레스',   cat:'av_outfit', price:580, desc:'온몸에 별이 반짝이는 드레스' },
+  { id:'av_outfit_rose',    emoji:'🌹', name:'장미 드레스',   cat:'av_outfit', price:530, desc:'붉은 장미 꽃잎 드레스' },
+  { id:'av_outfit_ballet',  emoji:'🩰', name:'화려한 발레복', cat:'av_outfit', price:650, desc:'반짝이는 리본과 튜튜가 달린 발레복' },
+  { id:'av_outfit_sporty',  emoji:'🎽', name:'화려한 운동복', cat:'av_outfit', price:600, desc:'알록달록 스트라이프의 활동적인 운동복' },
+  { id:'av_outfit_school1', emoji:'🎒', name:'대광초 교복 춘추복', cat:'av_outfit', price:550, desc:'단정한 블레이저 교복 세트' },
+  { id:'av_outfit_school2', emoji:'🎒', name:'대광초 생활복',     cat:'av_outfit', price:500, desc:'캐주얼한 카라티 교복 세트' },
   // ── 신발 & 가방 10개
-  { id:'av_shoes_glass',    emoji:'👠', name:'유리 구두',      cat:'avatar', price:150, desc:'신데렐라의 유리 구두' },
-  { id:'av_shoes_star',     emoji:'⭐', name:'별빛 부츠',      cat:'avatar', price:130, desc:'반짝이는 별빛 부츠' },
-  { id:'av_shoes_rainbow',  emoji:'🌈', name:'무지개 스니커즈',cat:'avatar', price:120, desc:'무지개 색 귀여운 스니커즈' },
-  { id:'av_shoes_flower',   emoji:'🌸', name:'꽃 샌들',        cat:'avatar', price:110, desc:'꽃 장식이 달린 예쁜 샌들' },
-  { id:'av_shoes_moon',     emoji:'🌙', name:'달빛 슬리퍼',   cat:'avatar', price:100, desc:'달빛을 담은 포근한 슬리퍼' },
-  { id:'av_bag_star',       emoji:'⭐', name:'별 미니백',       cat:'avatar', price:140, desc:'노란 손잡이가 달린 별 모양 반짝이 미니백' },
-  { id:'av_bag_heart',      emoji:'💖', name:'하트 크로스백',  cat:'avatar', price:160, desc:'끈으로 어깨에 메는 사랑스러운 하트 크로스백' },
-  { id:'av_bag_flower',     emoji:'🧺', name:'꽃바구니 백',    cat:'avatar', price:120, desc:'꽃이 담긴 예쁜 바구니 백' },
+  { id:'av_shoes_star',     emoji:'⭐', name:'별빛 부츠',      cat:'av_shoes', price:330, desc:'반짝이는 별빛 부츠' },
+  { id:'av_shoes_rainbow',  emoji:'🌈', name:'무지개 스니커즈',cat:'av_shoes', price:300, desc:'무지개 색 귀여운 스니커즈' },
+  { id:'av_shoes_flower',   emoji:'🌸', name:'꽃 샌들',        cat:'av_shoes', price:280, desc:'꽃 장식이 달린 예쁜 샌들' },
+  { id:'av_shoes_rainbow2', emoji:'🌈', name:'무지개 샌들',    cat:'av_shoes', price:300, desc:'상큼한 무지개색 샌들' },
+  { id:'av_shoes_rose',     emoji:'🌹', name:'장미 구두',      cat:'av_shoes', price:380, desc:'붉은 장미 장식 구두' },
+  { id:'av_shoes_star2',    emoji:'⭐', name:'별무늬 부츠',    cat:'av_shoes', price:330, desc:'별이 콕콕 박힌 귀여운 부츠' },
+  { id:'av_shoes_blackmaryjane', emoji:'👞', name:'검정 메리제인', cat:'av_shoes', price:330, desc:'단정한 검정 메리제인 슈즈' },
+  { id:'av_bag_star',       emoji:'⭐', name:'별 미니백',       cat:'av_acc', price:350, desc:'노란 손잡이가 달린 별 모양 반짝이 미니백' },
+  { id:'av_bag_flower',     emoji:'🧺', name:'꽃바구니 백',    cat:'av_acc', price:300, desc:'꽃이 담긴 예쁜 바구니 백' },
 ];
 
 let currentDay = 'Mon';
@@ -1135,7 +1108,82 @@ function buildSceneSVG(unlockedItems) {
   return parts.join('');
 }
 
-/* ── Lily character SVG ── */
+/* ── Lily character (PNG 레이어 버전) ── */
+const AV_ASSETS = 'lily2_assets/';
+const PNG_THEMES = ['theme_spring','theme_ocean','theme_cloud','theme_forest','theme_starnight','theme_candy'];
+const AV_FIT = {
+  av_hair_bow:    { img:'av_hair_bow.png',    scale:0.443, ox:24.80, oy:-31.30 },
+  av_hair_pink:   { img:'av_hair_band.png',   scale:0.803, scaleX:1.185, ox:0.00, oy:-10.30 },
+  av_hair_star:   { img:'av_hair_star.png',   scale:0.694, ox:22.70, oy:-33.20 },
+  av_hair_flower: { img:'av_hair_flower.png', scale:0.735, ox:-0.20, oy:-13.59 },
+  av_outfit_princess: { img:'av_outfit_princess.png', scale:0.953, ox:-0.20, oy:13.10 },
+  av_outfit_rainbow:  { img:'av_outfit_rainbow.png',  scale:1.102, ox:0, oy:1.80 },
+  av_outfit_galaxy:   { img:'av_outfit_galaxy.png',   scale:0.900, scaleX:1.300, ox:0.00, oy:-0.70 },
+  av_outfit_angel:    { img:'av_outfit_angel.png',    scale:1.0485, ox:0, oy:1.22 },
+  av_outfit_witch:    { img:'av_outfit_witch.png',    scale:0.900, scaleX:1.040, ox:0.60, oy:-0.70 },
+  av_outfit_star:     { img:'av_outfit_star.png',     scale:0.900, ox:0, oy:13.10 },
+  av_outfit_rose:      { img:'av_outfit_rose.png',    scale:0.900, scaleX:1.155, ox:0.00, oy:0.20 },
+  av_outfit_ballet:    { img:'av_outfit_ballet.png',  scale:1.112, ox:-0.20, oy:1.20 },
+  av_outfit_sporty:    { img:'av_outfit_sporty.png',  scale:1.137, ox:0.00, oy:2.20 },
+  av_outfit_school1:   { img:'av_outfit_school1.png', scale:1.003, scaleX:1.000, ox:0.00, oy:0.70 },
+  av_outfit_school2:   { img:'av_outfit_school2.png', scale:0.995, scaleX:1.050, ox:0.20, oy:-0.20 },
+  av_acc_tiara:    { img:'av_acc_tiara.png',    scale:0.489, ox:-0.50, oy:-41.30 },
+  av_acc_necklace: { img:'av_acc_necklace.png', scale:0.326, ox:0.00, oy:-1.70 },
+  av_acc_glasses:  { img:'av_acc_glasses.png',  scale:0.560, ox:0.60,  oy:-22.20 },
+  av_acc_ribbon:   { img:'av_acc_ribbon.png',   scale:0.242, ox:0.40,  oy:-0.20 },
+  av_shoes_star:    { img:'av_shoes_star.png',    scale:0.602, ox:-0.10, oy:34.20 },
+  av_shoes_rainbow: { img:'av_shoes_rainbow.png', scale:0.644, ox:-0.10, oy:33.20 },
+  av_shoes_flower:  { img:'av_shoes_ribbon_extra.png', scale:1, ox:0, oy:0 },
+  av_shoes_rainbow2: { img:'av_shoes_rainbow2.png', scale:0.970, scaleX:1.000, ox:0.00, oy:2.20 },
+  av_shoes_rose:     { img:'av_shoes_rose.png',     scale:1.012, scaleX:1.000, ox:0.00, oy:0.20 },
+  av_shoes_star2:    { img:'av_shoes_star2.png',    scale:1.020, scaleX:1.000, ox:0.00, oy:-0.70 },
+  av_shoes_blackmaryjane: { img:'av_shoes_blackmaryjane.png', scale:0.6, ox:0, oy:34 },
+  av_acc_shellpin:   { img:'av_acc_shellpin.png',   scale:1.145, scaleX:1.165, ox:-10.40, oy:3.10 },
+  av_acc_witchhat:   { img:'av_acc_witchhat.png',   scale:0.769, scaleX:1.000, ox:9.60, oy:-21.30 },
+  av_bag_star:   { img:'av_bag_star.png',   scale:0.836, ox:36.70, oy:23.20 },
+  av_bag_flower: { img:'av_bag_flower.png', scale:0.4,   ox:22,    oy:15 },
+};
+const AV_HAIR_IDS = ['av_hair_bow','av_hair_pink','av_hair_star','av_hair_flower'];
+const AV_ACC_IDS  = ['av_acc_tiara','av_acc_necklace','av_acc_glasses','av_acc_ribbon','av_bag_star','av_bag_flower','av_acc_shellpin','av_acc_witchhat'];
+
+function avLayer(id) {
+  const f = AV_FIT[id];
+  if (!f) return '';
+  const sx = f.scaleX !== undefined ? f.scaleX : 1;
+  return `<img src="${AV_ASSETS}${f.img}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;transform-origin:center center;transform:translate(${f.ox}%, ${f.oy}%) scale(${f.scale*sx}, ${f.scale});">`;
+}
+
+function buildLilyAvatarImage(unlockedItems, ownedAvatarItems) {
+  ownedAvatarItems = ownedAvatarItems || [];
+  const av = id => ownedAvatarItems.some(it => it.id === id);
+  const hasId = ids => ownedAvatarItems.find(it => ids.includes(it.id) && AV_FIT[it.id]);
+
+  const activeOutfit = ownedAvatarItems.find(it => it.id.startsWith('av_outfit_') && AV_FIT[it.id]);
+  const activeShoes  = ownedAvatarItems.find(it => it.id.startsWith('av_shoes_') && AV_FIT[it.id]);
+  const activeHair   = hasId(AV_HAIR_IDS);
+
+  let html = `<div style="position:relative;width:100%;aspect-ratio:1536/2752;">`;
+  html += `<img src="${AV_ASSETS}joy_final.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;">`;
+  if (activeShoes)  html += avLayer(activeShoes.id);
+  if (activeOutfit) html += avLayer(activeOutfit.id);
+  if (activeHair)   html += avLayer(activeHair.id);
+  ownedAvatarItems.forEach(it => { if (AV_ACC_IDS.includes(it.id) && AV_FIT[it.id]) html += avLayer(it.id); });
+
+  // 주간 완료 보상 이펙트(그림 없는 것들은 간단한 이모지 배지로 표시)
+  const hasCrown     = unlockedItems.some(it => it[1] === 'Flower Crown');
+  const hasWand      = unlockedItems.some(it => it[1] === 'Sparkle Wand');
+  const hasButterfly = unlockedItems.some(it => it[1] === 'Butterfly Wings');
+  const hasGlow      = unlockedItems.some(it => it[1] === 'Full Magic');
+  if (hasCrown)     html += `<span style="position:absolute;top:2%;left:50%;transform:translateX(-50%);font-size:11%;">🌸</span>`;
+  if (hasWand)      html += `<span style="position:absolute;top:55%;left:12%;font-size:9%;">💫</span>`;
+  if (hasButterfly) html += `<span style="position:absolute;top:28%;right:10%;font-size:9%;">🦋</span>`;
+  if (hasGlow)      html += `<div style="position:absolute;inset:0;box-shadow:inset 0 0 40px 10px rgba(255,215,106,.35);border-radius:50%;pointer-events:none;"></div>`;
+
+  html += `</div>`;
+  return html;
+}
+
+/* ── Lily character SVG (레거시, 미사용) ── */
 function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
   ownedAvatarItems = ownedAvatarItems || [];
   const count = unlockedItems.length;
@@ -1165,8 +1213,7 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
     activeOutfit.id === 'av_outfit_princess' ? `
       <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#f5d0ff" opacity="0.45"/>
       <path d="M155 305 Q200 328 245 305" fill="none" stroke="rgba(255,255,255,.72)" stroke-width="4"/>
-      <path d="M148 338 Q200 364 252 338" fill="none" stroke="rgba(255,255,255,.72)" stroke-width="3"/>
-      <text x="162" y="268" font-size="10">✨</text><text x="222" y="284" font-size="9">✦</text><text x="184" y="348" font-size="10">⭐</text>` :
+      <path d="M148 338 Q200 364 252 338" fill="none" stroke="rgba(255,255,255,.72)" stroke-width="3"/>` :
     activeOutfit.id === 'av_outfit_rainbow' ? `
       <path d="M172 226 Q200 210 228 226 L229 248 Q200 244 171 248 Z" fill="#FF6B6B" opacity="0.82"/>
       <path d="M171 248 Q200 244 229 248 L231 268 Q200 264 169 268 Z" fill="#FF9F43" opacity="0.82"/>
@@ -1188,22 +1235,15 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
     activeOutfit.id === 'av_outfit_angel' ? `
       <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="white" opacity="0.55"/>
       <path d="M80 240 C60 200 90 170 130 200 C110 230 105 268 120 290 Z" fill="rgba(255,255,255,.55)" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/>
-      <path d="M320 240 C340 200 310 170 270 200 C290 230 295 268 280 290 Z" fill="rgba(255,255,255,.55)" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/>
-      <text x="152" y="310" font-size="10">✦</text><text x="236" y="298" font-size="9">✦</text>
-      <text x="180" y="354" font-size="10">✨</text><text x="205" y="366" font-size="9">✦</text>` :
+      <path d="M320 240 C340 200 310 170 270 200 C290 230 295 268 280 290 Z" fill="rgba(255,255,255,.55)" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/>` :
     activeOutfit.id === 'av_outfit_mermaid' ? `
       <path d="M172 280 Q200 268 228 280 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#00c8a0" opacity="0.65"/>
       <path d="M172 226 Q200 210 228 226 L228 280 Q200 268 172 280 Z" fill="#0084b4" opacity="0.55"/>
       <path d="M157 316 Q200 335 243 316" fill="none" stroke="rgba(0,220,180,.8)" stroke-width="3"/>
-      <path d="M150 342 Q200 362 250 342" fill="none" stroke="rgba(0,200,160,.7)" stroke-width="2.5"/>
-      <text x="165" y="268" font-size="9">🐚</text><text x="218" y="272" font-size="8">🐠</text>
-      <text x="178" y="345" font-size="9">🐚</text><text x="210" y="358" font-size="8">💎</text>` :
+      <path d="M150 342 Q200 362 250 342" fill="none" stroke="rgba(0,200,160,.7)" stroke-width="2.5"/>` :
     activeOutfit.id === 'av_outfit_witch' ? `
       <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#1a0040" opacity="0.72"/>
-      <path d="M157 316 Q200 335 243 316" fill="none" stroke="#f7a916" stroke-width="2.5" opacity="0.8"/>
-      <text x="163" y="262" font-size="9">✨</text><text x="220" y="274" font-size="8">⭐</text>
-      <text x="180" y="308" font-size="9">✦</text><text x="212" y="340" font-size="8">✨</text>
-      <text x="170" y="358" font-size="9">🌙</text><text x="205" y="366" font-size="8">⭐</text>` :
+      <path d="M157 316 Q200 335 243 316" fill="none" stroke="#f7a916" stroke-width="2.5" opacity="0.8"/>` :
     activeOutfit.id === 'av_outfit_star' ? `
       <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#4a0080" opacity="0.60"/>
       <circle cx="172" cy="255" r="3" fill="#ffd76a" opacity="0.9"/><circle cx="210" cy="248" r="4" fill="#ffd76a" opacity="0.9"/>
@@ -1213,10 +1253,21 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
       <text x="183" y="278" font-size="10">⭐</text><text x="195" y="322" font-size="11">🌟</text>` :
     activeOutfit.id === 'av_outfit_rose' ? `
       <path d="M172 226 Q200 210 228 226 L238 294 L255 362 Q200 381 145 362 L162 294 Z" fill="#c0003c" opacity="0.55"/>
-      <path d="M157 316 Q200 335 243 316" fill="none" stroke="rgba(255,80,100,.7)" stroke-width="3"/>
-      <text x="162" y="253" font-size="11">🌹</text><text x="208" y="268" font-size="9">🌹</text>
-      <text x="178" y="298" font-size="10">🌹</text><text x="215" y="318" font-size="9">🌹</text>
-      <text x="162" y="344" font-size="10">🌹</text><text x="200" y="358" font-size="9">🌹</text>` : '';
+      <path d="M157 316 Q200 335 243 316" fill="none" stroke="rgba(255,80,100,.7)" stroke-width="3"/>` :
+    activeOutfit.id === 'av_outfit_ballet' ? `
+      <path d="M172 226 Q200 210 228 226 L232 268 Q200 258 168 268 Z" fill="#fff0f8" opacity="0.85" stroke="rgba(255,255,255,.9)" stroke-width="1.5"/>
+      <ellipse cx="200" cy="300" rx="72" ry="20" fill="#ffd6ec" opacity="0.55"/>
+      <ellipse cx="200" cy="316" rx="80" ry="22" fill="#ffe6f5" opacity="0.6"/>
+      <ellipse cx="200" cy="334" rx="86" ry="24" fill="#fff0fa" opacity="0.65"/>
+      <ellipse cx="200" cy="352" rx="90" ry="24" fill="#ffd6ec" opacity="0.55"/>
+      <path d="M157 316 Q200 340 243 316" fill="none" stroke="#ff9dca" stroke-width="3" opacity="0.85"/>` :
+    activeOutfit.id === 'av_outfit_sporty' ? `
+      <path d="M172 226 Q200 210 228 226 L234 288 Q200 280 166 288 Z" fill="#ff2d78" opacity="0.85"/>
+      <path d="M166 288 L238 294 L248 330 Q200 344 152 330 L162 294 Z" fill="#1a1a2e" opacity="0.85"/>
+      <path d="M152 330 Q200 344 248 330 L255 362 Q200 381 145 362 Z" fill="#00d4ff" opacity="0.8"/>
+      <path d="M195 226 L192 362" stroke="#fff4a7" stroke-width="4" opacity="0.85"/>
+      <path d="M205 226 L208 362" stroke="#fff4a7" stroke-width="4" opacity="0.85"/>
+      <path d="M160 236 Q200 224 240 236" fill="none" stroke="#fff" stroke-width="3" opacity="0.7"/>` : '';
 
   // Shoes overlay (replaces default shoes)
   const activeShoes = ownedAvatarItems.find(it => it.id.startsWith('av_shoes_'));
@@ -1244,6 +1295,7 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
 
   // Bag overlay (near right hand)
   const activeBag = ownedAvatarItems.find(it => it.id.startsWith('av_bag_'));
+  // 가방 종류별로 끈 또는 손잡이 중 하나만, 아이콘 위치에 실제로 맞닿게 연결
   const bagAttachment = !activeBag ? '' :
     activeBag.id === 'av_bag_star' ? `
       <path d="M254 306 Q270 286 286 306" stroke="#ffd76a" stroke-width="4" fill="none" stroke-linecap="round"/>` :
@@ -1338,8 +1390,8 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
       <ellipse cx="169" cy="198" rx="9" ry="6" fill="#ff9dca" opacity=".55"/>
       <ellipse cx="231" cy="198" rx="9" ry="6" fill="#ff9dca" opacity=".55"/>
       ${hasGlasses ? `
-        <circle cx="181" cy="176" r="12" fill="rgba(157,110,255,.12)" stroke="#f7a916" stroke-width="2.5"/>
-        <circle cx="219" cy="176" r="12" fill="rgba(157,110,255,.12)" stroke="#f7a916" stroke-width="2.5"/>
+        <circle cx="181" cy="176" r="12" fill="rgba(247,169,22,.12)" stroke="#f7a916" stroke-width="2.5"/>
+        <circle cx="219" cy="176" r="12" fill="rgba(247,169,22,.12)" stroke="#f7a916" stroke-width="2.5"/>
         <path d="M193 176 Q200 179 207 176" stroke="#f7a916" stroke-width="2.5" fill="none"/>
         <path d="M169 175 L153 172" stroke="#f7a916" stroke-width="2.5"/>
         <path d="M231 175 L247 172" stroke="#f7a916" stroke-width="2.5"/>` : ''}
@@ -1348,8 +1400,8 @@ function buildLilyAvatarSVG(unlockedItems, ownedAvatarItems) {
         <text x="190" y="238" font-size="13">💫</text>` : ''}
       ${hasRibbon ? `
         <path d="M175 223 Q200 233 225 223" stroke="#ff9dca" stroke-width="5" fill="none" stroke-linecap="round"/>
-        <path d="M195 228 L190 250 L198 244 Z" fill="#ff7eb3"/>
-        <path d="M205 228 L210 250 L202 244 Z" fill="#ff7eb3"/>
+        <path d="M195 228 L190 250 L198 244 Z" fill="#ff8c00"/>
+        <path d="M205 228 L210 250 L202 244 Z" fill="#ff8c00"/>
         <path d="M188 220 Q196 212 200 220 Q204 212 212 220 Q205 228 200 222 Q195 228 188 220Z" fill="#ff9dca" stroke="#ff8c00" stroke-width="1.5"/>` : ''}
       ${hasEarrings ? `
         <text x="144" y="197" font-size="11">✨</text>
@@ -1427,9 +1479,8 @@ function escapeHtml(s) {
 
 function itemCountFor(day) { return Math.min(taskCounts(day).done, MAX_TASKS); }
 function keyFor(f) { return Object.keys(FAIRIES).find(day => FAIRIES[day] === f); }
-function buildMiniFairy(day, complete = false) {
-  const itemsVisible = complete ? Array.from({length: 10}, (_, i) => i) : [];
-  return buildFairySVG(day, itemsVisible, -1, true);
+function buildMiniFairy(day, itemCount = 0) {
+  return buildFairyImage(day, itemCount);
 }
 
 function hairBack(f) {
@@ -1564,7 +1615,7 @@ function applyTheme(id) {
 
 function getItemZone(item) {
   if (item.cat === 'theme') return 'bg';
-  if (item.cat === 'avatar') return 'avatar';
+  if (AVATAR_CATS.includes(item.cat)) return 'avatar';
   if (item.cat === 'pet') return 'pet';
   if (item.cat === 'furniture' || item.cat === 'food') return 'floor';
   if (item.cat === 'deco') {
@@ -1724,7 +1775,30 @@ function sofaLampSVG() {
   </svg>`;
 }
 
+const PNG_PET_IDS = ['pet_cat','pet_rabbit','pet_hamster','pet_butterfly','pet_fox','pet_unicorn','pet_frog','pet_dragon','pet_penguin'];
+const PNG_FOOD_IDS = ['food_cake','food_cupcake','food_macaron','food_parfait','food_icecream'];
+const PNG_FURNITURE = {
+  furn_canopybed:   { file:'furniture/furniture_bed.png',    w:150 },
+  furn_clock:       { file:'furniture/furniture_clock.png',  w:70 },
+  furn_pastelpiano: { file:'furniture/furniture_piano.png',  w:110 },
+  furn_teatable:    { file:'furniture/furniture_table.png',  w:120 },
+  furn_flowerstand: { file:'furniture/furniture_flower.png', w:60 },
+};
+
 function customItemIcon(id) {
+  if (AV_FIT[id]) {
+    return `<img src="${AV_ASSETS}${AV_FIT[id].img}" style="width:64px;height:auto;max-height:76px;object-fit:contain;">`;
+  }
+  if (PNG_PET_IDS.includes(id)) {
+    return `<img src="${AV_ASSETS}${id}.png" style="width:76px;height:76px;object-fit:contain;">`;
+  }
+  if (PNG_FOOD_IDS.includes(id)) {
+    return `<img src="${AV_ASSETS}${id}.png" style="width:64px;height:64px;object-fit:contain;">`;
+  }
+  if (PNG_FURNITURE[id]) {
+    const f = PNG_FURNITURE[id];
+    return `<img src="${AV_ASSETS}${f.file}" style="width:${f.w}px;height:auto;object-fit:contain;">`;
+  }
   return id === 'furn_sofa' ? sofaLampSVG() :
     id === 'furn_bookshelf' ? bookshelfSVG() :
     id === 'furn_wardrobe' ? wardrobeSVG() :
@@ -1783,14 +1857,21 @@ function renderRoom() {
   const floorItems = ownedItems.filter(it => getItemZone(it) === 'floor');
   const petItems   = ownedItems.filter(it => getItemZone(it) === 'pet');
 
-  const wpEmojis = checkerboardWp(theme.wp);
-  let html = `
-    <div class="rc-wall" style="background:linear-gradient(180deg,${theme.wall},${theme.wall2})"></div>
-    <div class="rc-floor" style="background:linear-gradient(180deg,${theme.floor},${theme.floor2})"></div>
-    <div class="rc-baseboard" style="background:${theme.base}"></div>
-    <div class="rc-wallpaper">${wpEmojis}</div>
-    <div class="rc-glitter">${glitterHtml(theme.glow)}</div>
-  `;
+  let html;
+  if (PNG_THEMES.includes(activeTheme)) {
+    html = `<img src="${AV_ASSETS}${activeTheme}.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">`;
+  } else if (!activeTheme) {
+    html = `<img src="${AV_ASSETS}room_base.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">`;
+  } else {
+    const wpEmojis = checkerboardWp(theme.wp);
+    html = `
+      <div class="rc-wall" style="background:linear-gradient(180deg,${theme.wall},${theme.wall2})"></div>
+      <div class="rc-floor" style="background:linear-gradient(180deg,${theme.floor},${theme.floor2})"></div>
+      <div class="rc-baseboard" style="background:${theme.base}"></div>
+      <div class="rc-wallpaper">${wpEmojis}</div>
+      <div class="rc-glitter">${glitterHtml(theme.glow)}</div>
+    `;
+  }
 
   function itemPosStyle(item, defaultLeft, defaultTop) {
     const saved = itemPositions[item.id];
@@ -1846,7 +1927,7 @@ function renderRoom() {
   const _rawPos = itemPositions['__lily__'] || { x: 28, y: 18 };
   const lilyPos = (_rawPos.x >= 0 && _rawPos.x <= 75 && _rawPos.y >= 0 && _rawPos.y <= 68)
     ? _rawPos : (() => { itemPositions['__lily__'] = { x: 28, y: 18 }; saveData(); return { x: 28, y: 18 }; })();
-  html += `<div class="rc-lily rc-draggable" data-id="__lily__" style="left:${lilyPos.x}%;top:${lilyPos.y}%">${buildLilyAvatarSVG(unlockedItems, avatarItems)}</div>`;
+  html += `<div class="rc-lily rc-draggable" data-id="__lily__" style="left:${lilyPos.x}%;top:${lilyPos.y}%">${buildLilyAvatarImage(unlockedItems, avatarItems)}</div>`;
 
   scene.innerHTML = html;
 
@@ -2064,10 +2145,10 @@ function renderShop() {
         ? `<div class="shop-owned-badge">✓ 적용 중</div>`
         : `<button class="shop-place-btn" onclick="applyTheme('${item.id}')">✚ 적용하기</button>`;
     } else if (!placed) {
-      const placeLabel = item.cat === 'avatar' ? '✚ 착용하기' : '✚ 배치하기';
+      const placeLabel = AVATAR_CATS.includes(item.cat) ? '✚ 착용하기' : '✚ 배치하기';
       action = `<button class="shop-place-btn" onclick="placeItem('${item.id}')">${placeLabel}</button>`;
     } else {
-      if (item.cat === 'avatar') {
+      if (AVATAR_CATS.includes(item.cat)) {
         action = `<button class="shop-place-btn" style="background:rgba(220,80,80,.15);color:#c0392b;border-color:#e88" onclick="removeFromRoom('${item.id}')">✕ 해제하기</button>`;
       } else {
         action = `<div class="shop-owned-badge">✓ 배치 중</div>`;
@@ -2128,10 +2209,17 @@ function renderFairyStrip() {
     return `<button class="mini-card ${day === currentDay ? 'active' : ''} ${isFairyComplete(day) ? 'done' : ''}" style="--accent:${f.accent}; --light:${f.light};" onclick="selectDay('${day}')">
       <div class="mini-card-name">${f.name}</div>
       <div class="mini-card-title">${f.title}</div>
-      <div class="mini-fairy">${buildMiniFairy(day, isFairyComplete(day))}</div>
+      <div class="mini-fairy">${buildMiniFairy(day, itemCountFor(day))}</div>
       <div class="mini-progress"><span>${f.icon}</span><div class="mini-bar"><div class="mini-fill" style="width:${pct}%"></div></div><span>${done}/${MAX_TASKS}</span></div>
     </button>`;
   }).join('');
+}
+
+const FAIRY_DAY_KEY = { Mon:'mon', Tue:'tue', Wed:'wed', Thu:'thu', Fri:'fri', Sat:'sat', Sun:'sun' };
+function buildFairyImage(day, itemCount) {
+  const stage = Math.max(0, Math.min(8, itemCount));
+  const key = FAIRY_DAY_KEY[day] || 'mon';
+  return `<img src="${AV_ASSETS}fairy/fairy_${key}_stage${stage}.png" style="width:100%;height:100%;object-fit:contain;">`;
 }
 
 function renderFairy() {
@@ -2148,7 +2236,7 @@ function renderFairy() {
   document.getElementById('fairyName').textContent = f.name;
   document.getElementById('fairyTitle').textContent = f.title;
   document.getElementById('dayBadge').textContent = `${DAY_KOR[currentDay]} · ${f.dayName}`;
-  document.getElementById('fairyStage').innerHTML = buildFairySVG(currentDay, itemsVisible, newItemIdxForRender) + `<div class="magic-effect">${complete ? weatherEffect(f) : ''}</div>`;
+  document.getElementById('fairyStage').innerHTML = buildFairyImage(currentDay, itemCount) + `<div class="magic-effect">${complete ? weatherEffect(f) : ''}</div>`;
   document.getElementById('itemProgress').textContent = `${itemCount} / ${MAX_TASKS} items collected`;
   document.getElementById('itemGrid').innerHTML = f.items.map((item, idx) => {
     const unlocked = idx < itemCount;
