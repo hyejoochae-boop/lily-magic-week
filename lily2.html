@@ -1166,16 +1166,6 @@ function buildLilyAvatarImage(unlockedItems, ownedAvatarItems) {
   if (activeHair)   html += avLayer(activeHair.id);
   ownedAvatarItems.forEach(it => { if (AV_ACC_IDS.includes(it.id) && AV_FIT[it.id]) html += avLayer(it.id); });
 
-  // 주간 완료 보상 이펙트(그림 없는 것들은 간단한 이모지 배지로 표시)
-  const hasCrown     = unlockedItems.some(it => it[1] === 'Flower Crown');
-  const hasWand      = unlockedItems.some(it => it[1] === 'Sparkle Wand');
-  const hasButterfly = unlockedItems.some(it => it[1] === 'Butterfly Wings');
-  const hasGlow      = unlockedItems.some(it => it[1] === 'Full Magic');
-  if (hasCrown)     html += `<span style="position:absolute;top:2%;left:50%;transform:translateX(-50%);font-size:11%;">🌸</span>`;
-  if (hasWand)      html += `<span style="position:absolute;top:55%;left:12%;font-size:9%;">💫</span>`;
-  if (hasButterfly) html += `<span style="position:absolute;top:28%;right:10%;font-size:9%;">🦋</span>`;
-  if (hasGlow)      html += `<div style="position:absolute;inset:0;box-shadow:inset 0 0 40px 10px rgba(255,215,106,.35);border-radius:50%;pointer-events:none;"></div>`;
-
   html += `</div>`;
   return html;
 }

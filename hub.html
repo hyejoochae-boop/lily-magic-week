@@ -609,15 +609,6 @@ function buildAvatarImage(who, unlockedItems, ownedAvatarItems) {
   if (activeHair)   html += avLayer(activeHair.id);
   ownedAvatarItems.forEach(it => { if (AV_ACC_IDS.includes(it.id) && AV_FIT[it.id]) html += avLayer(it.id); });
 
-  const hasCrown     = unlockedItems.some(it => it[1] === 'Flower Crown');
-  const hasWand      = unlockedItems.some(it => it[1] === 'Sparkle Wand');
-  const hasButterfly = unlockedItems.some(it => it[1] === 'Butterfly Wings');
-  const hasGlow      = unlockedItems.some(it => it[1] === 'Full Magic');
-  if (hasCrown)     html += `<span style="position:absolute;top:2%;left:50%;transform:translateX(-50%);font-size:22px;">🌸</span>`;
-  if (hasWand)      html += `<span style="position:absolute;top:55%;left:12%;font-size:18px;">💫</span>`;
-  if (hasButterfly) html += `<span style="position:absolute;top:28%;right:10%;font-size:18px;">🦋</span>`;
-  if (hasGlow)      html += `<div style="position:absolute;inset:0;box-shadow:inset 0 0 30px 8px rgba(255,215,106,.4);border-radius:50%;pointer-events:none;"></div>`;
-
   html += `</div>`;
   return html;
 }
