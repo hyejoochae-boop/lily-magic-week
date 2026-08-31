@@ -165,7 +165,7 @@
     border-radius: 28px;
     padding: 28px 24px 32px;
     border: 2px solid rgba(255,255,255,.55);
-    background: linear-gradient(160deg, rgba(255,255,255,.18), rgba(200,180,255,.12));
+    background: rgba(255,255,255,.7);
     box-shadow: 0 22px 52px rgba(58,34,102,.22), inset 0 1px 0 rgba(255,255,255,.42);
   }
   .board-header {
@@ -176,13 +176,13 @@
     font-family: 'Emilys Candy', 'Gowun Dodum', sans-serif;
     font-weight: 900;
     font-size: clamp(1.4rem, 4vw, 1.85rem);
-    color: #fff7cf;
-    text-shadow: 0 2px 0 #b858ba, 0 6px 16px rgba(63,36,120,.3);
+    color: var(--ink);
     margin-bottom: 6px;
   }
   .board-header p {
     font: 700 .88rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
-    color: rgba(255,255,255,.65);
+    color: var(--ink);
+    opacity: .7;
   }
 
   /* 메시지 리스트 */
@@ -203,7 +203,8 @@
     text-align: center;
     padding: 28px;
     font: 700 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
-    color: rgba(255,255,255,.42);
+    color: var(--ink);
+    opacity: .5;
   }
   .msg-empty .empty-icon { display: block; font-size: 2.4rem; margin-bottom: 8px; }
 
@@ -305,10 +306,10 @@
   }
   .msg-textarea {
     width: 100%;
-    background: rgba(255,255,255,.12);
-    border: 1.5px solid rgba(255,255,255,.25);
+    background: rgba(255,255,255,.7);
+    border: 1.5px solid rgba(255,255,255,.7);
     border-radius: 12px;
-    color: white;
+    color: var(--ink);
     font: 500 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif;
     padding: 12px 14px;
     resize: none;
@@ -318,8 +319,8 @@
     transition: border-color .15s;
     touch-action: manipulation;
   }
-  .msg-textarea:focus { border-color: rgba(255,255,255,.55); }
-  .msg-textarea::placeholder { color: rgba(255,255,255,.32); }
+  .msg-textarea:focus { border-color: rgba(255,255,255,.95); }
+  .msg-textarea::placeholder { color: rgba(75,42,104,.4); }
   .msg-send-btn {
     margin-top: 12px;
     width: 100%;
