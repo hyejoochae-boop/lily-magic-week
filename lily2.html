@@ -9,9 +9,9 @@
 <meta name="apple-mobile-web-app-title" content="Lily's Week">
 <meta name="theme-color" content="#9d6eff">
 
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Butterfly+Kids&display=swap" rel="stylesheet">
 <style>
-  :root { --sys-font: 'Noto Sans KR', sans-serif; }
+  :root { --sys-font: 'Butterfly Kids', 'Gowun Dodum', sans-serif; }
 </style>
 <style>
   :root {
@@ -26,13 +26,10 @@
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body { min-height: 100%; overscroll-behavior: none; -webkit-touch-callout: none; }
   body {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Butterfly Kids', 'Gowun Dodum', sans-serif;
     color: white;
-    background:
-      radial-gradient(circle at 12% 12%, rgba(255, 237, 152, 0.78) 0 9%, transparent 22%),
-      radial-gradient(circle at 85% 10%, rgba(164, 222, 255, 0.72) 0 11%, transparent 26%),
-      radial-gradient(circle at 72% 78%, rgba(255, 126, 179, 0.54) 0 14%, transparent 32%),
-      linear-gradient(180deg, #8064d9 0%, #b784e8 42%, #ffd5ec 100%);
+    background: url('lily2_assets/skin_right.png') no-repeat center top / cover;
+    background-color: #b784e8;
     overflow-x: hidden;
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
@@ -49,11 +46,11 @@
 
   .container { max-width: 1180px; margin: 0 auto; padding: 22px 16px 92px; position: relative; z-index: 2; }
   header { text-align: center; margin-bottom: 18px; }
-  .title-main { font-family: 'Pacifico', cursive; font-size: clamp(1.9rem, 6vw, 3.6rem); color: #fff7cf; text-shadow: 0 3px 0 #b858ba, 0 9px 26px rgba(63, 36, 120, 0.38), 0 0 28px rgba(255,255,255,0.75); line-height: 1.1; margin-bottom: 10px; }
-  .title-ribbon { display: inline-block; margin: 0 auto 8px; padding: 5px 28px 7px; border-radius: 999px; background: linear-gradient(90deg, rgba(255,126,179,.9), rgba(157,110,255,.92), rgba(114,205,255,.9)); border: 2px solid rgba(255,255,255,.72); box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 8px 24px rgba(83,48,130,.28); font-family: 'Noto Sans KR', sans-serif; font-size: clamp(.85rem, 2.4vw, 1.1rem); font-weight: 700; }
-  .title-sub { font-family: 'Noto Sans KR', sans-serif; font-size: 1.25rem; font-weight: 700; text-shadow: 0 2px 8px rgba(66,35,100,.35); }
+  .title-main { font-family: 'Butterfly Kids', 'Gowun Dodum', cursive; font-weight: 700; font-size: clamp(1.9rem, 6vw, 3.6rem); color: #fff7cf; text-shadow: 0 3px 0 #b858ba, 0 9px 26px rgba(63, 36, 120, 0.38), 0 0 28px rgba(255,255,255,0.75); line-height: 1.1; margin-bottom: 10px; }
+  .title-ribbon { display: inline-block; margin: 0 auto 8px; padding: 5px 28px 7px; border-radius: 999px; background: linear-gradient(90deg, rgba(255,126,179,.9), rgba(157,110,255,.92), rgba(114,205,255,.9)); border: 2px solid rgba(255,255,255,.72); box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 8px 24px rgba(83,48,130,.28); font-family: 'Butterfly Kids', 'Gowun Dodum', sans-serif; font-size: clamp(.85rem, 2.4vw, 1.1rem); font-weight: 700; }
+  .title-sub { font-family: 'Butterfly Kids', 'Gowun Dodum', sans-serif; font-size: 1.25rem; font-weight: 700; text-shadow: 0 2px 8px rgba(66,35,100,.35); }
 
-  /* ── PAGE LAYOUT: 3:7 분할 ── */
+  /* ── PAGE LAYOUT: 4:6 분할 ── */
   .page-layout {
     display: flex; height: 100vh; height: 100dvh;
     overflow: hidden; position: relative; z-index: 1;
@@ -64,7 +61,7 @@
     width: 40%; min-width: 210px; max-width: 460px;
     height: 100%; display: flex; flex-direction: column;
     overflow: hidden; flex-shrink: 0;
-    background: linear-gradient(180deg, rgba(120,70,210,0.88) 0%, rgba(85,40,170,0.94) 100%);
+    background: linear-gradient(180deg, rgba(120,70,210,0.55) 0%, rgba(85,40,170,0.65) 100%), url('lily2_assets/skin_left.png') no-repeat center / cover;
     border-right: 5px solid rgba(255,255,255,.35);
     box-shadow: 4px 0 16px rgba(0,0,0,.35);
     position: relative; z-index: 5;
@@ -74,9 +71,9 @@
     padding: 9px 10px 7px; background: rgba(0,0,0,.32);
     border-bottom: 1px solid rgba(255,255,255,.13); flex-shrink: 0;
   }
-  .room-title-text { font: 700 0.78rem 'Noto Sans KR', sans-serif; color: white; }
+  .room-title-text { font: 700 0.78rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: white; }
   .room-pts-badge {
-    font: 900 0.8rem 'Noto Sans KR', sans-serif; color: #ffd76a;
+    font: 900 0.8rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: #ffd76a;
     background: rgba(0,0,0,.38); padding: 3px 9px; border-radius: 999px;
     border: 1px solid rgba(255,215,106,.35);
   }
@@ -101,7 +98,7 @@
     background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.36);
   }
   .room-nav-btn .rnb-icon { font-size: 1.1rem; line-height: 1; }
-  .room-nav-btn .rnb-label { font: 700 0.46rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.72); text-align: center; }
+  .room-nav-btn .rnb-label { font: 700 0.46rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.72); text-align: center; }
 
   /* ── ROOM CANVAS ── */
   .room-canvas { flex: 1; position: relative; overflow: hidden; }
@@ -166,43 +163,43 @@
 
   /* FX + dialogue */
   .rc-dialogue { position: absolute; bottom: 2%; left: 3%; right: 3%; background: rgba(4,2,12,.82); border: 1.5px solid rgba(255,255,255,.22); border-radius: 10px; padding: 6px 10px; z-index: 15; backdrop-filter: blur(4px); }
-  .rc-dialogue-text { font: 700 0.6rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.9); line-height: 1.5; }
+  .rc-dialogue-text { font: 700 0.6rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.9); line-height: 1.5; }
 
   /* ── 쪽지 보드 ── */
   .room-msg-board { flex-shrink: 0; background: rgba(255,255,255,.13); border-top: 1px solid rgba(255,255,255,.2); padding: 10px 10px 8px; }
   .rmb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-  .rmb-title { font: 700 .68rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.9); }
+  .rmb-title { font: 700 .68rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.9); }
   .rmb-add-btn { background: rgba(255,255,255,.22); border: 1px solid rgba(255,255,255,.4); border-radius: 50%; width: 22px; height: 22px; color: white; font-size: .9rem; cursor: pointer; line-height: 1; display: flex; align-items: center; justify-content: center; }
   .rmb-add-btn:hover { background: rgba(255,255,255,.38); }
-  .rmb-card { background: rgba(255,255,255,.15); border-radius: 8px; padding: 8px 10px; min-height: 68px; font: 500 .68rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.95); line-height: 1.45; word-break: break-all; }
+  .rmb-card { background: rgba(255,255,255,.15); border-radius: 8px; padding: 8px 10px; min-height: 68px; font: 500 .68rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.95); line-height: 1.45; word-break: break-all; }
   .rmb-card.empty { color: rgba(255,255,255,.45); text-align: center; padding-top: 20px; font-size: .63rem; }
-  .rmb-from { font: 700 .6rem 'Noto Sans KR', sans-serif; color: rgba(255,230,150,.9); margin-bottom: 2px; }
+  .rmb-from { font: 700 .6rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: rgba(255,230,150,.9); margin-bottom: 2px; }
   .rmb-nav { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 5px; }
   .rmb-nav-btn { background: rgba(255,255,255,.18); border: none; border-radius: 50%; width: 22px; height: 22px; color: white; font-size: .75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .rmb-nav-btn:hover { background: rgba(255,255,255,.32); }
   .rmb-nav-btn:disabled { opacity: .3; cursor: default; }
-  .rmb-counter { font: 600 .62rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.6); min-width: 28px; text-align: center; }
+  .rmb-counter { font: 600 .62rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.6); min-width: 28px; text-align: center; }
   .rmb-del-btn { background: rgba(255,80,80,.25); border: none; border-radius: 50%; width: 22px; height: 22px; color: rgba(255,180,180,.9); font-size: .7rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .rmb-del-btn:hover { background: rgba(255,80,80,.45); }
   /* 쪽지 입력 오버레이 */
   .rmb-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.6); z-index: 40; display: flex; align-items: flex-end; -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
   .rmb-input-box { background: #2d1060; border-radius: 14px 14px 0 0; padding: 14px 14px 18px; width: 100%; border-top: 2px solid rgba(255,255,255,.25); }
   .rmb-from-row { display: flex; gap: 6px; margin-bottom: 9px; }
-  .rmb-from-btn { flex: 1; padding: 6px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1); color: rgba(255,255,255,.7); font: 700 1rem 'Noto Sans KR', sans-serif; cursor: pointer; touch-action: manipulation; }
+  .rmb-from-btn { flex: 1; padding: 6px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1); color: rgba(255,255,255,.7); font: 700 1rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; cursor: pointer; touch-action: manipulation; }
   .rmb-from-btn.active { background: rgba(255,215,106,.25); border-color: #ffd76a; color: #ffd76a; }
-  .rmb-textarea { width: 100%; background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.25); border-radius: 8px; color: white; font: 500 1rem 'Noto Sans KR', sans-serif; padding: 8px 10px; resize: none; box-sizing: border-box; outline: none; touch-action: manipulation; }
+  .rmb-textarea { width: 100%; background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.25); border-radius: 8px; color: white; font: 500 1rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; padding: 8px 10px; resize: none; box-sizing: border-box; outline: none; touch-action: manipulation; }
   .rmb-textarea::placeholder { color: rgba(255,255,255,.35); }
   .rmb-submit-row { display: flex; gap: 6px; margin-top: 8px; }
-  .rmb-cancel-btn { flex: 1; padding: 8px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,.25); background: rgba(255,255,255,.08); color: rgba(255,255,255,.7); font: 700 1rem 'Noto Sans KR', sans-serif; cursor: pointer; touch-action: manipulation; }
-  .rmb-send-btn { flex: 2; padding: 8px; border-radius: 8px; border: none; background: linear-gradient(90deg, #9d6eff, #ff9dca); color: white; font: 700 1rem 'Noto Sans KR', sans-serif; cursor: pointer; touch-action: manipulation; }
+  .rmb-cancel-btn { flex: 1; padding: 8px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,.25); background: rgba(255,255,255,.08); color: rgba(255,255,255,.7); font: 700 1rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; cursor: pointer; touch-action: manipulation; }
+  .rmb-send-btn { flex: 2; padding: 8px; border-radius: 8px; border: none; background: linear-gradient(90deg, #9d6eff, #ff9dca); color: white; font: 700 1rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; cursor: pointer; touch-action: manipulation; }
   /* 꾹 눌러 삭제 컨텍스트 메뉴 */
   .rc-ctx-menu { position: absolute; z-index: 50; background: rgba(20,5,45,.95); border: 1.5px solid rgba(255,255,255,.25); border-radius: 10px; padding: 6px; display: flex; flex-direction: column; gap: 4px; backdrop-filter: blur(6px); min-width: 100px; }
-  .rc-ctx-btn { background: rgba(255,255,255,.1); border: none; border-radius: 7px; color: white; font: 600 .72rem 'Noto Sans KR', sans-serif; padding: 7px 10px; cursor: pointer; text-align: left; }
+  .rc-ctx-btn { background: rgba(255,255,255,.1); border: none; border-radius: 7px; color: white; font: 600 .72rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; padding: 7px 10px; cursor: pointer; text-align: left; }
   .rc-ctx-btn:hover { background: rgba(255,255,255,.2); }
   .rc-ctx-btn.danger { color: #ff9dca; }
   .rc-ctx-btn.danger:hover { background: rgba(255,80,100,.25); }
   /* 배치하기 버튼 (상점) */
-  .shop-place-btn { background: linear-gradient(90deg,#4caf82,#3d9970); color: white; border: none; border-radius: 8px; padding: 6px 10px; font: 700 .8rem 'Noto Sans KR',sans-serif; cursor: pointer; width: 100%; margin-top: 4px; }
+  .shop-place-btn { background: linear-gradient(90deg,#4caf82,#3d9970); color: white; border: none; border-radius: 8px; padding: 6px 10px; font: 700 .8rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; cursor: pointer; width: 100%; margin-top: 4px; }
   .shop-place-btn:hover { opacity: .85; }
 
   /* Room footer */
@@ -210,7 +207,7 @@
   .room-unlock-slots { display: flex; gap: 3px; flex-wrap: wrap; justify-content: center; margin-bottom: 3px; }
   .rus-slot { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid rgba(255,255,255,.35); background: rgba(255,255,255,.1); font-size: .65rem; }
   .rus-slot.filled { background: rgba(255,255,255,.75); border-color: rgba(255,255,255,.9); box-shadow: 0 0 7px rgba(255,215,106,.5); animation: slotAppear .5s ease; }
-  .room-week-label { text-align: center; font: 700 0.58rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.6); }
+  .room-week-label { text-align: center; font: 700 0.58rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.6); }
 
   /* ── RIGHT 60%: Main scroll ── */
   .main-scroll { flex: 1; height: 100%; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
@@ -220,17 +217,17 @@
 
   @keyframes slotAppear { 0%{transform:scale(0) rotate(-20deg);filter:brightness(2)} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
   @keyframes badgePop { 0%{transform:scale(0) rotate(-10deg)} 60%{transform:scale(1.12)} 100%{transform:scale(1)} }
-  .lily-item-badge { padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,.72); border: 2px solid rgba(255,255,255,.9); font: 700 .72rem 'Noto Sans KR', sans-serif; color: var(--ink); animation: badgePop .4s ease; white-space: nowrap; }
+  .lily-item-badge { padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,.72); border: 2px solid rgba(255,255,255,.9); font: 700 .72rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: var(--ink); animation: badgePop .4s ease; white-space: nowrap; }
 
   /* ─────────────── rest of styles (unchanged) ─────────────── */
   .mode-switch { display: flex; justify-content: center; gap: 10px; margin: 16px 0; flex-wrap: wrap; }
-  .mode-btn { min-height: 44px; border: 2px solid rgba(255,255,255,.68); border-radius: 999px; padding: 10px 18px; background: rgba(255,255,255,.2); color: white; font: 700 1rem 'Noto Sans KR', sans-serif; cursor: pointer; box-shadow: 0 6px 16px rgba(67,35,105,.18); }
+  .mode-btn { min-height: 44px; border: 2px solid rgba(255,255,255,.68); border-radius: 999px; padding: 10px 18px; background: rgba(255,255,255,.2); color: white; font: 700 1rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; cursor: pointer; box-shadow: 0 6px 16px rgba(67,35,105,.18); }
   .mode-btn.active { background: linear-gradient(135deg, #fff4b5, #ff9dca); color: var(--ink); transform: translateY(-1px); }
 
   .weekly-sky { position: relative; overflow: hidden; margin-bottom: 18px; border-radius: 26px; border: 2px solid rgba(255,255,255,.58); background: linear-gradient(180deg, rgba(103,151,232,.78), rgba(255,212,238,.72)), linear-gradient(90deg, #6b4ab9, #9ed9ff); box-shadow: 0 18px 44px rgba(58,34,102,.24), inset 0 1px 0 rgba(255,255,255,.45); padding: 18px; min-height: 190px; }
   .weekly-sky.complete { animation: completedGlow 2.6s ease-in-out infinite; }
-  .weekly-sky h2 { font-family: 'Noto Sans KR', sans-serif; font-weight: 900; font-size: 1.65rem; text-shadow: 0 2px 12px rgba(70,35,120,.45); }
-  .weekly-sub { margin-top: 4px; font-family: 'Noto Sans KR', sans-serif; font-size: 1.12rem; font-weight: 700; }
+  .weekly-sky h2 { font-family: 'Butterfly Kids', 'Gowun Dodum', sans-serif; font-weight: 900; font-size: 1.65rem; text-shadow: 0 2px 12px rgba(70,35,120,.45); }
+  .weekly-sub { margin-top: 4px; font-family: 'Butterfly Kids', 'Gowun Dodum', sans-serif; font-size: 1.12rem; font-weight: 700; }
   .weather-path { position: absolute; left: 24px; right: 24px; bottom: 18px; height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
   .weather-step { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font-size: 1.35rem; background: rgba(255,255,255,.44); border: 2px solid rgba(255,255,255,.65); color: var(--ink); z-index: 2; cursor: pointer; }
   .weather-step.done { background: linear-gradient(135deg, #fff4a7, #fff); box-shadow: 0 0 20px rgba(255,235,130,.9); transform: scale(1.06); }
@@ -238,8 +235,8 @@
   .rainbow-arc { position: absolute; right: -40px; bottom: -74px; width: 420px; height: 210px; border-radius: 420px 420px 0 0; border-top: 18px solid #ff6a9f; border-left: 18px solid transparent; border-right: 18px solid transparent; opacity: .55; }
   .rainbow-arc:before { content: ''; position: absolute; inset: 13px 11px auto; height: 170px; border-radius: 360px 360px 0 0; border-top: 16px solid #ffd76a; }
   .rainbow-arc:after { content: ''; position: absolute; inset: 40px 38px auto; height: 125px; border-radius: 300px 300px 0 0; border-top: 15px solid #7fe0ff; }
-  .weekly-complete-panel { position: absolute; right: 18px; top: 18px; width: min(315px, calc(100% - 36px)); padding: 14px 16px; border-radius: 18px; background: rgba(255,255,255,.74); color: var(--ink); border: 2px solid rgba(255,255,255,.8); text-align: center; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
-  .next-week-btn { display: none; width: 100%; margin: 4px 0 20px; padding: 15px 12px; border: 0; border-radius: 18px; color: #fff; background: linear-gradient(135deg,#9d6eff,#ff7eb3); font: 800 1.08rem 'Noto Sans KR', sans-serif; cursor: pointer; box-shadow: 0 6px 18px rgba(100,60,160,.3); animation: nextWeekPulse 1.8s ease-in-out infinite; }
+  .weekly-complete-panel { position: absolute; right: 18px; top: 18px; width: min(315px, calc(100% - 36px)); padding: 14px 16px; border-radius: 18px; background: rgba(255,255,255,.74); color: var(--ink); border: 2px solid rgba(255,255,255,.8); text-align: center; font-family: 'Butterfly Kids', 'Gowun Dodum', sans-serif; font-weight: 700; }
+  .next-week-btn { display: none; width: 100%; margin: 4px 0 20px; padding: 15px 12px; border: 0; border-radius: 18px; color: #fff; background: linear-gradient(135deg,#9d6eff,#ff7eb3); font: 800 1.08rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; cursor: pointer; box-shadow: 0 6px 18px rgba(100,60,160,.3); animation: nextWeekPulse 1.8s ease-in-out infinite; }
   .next-week-btn:hover { opacity: .92; transform: translateY(-1px); }
   .next-week-btn:active { transform: translateY(0); }
   @keyframes nextWeekPulse { 0%,100% { box-shadow: 0 6px 18px rgba(100,60,160,.3); } 50% { box-shadow: 0 6px 26px rgba(255,126,179,.6); } }
@@ -251,12 +248,12 @@
   .mini-card { border: 2px solid rgba(255,255,255,.62); border-radius: 8px; min-height: 188px; padding: 10px 8px; color: var(--ink); background: linear-gradient(160deg, var(--light), rgba(255,255,255,.86)); box-shadow: 0 10px 24px rgba(70,35,110,.18), inset 0 1px 0 rgba(255,255,255,.8); cursor: pointer; position: relative; overflow: hidden; }
   .mini-card.active { border-color: #fff4a7; box-shadow: 0 0 0 3px rgba(255,215,106,.62), 0 15px 32px rgba(70,35,110,.24); transform: translateY(-2px); }
   .mini-card.done { animation: completedGlow 2.3s ease-in-out infinite; }
-  .mini-card-name { font: 700 1.06rem 'Noto Sans KR', sans-serif; line-height: 1.05; }
-  .mini-card-title { font: 700 .78rem 'Noto Sans KR', sans-serif; opacity: .86; min-height: 28px; }
+  .mini-card-name { font: 700 1.06rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; line-height: 1.05; }
+  .mini-card-title { font: 700 .78rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; opacity: .86; min-height: 28px; }
   .mini-fairy { height: 96px; display: grid; place-items: center; }
   .mini-fairy svg { width: 82px; height: 96px; overflow: visible; }
   .mini-fairy img { width: 100%; height: 100%; object-fit: contain; }
-  .mini-progress { display: flex; align-items: center; gap: 7px; margin-top: 7px; font: 700 .85rem 'Noto Sans KR', sans-serif; }
+  .mini-progress { display: flex; align-items: center; gap: 7px; margin-top: 7px; font: 700 .85rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; }
   .mini-bar { flex: 1; height: 8px; border-radius: 999px; background: rgba(93,55,130,.15); overflow: hidden; border: 1px solid rgba(255,255,255,.7); }
   .mini-fill { height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--accent), #fff4a7); }
 
@@ -266,9 +263,9 @@
   .fairy-card.done { animation: completedGlow 2.4s ease-in-out infinite; }
   @keyframes completedGlow { 0%, 100% { box-shadow: 0 18px 42px rgba(70,35,110,.23), 0 0 0 rgba(255,255,255,0); } 50% { box-shadow: 0 18px 42px rgba(70,35,110,.23), 0 0 34px rgba(255,244,167,.92); } }
   .fairy-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-  .fairy-name { font-family: 'Pacifico', cursive; font-size: clamp(1.35rem, 3.2vw, 2rem); color: var(--accent); text-shadow: 0 2px 0 rgba(255,255,255,.8); line-height: 1.15; }
-  .fairy-title { font: 700 .82rem 'Noto Sans KR', sans-serif; color: var(--ink); opacity: .82; margin-top: 5px; }
-  .day-badge { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,.68); border: 2px solid rgba(255,255,255,.86); font: 700 .95rem 'Noto Sans KR', sans-serif; white-space: nowrap; }
+  .fairy-name { font-family: 'Butterfly Kids', 'Gowun Dodum', cursive; font-size: clamp(1.35rem, 3.2vw, 2rem); color: var(--accent); text-shadow: 0 2px 0 rgba(255,255,255,.8); line-height: 1.15; }
+  .fairy-title { font: 700 .82rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: var(--ink); opacity: .82; margin-top: 5px; }
+  .day-badge { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,.68); border: 2px solid rgba(255,255,255,.86); font: 700 .95rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; white-space: nowrap; }
   .showcase { display: grid; grid-template-columns: minmax(250px, .9fr) minmax(280px, 1.1fr); gap: 14px; align-items: center; }
   .fairy-stage { position: relative; min-height: 438px; display: grid; place-items: center; border-radius: 8px; overflow: hidden; background: radial-gradient(circle at 50% 32%, rgba(255,255,255,.9), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.38), rgba(255,255,255,.08)); }
   .fairy-stage svg { width: min(360px, 100%); height: auto; overflow: visible; filter: drop-shadow(0 16px 22px rgba(93,55,130,.24)); }
@@ -279,8 +276,8 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .collection-card { padding: 16px; background: rgba(255,255,255,.66); }
   .collection-title { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 12px; }
-  .collection-title h2 { font-family: 'Noto Sans KR', sans-serif; font-weight: 900; color: var(--accent); font-size: 1.1rem; white-space: nowrap; }
-  .item-progress { font: 700 .82rem 'Noto Sans KR', sans-serif; color: var(--ink); white-space: nowrap; text-align: right; }
+  .collection-title h2 { font-family: 'Butterfly Kids', 'Gowun Dodum', sans-serif; font-weight: 900; color: var(--accent); font-size: 1.1rem; white-space: nowrap; }
+  .item-progress { font: 700 .82rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: var(--ink); white-space: nowrap; text-align: right; }
   .item-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
   .item-slot { aspect-ratio: 1; min-height: 52px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center; border: 2px solid rgba(110,75,145,.16); background: rgba(255,255,255,.52); position: relative; overflow: hidden; }
   .item-slot.locked { filter: grayscale(.9); opacity: .45; }
@@ -288,21 +285,21 @@
   .item-slot.new { animation: slotSparkle 1.2s ease-out; }
   @keyframes slotSparkle { 0% { transform: scale(.72) rotate(-4deg); filter: brightness(1.8); } 55% { transform: scale(1.09) rotate(2deg); } 100% { transform: scale(1); } }
   .item-emoji { font-size: 1.4rem; line-height: 1; }
-  .item-name { font: 700 .62rem 'Noto Sans KR', sans-serif; line-height: 1.05; padding: 0 2px; }
-  .next-item-hint { margin-top: 12px; padding: 11px 12px; border-radius: 8px; background: rgba(255,255,255,.62); border: 1px solid rgba(255,255,255,.86); font: 700 1rem 'Noto Sans KR', sans-serif; text-align: center; }
+  .item-name { font: 700 .62rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; line-height: 1.05; padding: 0 2px; }
+  .next-item-hint { margin-top: 12px; padding: 11px 12px; border-radius: 8px; background: rgba(255,255,255,.62); border: 1px solid rgba(255,255,255,.86); font: 700 1rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; text-align: center; }
   .progress-wrap { margin-top: 14px; }
   .progress-bar { height: 15px; background: rgba(72,38,112,.14); border-radius: 999px; overflow: hidden; border: 2px solid rgba(255,255,255,.76); }
   .progress-fill { height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, #ff6a9f, #ffd76a, #77d6ff, #b693ff); transition: width .45s ease; }
-  .progress-text { text-align: center; margin-top: 8px; font: 700 1rem 'Noto Sans KR', sans-serif; }
+  .progress-text { text-align: center; margin-top: 8px; font: 700 1rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; }
 
   .todo-card { padding: 18px; background: rgba(255,255,255,.9); }
   .todo-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
-  .todo-header h2 { font-family: 'Pacifico', cursive; color: var(--accent); font-size: 1.55rem; line-height: 1.05; }
-  .count-badge { border-radius: 999px; background: linear-gradient(135deg, var(--accent), #ff9dca); color: white; padding: 6px 12px; font: 700 .95rem 'Noto Sans KR', sans-serif; white-space: nowrap; }
+  .todo-header h2 { font-family: 'Butterfly Kids', 'Gowun Dodum', cursive; color: var(--accent); font-size: 1.55rem; line-height: 1.05; }
+  .count-badge { border-radius: 999px; background: linear-gradient(135deg, var(--accent), #ff9dca); color: white; padding: 6px 12px; font: 700 .95rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; white-space: nowrap; }
   .mom-input { display: flex; gap: 8px; margin-bottom: 12px; }
-  .mom-input input { flex: 1; min-width: 0; padding: 12px 13px; border-radius: 8px; border: 2px solid rgba(125,84,170,.32); font: 700 1.08rem 'Noto Sans KR', sans-serif; color: var(--ink); outline: none; touch-action: manipulation; }
+  .mom-input input { flex: 1; min-width: 0; padding: 12px 13px; border-radius: 8px; border: 2px solid rgba(125,84,170,.32); font: 700 1.08rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: var(--ink); outline: none; touch-action: manipulation; }
   .mom-input input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(157,110,255,.14); }
-  .mom-input button { border: 0; border-radius: 8px; padding: 0 16px; min-height: 48px; color: white; background: linear-gradient(135deg, var(--accent), #ff7eb3); font: 700 1rem 'Noto Sans KR', sans-serif; cursor: pointer; }
+  .mom-input button { border: 0; border-radius: 8px; padding: 0 16px; min-height: 48px; color: white; background: linear-gradient(135deg, var(--accent), #ff7eb3); font: 700 1rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; cursor: pointer; }
   .mom-input button:disabled, .mom-input input:disabled { opacity: .55; cursor: not-allowed; }
   .todo-list { list-style: none; }
   .todo-item, .mom-todo-item { display: flex; align-items: center; gap: 11px; min-height: 56px; margin-bottom: 9px; padding: 11px 12px; border-radius: 8px; background: linear-gradient(135deg, #fff, var(--fairy-light)); border: 2px solid rgba(125,84,170,.1); box-shadow: 0 4px 12px rgba(83,46,120,.1); }
@@ -310,22 +307,22 @@
   .todo-item.done { border-color: var(--accent); background: linear-gradient(135deg, #fff8c8, #fff); }
   .checkbox { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; background: white; border: 3px solid var(--accent); color: white; font-weight: 700; }
   .todo-item.done .checkbox { background: linear-gradient(135deg, var(--accent), #ffd76a); box-shadow: 0 0 14px rgba(255,215,106,.72); }
-  .todo-text, .mom-todo-item .text { flex: 1; font: 700 1.12rem 'Noto Sans KR', sans-serif; color: var(--ink); }
+  .todo-text, .mom-todo-item .text { flex: 1; font: 700 1.12rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: var(--ink); }
   .todo-item.done .todo-text { text-decoration: line-through; color: #8c74a4; }
   .task-reward { font-size: 1.45rem; width: 32px; text-align: center; flex-shrink: 0; }
   .delete-btn { width: 36px; height: 36px; border-radius: 50%; border: 0; background: #ffe1ed; color: #d73778; font-weight: 700; cursor: pointer; }
-  .empty-msg { text-align: center; padding: 28px 14px; color: #7c6294; font: 700 1.05rem 'Noto Sans KR', sans-serif; }
+  .empty-msg { text-align: center; padding: 28px 14px; color: #7c6294; font: 700 1.05rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; }
   .empty-msg .big-emoji { display: block; font-size: 3rem; margin-bottom: 8px; }
-  .help-tip { margin-top: 12px; padding: 11px 12px; border-radius: 8px; background: rgba(157,110,255,.11); color: #654286; font: 700 1rem 'Noto Sans KR', sans-serif; text-align: center; }
+  .help-tip { margin-top: 12px; padding: 11px 12px; border-radius: 8px; background: rgba(157,110,255,.11); color: #654286; font: 700 1rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; text-align: center; }
 
-  .toast { position: fixed; top: 78px; left: 50%; transform: translateX(-50%) translateY(-100px); z-index: 210; opacity: 0; transition: all .45s cubic-bezier(.34,1.56,.64,1); max-width: 92vw; white-space: nowrap; padding: 14px 20px; border-radius: 999px; background: linear-gradient(135deg, #fff4a7, #ff9dca); color: var(--ink); border: 3px solid white; box-shadow: 0 12px 28px rgba(85,45,122,.28); font: 700 1rem 'Noto Sans KR', sans-serif; }
+  .toast { position: fixed; top: 78px; left: 50%; transform: translateX(-50%) translateY(-100px); z-index: 210; opacity: 0; transition: all .45s cubic-bezier(.34,1.56,.64,1); max-width: 92vw; white-space: nowrap; padding: 14px 20px; border-radius: 999px; background: linear-gradient(135deg, #fff4a7, #ff9dca); color: var(--ink); border: 3px solid white; box-shadow: 0 12px 28px rgba(85,45,122,.28); font: 700 1rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   .celebration { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 120; background: rgba(75,42,104,.58); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 18px; }
   .celebration.show { display: flex; }
   .celebration-box { width: min(460px, 94vw); text-align: center; padding: 30px 24px; border-radius: 24px; border: 3px solid white; background: linear-gradient(145deg, #fff8c8, #ffdced 42%, #dff5ff); color: var(--ink); box-shadow: 0 24px 70px rgba(38,22,82,.32); animation: bounceIn .55s ease; }
-  .celebration-box h2 { font-family: 'Pacifico', cursive; color: var(--violet); font-size: 2rem; margin: 8px 0; }
-  .celebration-box p { font: 700 1.15rem 'Noto Sans KR', sans-serif; margin-bottom: 18px; }
-  .celebration-box button { border: 0; border-radius: 999px; padding: 13px 28px; color: white; background: linear-gradient(135deg, var(--violet), var(--pink)); font: 700 1rem 'Noto Sans KR', sans-serif; cursor: pointer; }
+  .celebration-box h2 { font-family: 'Butterfly Kids', 'Gowun Dodum', cursive; color: var(--violet); font-size: 2rem; margin: 8px 0; }
+  .celebration-box p { font: 700 1.15rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; margin-bottom: 18px; }
+  .celebration-box button { border: 0; border-radius: 999px; padding: 13px 28px; color: white; background: linear-gradient(135deg, var(--violet), var(--pink)); font: 700 1rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; cursor: pointer; }
   @keyframes bounceIn { 0% { opacity: 0; transform: scale(.55); } 65% { transform: scale(1.04); } 100% { opacity: 1; transform: scale(1); } }
   .confetti { position: fixed; top: -12px; width: 11px; height: 11px; pointer-events: none; z-index: 115; animation: fall 3.2s linear forwards; }
   @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
@@ -339,20 +336,20 @@
   /* ── HISTORY ── */
   .history-section { margin-top: 28px; border-radius: 26px; overflow: hidden; border: 2px solid rgba(255,255,255,.58); background: linear-gradient(160deg, rgba(255,255,255,.18), rgba(200,180,255,.12)); box-shadow: 0 18px 44px rgba(58,34,102,.2), inset 0 1px 0 rgba(255,255,255,.4); padding: 20px 22px 24px; }
   .history-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
-  .history-header h2 { font-family: 'Pacifico', cursive; font-size: 1.6rem; color: #fff7cf; text-shadow: 0 2px 0 #b858ba, 0 6px 16px rgba(63,36,120,.3); }
-  .history-week-count { padding: 6px 14px; border-radius: 999px; background: rgba(255,255,255,.22); border: 2px solid rgba(255,255,255,.58); font: 700 .95rem 'Noto Sans KR', sans-serif; }
+  .history-header h2 { font-family: 'Butterfly Kids', 'Gowun Dodum', cursive; font-size: 1.6rem; color: #fff7cf; text-shadow: 0 2px 0 #b858ba, 0 6px 16px rgba(63,36,120,.3); }
+  .history-week-count { padding: 6px 14px; border-radius: 999px; background: rgba(255,255,255,.22); border: 2px solid rgba(255,255,255,.58); font: 700 .95rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; }
   .history-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
   .history-week-card { border-radius: 16px; padding: 14px 12px; border: 2px solid rgba(255,255,255,.48); background: rgba(255,255,255,.14); text-align: center; position: relative; overflow: hidden; }
   .history-week-card.success { background: linear-gradient(145deg, rgba(255,244,167,.35), rgba(255,200,220,.28)); border-color: rgba(255,215,106,.6); box-shadow: 0 8px 22px rgba(200,150,50,.18); }
   .history-week-card.fail { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.28); opacity: .72; }
-  .history-week-num { font-family: 'Pacifico', cursive; font-size: 1.25rem; color: #fff7cf; text-shadow: 0 2px 8px rgba(63,36,120,.35); }
+  .history-week-num { font-family: 'Butterfly Kids', 'Gowun Dodum', cursive; font-size: 1.25rem; color: #fff7cf; text-shadow: 0 2px 8px rgba(63,36,120,.35); }
   .history-week-status { font-size: 1.8rem; margin: 4px 0; }
   .history-week-days { display: flex; justify-content: center; gap: 3px; margin-top: 6px; }
   .history-day-dot { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: .72rem; border: 1.5px solid rgba(255,255,255,.4); background: rgba(255,255,255,.15); }
   .history-day-dot.done { background: linear-gradient(135deg, #ffd76a, #ff9dca); border-color: rgba(255,255,255,.7); }
-  .history-week-date { font: 700 .78rem 'Noto Sans KR', sans-serif; opacity: .72; margin-top: 5px; }
-  .history-week-label { font: 700 .82rem 'Noto Sans KR', sans-serif; opacity: .85; margin-top: 3px; }
-  .history-empty { text-align: center; padding: 28px; font: 700 1.08rem 'Noto Sans KR', sans-serif; opacity: .65; }
+  .history-week-date { font: 700 .78rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; opacity: .72; margin-top: 5px; }
+  .history-week-label { font: 700 .82rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; opacity: .85; margin-top: 3px; }
+  .history-empty { text-align: center; padding: 28px; font: 700 1.08rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; opacity: .65; }
 
   /* ── POINTS BADGE ── */
   .points-badge {
@@ -361,7 +358,7 @@
     background: linear-gradient(135deg, #ffd76a, #ffb830);
     border: 2.5px solid rgba(255,255,255,.9);
     box-shadow: 0 4px 14px rgba(200,130,0,.28);
-    font: 700 1.2rem 'Noto Sans KR', sans-serif; color: #5a3500;
+    font: 700 1.2rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: #5a3500;
     white-space: nowrap; margin-top: 8px;
   }
   .points-badge .pt-num { font-size: 1.4rem; }
@@ -382,19 +379,19 @@
     padding: 20px 22px 28px;
   }
   .shop-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
-  .shop-header h2 { font-family: 'Pacifico', cursive; font-size: 1.6rem; color: #fff7cf; text-shadow: 0 2px 0 #b858ba, 0 6px 16px rgba(63,36,120,.3); }
+  .shop-header h2 { font-family: 'Butterfly Kids', 'Gowun Dodum', cursive; font-size: 1.6rem; color: #fff7cf; text-shadow: 0 2px 0 #b858ba, 0 6px 16px rgba(63,36,120,.3); }
   .shop-points-display {
     padding: 7px 18px; border-radius: 999px;
     background: linear-gradient(135deg, #ffd76a, #ffb830);
     border: 2px solid rgba(255,255,255,.8);
-    font: 700 1.1rem 'Noto Sans KR', sans-serif; color: #5a3500;
+    font: 700 1.1rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: #5a3500;
   }
   .shop-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
   .shop-tab {
     min-height: 38px; padding: 7px 16px; border-radius: 999px;
     border: 2px solid rgba(255,255,255,.55);
     background: rgba(255,255,255,.18); color: white;
-    font: 700 .9rem 'Noto Sans KR', sans-serif; cursor: pointer;
+    font: 700 .9rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; cursor: pointer;
   }
   .shop-tab.active { background: linear-gradient(135deg, #fff4b5, #ff9dca); color: var(--ink); border-color: rgba(255,255,255,.9); }
   .shop-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
@@ -408,20 +405,20 @@
   .shop-item-card.owned { background: linear-gradient(145deg, #fff8cf, #fff); border-color: #ffd76a; }
   .shop-item-card.unaffordable { opacity: .65; }
   .shop-item-emoji { font-size: 2.4rem; line-height: 1.1; }
-  .shop-item-name { font: 700 .95rem 'Noto Sans KR', sans-serif; }
-  .shop-item-desc { font: 700 .78rem 'Noto Sans KR', sans-serif; color: #7c6294; min-height: 26px; }
-  .shop-item-price { font: 700 .9rem 'Noto Sans KR', sans-serif; color: #5a3500; background: linear-gradient(135deg,#ffeea0,#ffd76a); padding: 3px 12px; border-radius: 999px; }
+  .shop-item-name { font: 700 .95rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; }
+  .shop-item-desc { font: 700 .78rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: #7c6294; min-height: 26px; }
+  .shop-item-price { font: 700 .9rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: #5a3500; background: linear-gradient(135deg,#ffeea0,#ffd76a); padding: 3px 12px; border-radius: 999px; }
   .shop-buy-btn {
     margin-top: 4px; border: 0; border-radius: 999px;
     padding: 7px 18px; color: white;
     background: linear-gradient(135deg, #9d6eff, #ff7eb3);
-    font: 700 .88rem 'Noto Sans KR', sans-serif; cursor: pointer;
+    font: 700 .88rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; cursor: pointer;
   }
   .shop-buy-btn:disabled { background: rgba(140,120,160,.35); color: rgba(255,255,255,.6); cursor: not-allowed; }
   .shop-owned-badge {
     margin-top: 4px; padding: 5px 14px; border-radius: 999px;
     background: linear-gradient(135deg, #ffd76a, #ffb830);
-    font: 700 .85rem 'Noto Sans KR', sans-serif; color: #5a3500;
+    font: 700 .85rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: #5a3500;
   }
 
   @media (max-width: 980px) {
@@ -466,7 +463,7 @@
     margin-bottom: 14px;
   }
   .cal-header span {
-    font: 900 1.25rem 'Noto Sans KR', sans-serif; color: #fff7cf;
+    font: 900 1.25rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: #fff7cf;
     text-shadow: 0 2px 0 #b858ba, 0 6px 16px rgba(63,36,120,.3);
     min-width: 120px; text-align: center;
   }
@@ -482,7 +479,7 @@
     margin-bottom: 6px;
   }
   .cal-day-headers span {
-    text-align: center; font: 700 .82rem 'Noto Sans KR', sans-serif;
+    text-align: center; font: 700 .82rem 'Butterfly Kids', 'Gowun Dodum', sans-serif;
     color: rgba(255,255,255,.65); padding: 4px 0;
   }
   .cal-grid {
@@ -491,7 +488,7 @@
   .cal-day {
     aspect-ratio: 1; border-radius: 50%; display: flex; flex-direction: column;
     align-items: center; justify-content: center; position: relative;
-    font: 700 .82rem 'Noto Sans KR', sans-serif; color: rgba(255,255,255,.82);
+    font: 700 .82rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.82);
     cursor: default; transition: transform .12s;
   }
   .cal-day.other-month { opacity: .28; }
@@ -522,7 +519,7 @@
     display: flex; gap: 16px; justify-content: center; margin-top: 14px; flex-wrap: wrap;
   }
   .cll {
-    font: 700 .8rem 'Noto Sans KR', sans-serif; padding: 4px 12px; border-radius: 999px;
+    font: 700 .8rem 'Butterfly Kids', 'Gowun Dodum', sans-serif; padding: 4px 12px; border-radius: 999px;
     border: 1.5px solid rgba(255,255,255,.4);
   }
   .cll.done { background: linear-gradient(135deg, #9d6eff, #ff7eb3); color: white; }
@@ -541,7 +538,7 @@
     border-radius: 999px;
     background: var(--violet);
     color: #fff;
-    font: 900 .82rem 'Noto Sans KR', sans-serif;
+    font: 900 .82rem 'Butterfly Kids', 'Gowun Dodum', sans-serif;
     letter-spacing: .05em;
     text-decoration: none;
     border: 2px solid rgba(255,255,255,.65);
