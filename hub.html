@@ -38,11 +38,9 @@
   input, textarea { -webkit-user-select: text; user-select: text; }
 
   /* ── 배경 장식 ── */
-  .stars, .weather-drift { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
   .star { position: absolute; color: white; opacity: 0; animation: twinkle 3.4s infinite; text-shadow: 0 0 12px rgba(255, 235, 165, 0.95); }
-  .drift { position: absolute; opacity: 0.35; animation: driftAcross linear infinite; filter: drop-shadow(0 4px 10px rgba(255,255,255,0.35)); }
   @keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.35) rotate(0); } 50% { opacity: 1; transform: scale(1.25) rotate(12deg); } }
-  @keyframes driftAcross { from { transform: translateX(-15vw); } to { transform: translateX(115vw); } }
 
   /* ── 레이아웃 ── */
   .container {
@@ -463,7 +461,6 @@
 </head>
 <body>
 <div class="stars" id="stars"></div>
-<div class="weather-drift" id="weatherDrift"></div>
 <div class="toast" id="toast"></div>
 
 <div class="container">
@@ -828,22 +825,6 @@ function createStars() {
   }
 }
 
-function createWeatherDrift() {
-  const container = document.getElementById('weatherDrift');
-  const symbols = ['☁️','✨','💧','❄️','☀️','🌈'];
-  for (let i = 0; i < 14; i++) {
-    const drift = document.createElement('div');
-    drift.className = 'drift';
-    drift.textContent = symbols[i % symbols.length];
-    drift.style.top = (5 + Math.random() * 86) + '%';
-    drift.style.left = (-18 + Math.random() * 80) + 'vw';
-    drift.style.fontSize = (20 + Math.random() * 22) + 'px';
-    drift.style.animationDuration = (28 + Math.random() * 26) + 's';
-    drift.style.animationDelay = (-Math.random() * 40) + 's';
-    container.appendChild(drift);
-  }
-}
-
 // ── 날개 애니메이션 (CSS에서 못 쓰는 svg 내부용) ──
 const style = document.createElement('style');
 style.textContent = `
@@ -855,7 +836,6 @@ style.textContent = `
 document.head.appendChild(style);
 
 createStars();
-createWeatherDrift();
 </script>
 </body>
 </html>

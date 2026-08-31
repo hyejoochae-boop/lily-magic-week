@@ -37,11 +37,9 @@
   }
   input { -webkit-user-select: text; user-select: text; }
 
-  .stars, .weather-drift { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
   .star { position: absolute; color: white; opacity: 0; animation: twinkle 3.4s infinite; text-shadow: 0 0 12px rgba(255, 235, 165, 0.95); }
-  .drift { position: absolute; opacity: 0.35; animation: driftAcross linear infinite; filter: drop-shadow(0 4px 10px rgba(255,255,255,0.35)); }
   @keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.35) rotate(0); } 50% { opacity: 1; transform: scale(1.25) rotate(12deg); } }
-  @keyframes driftAcross { from { transform: translateX(-15vw); } to { transform: translateX(115vw); } }
 
   .container { max-width: 1180px; margin: 0 auto; padding: 22px 16px 92px; position: relative; z-index: 2; }
   header { text-align: center; margin-bottom: 18px; }
@@ -170,8 +168,8 @@
   .rmb-title { font: 700 .68rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.9); }
   .rmb-add-btn { background: rgba(255,255,255,.22); border: 1px solid rgba(255,255,255,.4); border-radius: 50%; width: 22px; height: 22px; color: white; font-size: .9rem; cursor: pointer; line-height: 1; display: flex; align-items: center; justify-content: center; }
   .rmb-add-btn:hover { background: rgba(255,255,255,.38); }
-  .rmb-card { background: rgba(255,255,255,.15); border-radius: 8px; padding: 8px 10px; min-height: 68px; font: 500 .68rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: rgba(255,255,255,.95); line-height: 1.45; word-break: break-all; }
-  .rmb-card.empty { color: rgba(255,255,255,.45); text-align: center; padding-top: 20px; font-size: .63rem; }
+  .rmb-card { background: rgba(255,255,255,.78); border-radius: 8px; padding: 8px 10px; min-height: 68px; font: 500 .68rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: var(--ink); line-height: 1.45; word-break: break-all; }
+  .rmb-card.empty { color: var(--ink); opacity: .5; text-align: center; padding-top: 20px; font-size: .63rem; }
   .rmb-from { font: 700 .6rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: rgba(255,230,150,.9); margin-bottom: 2px; }
   .rmb-nav { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 5px; }
   .rmb-nav-btn { background: rgba(255,255,255,.18); border: none; border-radius: 50%; width: 22px; height: 22px; color: white; font-size: .75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
@@ -564,7 +562,6 @@
 <body>
 <a href="index.html" class="back-to-hub" title="HUB로 돌아가기" aria-label="HUB로 돌아가기"><span class="bth-arrow">←</span>BACK</a>
 <div class="stars" id="stars"></div>
-<div class="weather-drift" id="weatherDrift"></div>
 <div class="toast" id="toast">Magic item unlocked!</div>
 
 <div class="page-layout">
@@ -1437,22 +1434,6 @@ function createStars() {
     star.style.animationDelay = Math.random() * 3.4 + 's';
     star.style.fontSize = (7 + Math.random() * 18) + 'px';
     container.appendChild(star);
-  }
-}
-
-function createWeatherDrift() {
-  const container = document.getElementById('weatherDrift');
-  const symbols = ['☁️','✨','💧','❄️','☀️','🌈'];
-  for (let i = 0; i < 14; i++) {
-    const drift = document.createElement('div');
-    drift.className = 'drift';
-    drift.textContent = symbols[i % symbols.length];
-    drift.style.top = (5 + Math.random() * 86) + '%';
-    drift.style.left = (-18 + Math.random() * 80) + 'vw';
-    drift.style.fontSize = (20 + Math.random() * 22) + 'px';
-    drift.style.animationDuration = (28 + Math.random() * 26) + 's';
-    drift.style.animationDelay = (-Math.random() * 40) + 's';
-    container.appendChild(drift);
   }
 }
 
@@ -2571,7 +2552,6 @@ document.getElementById('closeCelebrationBtn').onclick = closeCelebration;
 document.getElementById('newTodoInput').addEventListener('keydown', e => { if (e.key === 'Enter') addTodo(); });
 
 createStars();
-createWeatherDrift();
 createLilyBgStars();
 initCalendar();
 loadData();
