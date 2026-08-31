@@ -255,6 +255,7 @@
   .mini-card-title { font: 700 .78rem 'Noto Sans KR', sans-serif; opacity: .86; min-height: 28px; }
   .mini-fairy { height: 96px; display: grid; place-items: center; }
   .mini-fairy svg { width: 82px; height: 96px; overflow: visible; }
+  .mini-fairy img { width: 100%; height: 100%; object-fit: contain; }
   .mini-progress { display: flex; align-items: center; gap: 7px; margin-top: 7px; font: 700 .85rem 'Noto Sans KR', sans-serif; }
   .mini-bar { flex: 1; height: 8px; border-radius: 999px; background: rgba(93,55,130,.15); overflow: hidden; border: 1px solid rgba(255,255,255,.7); }
   .mini-fill { height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--accent), #fff4a7); }
@@ -1473,9 +1474,8 @@ function escapeHtml(s) {
 
 function itemCountFor(day) { return Math.min(taskCounts(day).done, MAX_TASKS); }
 function keyFor(f) { return Object.keys(FAIRIES).find(day => FAIRIES[day] === f); }
-function buildMiniFairy(day, complete = false) {
-  const itemsVisible = complete ? Array.from({length: 10}, (_, i) => i) : [];
-  return buildFairySVG(day, itemsVisible, -1, true);
+function buildMiniFairy(day, itemCount = 0) {
+  return buildFairyImage(day, itemCount);
 }
 
 function hairBack(f) {
@@ -2204,7 +2204,7 @@ function renderFairyStrip() {
     return `<button class="mini-card ${day === currentDay ? 'active' : ''} ${isFairyComplete(day) ? 'done' : ''}" style="--accent:${f.accent}; --light:${f.light};" onclick="selectDay('${day}')">
       <div class="mini-card-name">${f.name}</div>
       <div class="mini-card-title">${f.title}</div>
-      <div class="mini-fairy">${buildMiniFairy(day, isFairyComplete(day))}</div>
+      <div class="mini-fairy">${buildMiniFairy(day, itemCountFor(day))}</div>
       <div class="mini-progress"><span>${f.icon}</span><div class="mini-bar"><div class="mini-fill" style="width:${pct}%"></div></div><span>${done}/${MAX_TASKS}</span></div>
     </button>`;
   }).join('');
