@@ -865,6 +865,7 @@ const SHOP_ITEMS = [
   { id:'av_acc_necklace', emoji:'💫', name:'별 목걸이',      cat:'av_acc', price:100, desc:'반짝이는 별 모양 목걸이' },
   { id:'av_acc_glasses',  emoji:'👓', name:'동그란 안경',    cat:'av_acc', price:90,  desc:'귀여운 동그란 안경' },
   { id:'av_acc_ribbon',   emoji:'💝', name:'리본 목걸이',    cat:'av_acc', price:110, desc:'예쁜 리본 목걸이' },
+  { id:'av_acc_shellpin', emoji:'🐚', name:'조개 핀',        cat:'av_acc', price:90,  desc:'귀여운 조개 모양 머리핀' },
   // ── 아바타 옷 추가 5개
   { id:'av_outfit_angel',   emoji:'🤍', name:'천사 드레스',   cat:'av_outfit', price:240, desc:'새하얀 천사 날개 드레스' },
   { id:'av_outfit_witch',   emoji:'🧙', name:'마녀 드레스',   cat:'av_outfit', price:220, desc:'별빛 반짝이는 마녀 드레스' },
@@ -876,6 +877,10 @@ const SHOP_ITEMS = [
   { id:'av_shoes_star',     emoji:'⭐', name:'별빛 부츠',      cat:'av_shoes', price:130, desc:'반짝이는 별빛 부츠' },
   { id:'av_shoes_rainbow',  emoji:'🌈', name:'무지개 스니커즈',cat:'av_shoes', price:120, desc:'무지개 색 귀여운 스니커즈' },
   { id:'av_shoes_flower',   emoji:'🌸', name:'꽃 샌들',        cat:'av_shoes', price:110, desc:'꽃 장식이 달린 예쁜 샌들' },
+  { id:'av_shoes_rainbow2', emoji:'🌈', name:'무지개 샌들',    cat:'av_shoes', price:120, desc:'상큼한 무지개색 샌들' },
+  { id:'av_shoes_rose',     emoji:'🌹', name:'장미 구두',      cat:'av_shoes', price:150, desc:'붉은 장미 장식 구두' },
+  { id:'av_shoes_star2',    emoji:'⭐', name:'별무늬 부츠',    cat:'av_shoes', price:130, desc:'별이 콕콕 박힌 귀여운 부츠' },
+  { id:'av_shoes_blackmaryjane', emoji:'👞', name:'검정 메리제인', cat:'av_shoes', price:130, desc:'단정한 검정 메리제인 슈즈' },
   { id:'av_bag_star',       emoji:'⭐', name:'별 미니백',       cat:'av_acc', price:140, desc:'노란 손잡이가 달린 별 모양 반짝이 미니백' },
   { id:'av_bag_flower',     emoji:'🧺', name:'꽃바구니 백',    cat:'av_acc', price:120, desc:'꽃이 담긴 예쁜 바구니 백' },
 ];
@@ -1120,11 +1125,16 @@ const AV_FIT = {
   av_shoes_star:    { img:'av_shoes_star.png',    scale:0.602, ox:-0.10, oy:34.20 },
   av_shoes_rainbow: { img:'av_shoes_rainbow.png', scale:0.644, ox:-0.10, oy:33.20 },
   av_shoes_flower:  { img:'av_shoes_ribbon_extra.png', scale:1, ox:0, oy:0 },
+  av_shoes_rainbow2: { img:'av_shoes_rainbow2.png', scale:0.970, scaleX:1.000, ox:0.00, oy:2.20 },
+  av_shoes_rose:     { img:'av_shoes_rose.png',     scale:1.012, scaleX:1.000, ox:0.00, oy:0.20 },
+  av_shoes_star2:    { img:'av_shoes_star2.png',    scale:1.020, scaleX:1.000, ox:0.00, oy:-0.70 },
+  av_shoes_blackmaryjane: { img:'av_shoes_blackmaryjane.png', scale:0.6, ox:0, oy:34 },
+  av_acc_shellpin:   { img:'av_acc_shellpin.png',   scale:1.145, scaleX:1.165, ox:-10.40, oy:3.10 },
   av_bag_star:   { img:'av_bag_star.png',   scale:0.836, ox:36.70, oy:23.20 },
   av_bag_flower: { img:'av_bag_flower.png', scale:0.4,   ox:22,    oy:15 },
 };
 const AV_HAIR_IDS = ['av_hair_bow','av_hair_pink','av_hair_star','av_hair_flower'];
-const AV_ACC_IDS  = ['av_acc_tiara','av_acc_necklace','av_acc_glasses','av_acc_ribbon','av_bag_star','av_bag_flower'];
+const AV_ACC_IDS  = ['av_acc_tiara','av_acc_necklace','av_acc_glasses','av_acc_ribbon','av_bag_star','av_bag_flower','av_acc_shellpin'];
 
 function avLayer(id) {
   const f = AV_FIT[id];
