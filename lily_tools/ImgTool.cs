@@ -216,6 +216,66 @@ public static class ImgTool
         }
     }
 
+    // Remove an enclosed checkerboard patch: find neutral mid-gray pixels (checker dark squares, lum in [grayLo,grayHi]),
+    // take their bbox (+pad), and clear every neutral light pixel (chroma<=chromaTol, lum>=lightLo) inside that bbox.
+    public static string RemoveNeutralPatch(string src, string dst, int grayLo, int grayHi, int chromaTol, int lightLo, int pad, int minGrayPixels)
+    {
+        using (var bmp = new Bitmap(src))
+        {
+            int stride; var p = GetBytes(bmp, out stride);
+            int w = bmp.Width, h = bmp.Height;
+            // 1) locate gray-square pixels
+            var isGray = new bool[w * h]; int count = 0;
+            for (int y = 0; y < h; y++) for (int x = 0; x < w; x++)
+            {
+                int i = y * stride + x * 4; if (p[i + 3] < 200) continue;
+                int b = p[i], g = p[i + 1], r = p[i + 2];
+                int chroma = Math.Max(r, Math.Max(g, b)) - Math.Min(r, Math.Min(g, b)); int lum = (r + g + b) / 3;
+                if (chroma <= chromaTol && lum >= grayLo && lum <= grayHi) { isGray[y * w + x] = true; count++; }
+            }
+            if (count < minGrayPixels) return "no gray patch found (" + count + ")";
+            // 2) largest connected component of gray pixels (dilated by 1 so squares connect diagonally is not needed; use 8-neighbour)
+            var comp = new int[w * h]; int nc = 0; var areas = new List<int> { 0 }; var boxes = new List<int[]> { null };
+            int[] dx8 = { 1, -1, 0, 0, 1, 1, -1, -1 }, dy8 = { 0, 0, 1, -1, 1, -1, 1, -1 };
+            for (int s = 0; s < w * h; s++)
+            {
+                if (!isGray[s] || comp[s] != 0) continue;
+                nc++; areas.Add(0); var bx = new[] { w, h, -1, -1 }; boxes.Add(bx);
+                var st = new Stack<int>(); st.Push(s); comp[s] = nc;
+                while (st.Count > 0)
+                {
+                    int idx = st.Pop(); areas[nc]++; int cx = idx % w, cy = idx / w;
+                    if (cx < bx[0]) bx[0] = cx; if (cy < bx[1]) bx[1] = cy; if (cx > bx[2]) bx[2] = cx; if (cy > bx[3]) bx[3] = cy;
+                    // checker squares are separated by light squares: allow jumps up to 'gap' pixels along axes
+                    for (int d = 0; d < 8; d++)
+                    {
+                        for (int step = 1; step <= 6; step++)
+                        {
+                            int nx = cx + dx8[d] * step, ny = cy + dy8[d] * step;
+                            if (nx < 0 || ny < 0 || nx >= w || ny >= h) break;
+                            int ni = ny * w + nx;
+                            if (isGray[ni] && comp[ni] == 0) { comp[ni] = nc; st.Push(ni); break; }
+                        }
+                    }
+                }
+            }
+            int best = 1; for (int k = 2; k <= nc; k++) if (areas[k] > areas[best]) best = k;
+            var box = boxes[best];
+            int x0 = Math.Max(0, box[0] - pad), y0 = Math.Max(0, box[1] - pad), x1 = Math.Min(w - 1, box[2] + pad), y1 = Math.Min(h - 1, box[3] + pad);
+            // 3) clear neutral pixels inside bbox
+            int cleared = 0;
+            for (int y = y0; y <= y1; y++) for (int x = x0; x <= x1; x++)
+            {
+                int i = y * stride + x * 4; if (p[i + 3] == 0) continue;
+                int b = p[i], g = p[i + 1], r = p[i + 2];
+                int chroma = Math.Max(r, Math.Max(g, b)) - Math.Min(r, Math.Min(g, b)); int lum = (r + g + b) / 3;
+                if (chroma <= chromaTol && lum >= lightLo) { p[i + 3] = 0; cleared++; }
+            }
+            using (var outBmp = FromBytes(p, w, h, stride)) outBmp.Save(dst, ImageFormat.Png);
+            return string.Format("gray px {0}, comps {1}, patch bbox x{2}-{3} y{4}-{5} (area {6}), cleared {7}px", count, nc, x0, x1, y0, y1, areas[best], cleared);
+        }
+    }
+
     // Draw a garland string through the top of each opaque component (stars), left to right.
     public static string DrawString(string src, string dst, int lineWidth, int r, int g, int b, int extraTopPad)
     {

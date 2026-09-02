@@ -17,3 +17,8 @@ AI 생성 이미지의 가짜 체커보드 배경(불투명)을 테두리 색 �
 
 ## fit_simulator.html
 `../fit_simulator.html` — 새 아이템 위치/크기(AV_FIT, PNG_FURNITURE w) 조정 후 "내보내기" 텍스트 복사.
+
+```powershell
+# 바깥과 연결되지 않은(둘러싸인) 체커보드 조각 제거 — 회색 사각형(밝기 185~225) 위치를 찾아 그 영역의 무채색 픽셀만 지움
+[ImgTool]::RemoveNeutralPatch($src, $dst, 185, 225, 8, 175, 3, 200)
+```

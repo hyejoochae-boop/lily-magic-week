@@ -159,6 +159,10 @@
   .rc-body { display: inline-block; }
   .rc-resize-btn { display: none; position: absolute; bottom: -8px; right: -8px; width: 22px; height: 22px; border-radius: 50%; background: rgba(120,80,220,.92); color: #fff; font-size: .8rem; font-weight: 700; border: 1.5px solid #fff; cursor: nwse-resize; align-items: center; justify-content: center; z-index: 30; line-height: 1; touch-action: none; }
   .rc-draggable.selected .rc-resize-btn { display: flex; }
+  @media (pointer: coarse) {
+    .rc-del-btn { width: 30px; height: 30px; top: -12px; right: -12px; font-size: 1rem; }
+    .rc-resize-btn { width: 32px; height: 32px; bottom: -12px; right: -12px; font-size: 1.05rem; }
+  }
   .rc-draggable.selected .rc-item-emoji { filter: drop-shadow(0 0 8px rgba(255,200,80,.9)); transform: scale(1.1); }
 
   /* FX + dialogue */
@@ -1963,6 +1967,7 @@ function makeDraggable(el, container) {
   }
 
   function onStart(e) {
+    if (e.touches && e.touches.length > 1) return; // 두 손가락 = 핀치 크기조절
     e.preventDefault();
     e.stopPropagation();
     didDrag = false;
@@ -1994,6 +1999,7 @@ function makeDraggable(el, container) {
   }
 
   function onMove(e) {
+    if (e.touches && e.touches.length > 1) return; // 핀치 중에는 이동 안 함
     e.preventDefault();
     const { x, y } = getClient(e);
     if (Math.abs(x - startClientX) > 8 || Math.abs(y - startClientY) > 8) {
@@ -2042,13 +2048,14 @@ function itemScale(id) { const p = itemPositions[id]; return (p && p.s) ? p.s : 
 function setItemScale(el, container, s) {
   const id = el.dataset.id; if (!id) return;
   s = Math.round(Math.max(0.4, Math.min(3, s)) * 100) / 100;
-  const body = el.querySelector('.rc-body'); if (body) body.style.zoom = s;
+  // 위치는 확대/축소 전에 먼저 고정 (bottom 기준 배치 → top 기준으로 변환) 후 크기 적용
   const rect = container.getBoundingClientRect(), r = el.getBoundingClientRect();
   const prev = itemPositions[id] || {};
   const x = prev.x !== undefined ? prev.x : (r.left - rect.left) / rect.width * 100;
   const y = prev.y !== undefined ? prev.y : (r.top - rect.top) / rect.height * 100;
+  if (el.style.bottom && el.style.bottom !== 'auto') { el.style.top = y + '%'; el.style.bottom = 'auto'; el.style.left = x + '%'; }
   itemPositions[id] = { x, y, s };
-  if (el.style.bottom && el.style.bottom !== 'auto') { el.style.top = y + '%'; el.style.bottom = 'auto'; }
+  const body = el.querySelector('.rc-body'); if (body) body.style.zoom = s;
   return s;
 }
 function makeResizable(btn, container) {
@@ -2070,6 +2077,16 @@ function makeResizable(btn, container) {
   btn.addEventListener('mousedown', onStart);
   btn.addEventListener('touchstart', onStart, { passive: false });
   btn.addEventListener('click', e => e.stopPropagation());
+  // 두 손가락 핀치로 크기 조절 (패드)
+  let pinchStartDist = 0, pinchStartS = 1, pinching = false;
+  const dist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+  el.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) { e.preventDefault(); e.stopPropagation(); pinching = true; pinchStartDist = dist(e.touches); pinchStartS = itemScale(el.dataset.id); }
+  }, { passive: false });
+  el.addEventListener('touchmove', e => {
+    if (pinching && e.touches.length === 2) { e.preventDefault(); e.stopPropagation(); setItemScale(el, container, pinchStartS * dist(e.touches) / pinchStartDist); }
+  }, { passive: false });
+  el.addEventListener('touchend', e => { if (pinching && e.touches.length < 2) { pinching = false; saveData(); } });
   // 마우스휠로도 크기 조절
   el.addEventListener('wheel', e => { e.preventDefault(); setItemScale(el, container, itemScale(el.dataset.id) + (e.deltaY < 0 ? 0.05 : -0.05)); saveData(); }, { passive: false });
 }
