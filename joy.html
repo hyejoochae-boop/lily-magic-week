@@ -142,7 +142,7 @@
   @keyframes lampGlow { 0%,100%{filter:drop-shadow(0 0 5px rgba(255,220,100,.3))} 50%{filter:drop-shadow(0 0 14px rgba(255,220,100,.75))} }
 
   /* Lily in room */
-  .rc-lily { position: absolute; width: 63%; max-width: 140px; z-index: 8; cursor: grab; touch-action: none; }
+  .rc-lily { position: absolute; width: 63%; max-width: 140px; z-index: 50; /* 아바타는 항상 가구·아이템보다 앞 */ cursor: grab; touch-action: none; }
   .rc-lily svg { width: 100%; height: auto; overflow: visible; }
 
   /* Room items */
@@ -1982,7 +1982,7 @@ function makeDraggable(el, container) {
     }
     startLeft = parseFloat(el.style.left) || 0;
     startTop  = parseFloat(el.style.top)  || 0;
-    el.style.zIndex = '20';
+    el.style.zIndex = el.dataset.id === '__lily__' ? '60' : '20'; // 드래그 중에도 아바타가 항상 위
     el.style.transition = 'none';
     el.classList.add('dragging');
     const bringId = el.dataset.id;
@@ -2018,7 +2018,7 @@ function makeDraggable(el, container) {
     document.removeEventListener('touchmove', onMove);
     document.removeEventListener('mouseup', onEnd);
     document.removeEventListener('touchend', onEnd);
-    el.style.zIndex = '6';
+    el.style.zIndex = el.dataset.id === '__lily__' ? '' : '6'; // 아바타는 CSS z-index(50) 유지
     el.classList.remove('dragging');
     const id = el.dataset.id;
     if (orderChanged) { orderChanged = false; saveData(); }
