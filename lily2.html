@@ -156,6 +156,9 @@
   .rc-draggable.dragging { cursor: grabbing; opacity: .88; }
   .rc-del-btn { display: none; position: absolute; top: -8px; right: -8px; width: 20px; height: 20px; border-radius: 50%; background: rgba(220,50,50,.9); color: #fff; font-size: .75rem; font-weight: 700; border: 1.5px solid #fff; cursor: pointer; align-items: center; justify-content: center; z-index: 30; line-height: 1; }
   .rc-draggable.selected .rc-del-btn { display: flex; }
+  .rc-body { display: inline-block; }
+  .rc-resize-btn { display: none; position: absolute; bottom: -8px; right: -8px; width: 22px; height: 22px; border-radius: 50%; background: rgba(120,80,220,.92); color: #fff; font-size: .8rem; font-weight: 700; border: 1.5px solid #fff; cursor: nwse-resize; align-items: center; justify-content: center; z-index: 30; line-height: 1; touch-action: none; }
+  .rc-draggable.selected .rc-resize-btn { display: flex; }
   .rc-draggable.selected .rc-item-emoji { filter: drop-shadow(0 0 8px rgba(255,200,80,.9)); transform: scale(1.1); }
 
   /* FX + dialogue */
@@ -1893,16 +1896,18 @@ function renderRoom() {
     return `left:${defaultLeft}%;bottom:${defaultBottom}%`;
   }
 
+  const placedHtml = []; // roomPlaced 순서대로 출력 → 마지막에 클릭/배치한 아이템이 맨 앞
   if (wallItems.length > 0) {
     const spread = 90 / Math.max(wallItems.length, 1);
     wallItems.forEach((item, i) => {
       const x = 4 + i * spread;
       const y = 6 + (i % 2) * 16;
       const body = customItemIcon(item.id) || `<span class="rc-item-emoji" style="font-size:2.6rem">${item.emoji}</span>`;
-      html += `<div class="rc-item rc-draggable" data-id="${item.id}" style="${itemPosStyle(item, x, y)}">
+      placedHtml.push({ id: item.id, html: `<div class="rc-item rc-draggable" data-id="${item.id}" style="${itemPosStyle(item, x, y)}">
         <button class="rc-del-btn" onclick="removeFromRoom('${item.id}')">×</button>
-        ${body}
-      </div>`;
+        <div class="rc-body" style="zoom:${itemScale(item.id)}">${body}</div>
+        <button class="rc-resize-btn" title="크기 조절 (드래그 또는 마우스휠)">⤡</button>
+      </div>` });
     });
   }
 
@@ -1910,10 +1915,11 @@ function renderRoom() {
     petItems.forEach((item, i) => {
       const x = 3 + i * 14;
       const body = customItemIcon(item.id) || `<span class="rc-item-emoji" style="font-size:2.8rem">${item.emoji}</span>`;
-      html += `<div class="rc-item pet rc-draggable" data-id="${item.id}" style="${itemPosStyleB(item, x, 47)}">
+      placedHtml.push({ id: item.id, html: `<div class="rc-item pet rc-draggable" data-id="${item.id}" style="${itemPosStyleB(item, x, 47)}">
         <button class="rc-del-btn" onclick="removeFromRoom('${item.id}')">×</button>
-        ${body}
-      </div>`;
+        <div class="rc-body" style="zoom:${itemScale(item.id)}">${body}</div>
+        <button class="rc-resize-btn" title="크기 조절 (드래그 또는 마우스휠)">⤡</button>
+      </div>` });
     });
   }
 
@@ -1924,12 +1930,16 @@ function renderRoom() {
       const x = startX + i * spread;
       const yOff = (i % 2) * 4;
       const body = customItemIcon(item.id) || `<span class="rc-item-emoji" style="font-size:2.4rem">${item.emoji}</span>`;
-      html += `<div class="rc-item rc-draggable" data-id="${item.id}" style="${itemPosStyleB(item, x, 46 + yOff)}">
+      placedHtml.push({ id: item.id, html: `<div class="rc-item rc-draggable" data-id="${item.id}" style="${itemPosStyleB(item, x, 46 + yOff)}">
         <button class="rc-del-btn" onclick="removeFromRoom('${item.id}')">×</button>
-        ${body}
-      </div>`;
+        <div class="rc-body" style="zoom:${itemScale(item.id)}">${body}</div>
+        <button class="rc-resize-btn" title="크기 조절 (드래그 또는 마우스휠)">⤡</button>
+      </div>` });
     });
   }
+
+  placedHtml.sort((a, b) => roomPlaced.indexOf(a.id) - roomPlaced.indexOf(b.id));
+  html += placedHtml.map(p => p.html).join('');
 
   const avatarItems = ownedItems.filter(it => getItemZone(it) === 'avatar');
   const _rawPos = itemPositions['__lily__'] || { x: 28, y: 18 };
@@ -1940,11 +1950,12 @@ function renderRoom() {
   scene.innerHTML = html;
 
   scene.querySelectorAll('.rc-draggable').forEach(el => makeDraggable(el, scene));
+  scene.querySelectorAll('.rc-resize-btn').forEach(btn => makeResizable(btn, scene));
 }
 
 /* ── DRAG TO REPOSITION ── */
 function makeDraggable(el, container) {
-  let startClientX, startClientY, startLeft, startTop, didDrag = false;
+  let startClientX, startClientY, startLeft, startTop, didDrag = false, orderChanged = false;
 
   function getClient(e) {
     return e.touches ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
@@ -1969,6 +1980,13 @@ function makeDraggable(el, container) {
     el.style.zIndex = '20';
     el.style.transition = 'none';
     el.classList.add('dragging');
+    const bringId = el.dataset.id;
+    if (bringId && bringId !== '__lily__') {
+      // 마지막에 클릭한 아이템을 맨 앞으로 (배치 순서 갱신 + DOM 순서 이동)
+      const idx = roomPlaced.indexOf(bringId);
+      if (idx >= 0 && idx !== roomPlaced.length - 1) { roomPlaced.splice(idx, 1); roomPlaced.push(bringId); orderChanged = true; }
+      el.parentElement.appendChild(el);
+    }
     document.addEventListener('mousemove', onMove);
     document.addEventListener('touchmove', onMove, { passive: false });
     document.addEventListener('mouseup', onEnd);
@@ -1997,6 +2015,7 @@ function makeDraggable(el, container) {
     el.style.zIndex = '6';
     el.classList.remove('dragging');
     const id = el.dataset.id;
+    if (orderChanged) { orderChanged = false; saveData(); }
     if (!didDrag && id !== '__lily__') {
       // 탭 → 선택 토글 (× 버튼 표시/숨김)
       const isSelected = el.classList.contains('selected');
@@ -2017,6 +2036,44 @@ function makeDraggable(el, container) {
   el.addEventListener('touchstart', onStart, { passive: false });
 }
 
+
+/* ── 방 아이템 크기 조절 (가구·반려동물·음식·장식 — 비율 고정, 아바타 착용 아이템 제외) ── */
+function itemScale(id) { const p = itemPositions[id]; return (p && p.s) ? p.s : 1; }
+function setItemScale(el, container, s) {
+  const id = el.dataset.id; if (!id) return;
+  s = Math.round(Math.max(0.4, Math.min(3, s)) * 100) / 100;
+  const body = el.querySelector('.rc-body'); if (body) body.style.zoom = s;
+  const rect = container.getBoundingClientRect(), r = el.getBoundingClientRect();
+  const prev = itemPositions[id] || {};
+  const x = prev.x !== undefined ? prev.x : (r.left - rect.left) / rect.width * 100;
+  const y = prev.y !== undefined ? prev.y : (r.top - rect.top) / rect.height * 100;
+  itemPositions[id] = { x, y, s };
+  if (el.style.bottom && el.style.bottom !== 'auto') { el.style.top = y + '%'; el.style.bottom = 'auto'; }
+  return s;
+}
+function makeResizable(btn, container) {
+  const el = btn.closest('.rc-item'); if (!el) return;
+  let startX, startS;
+  const gc = e => e.touches ? e.touches[0].clientX : e.clientX;
+  function onStart(e) {
+    e.preventDefault(); e.stopPropagation();
+    startX = gc(e); startS = itemScale(el.dataset.id);
+    document.addEventListener('mousemove', onMove); document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('mouseup', onEnd); document.addEventListener('touchend', onEnd);
+  }
+  function onMove(e) { e.preventDefault(); setItemScale(el, container, startS * (1 + (gc(e) - startX) / 90)); }
+  function onEnd() {
+    document.removeEventListener('mousemove', onMove); document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('mouseup', onEnd); document.removeEventListener('touchend', onEnd);
+    saveData();
+  }
+  btn.addEventListener('mousedown', onStart);
+  btn.addEventListener('touchstart', onStart, { passive: false });
+  btn.addEventListener('click', e => e.stopPropagation());
+  // 마우스휠로도 크기 조절
+  el.addEventListener('wheel', e => { e.preventDefault(); setItemScale(el, container, itemScale(el.dataset.id) + (e.deltaY < 0 ? 0.05 : -0.05)); saveData(); }, { passive: false });
+}
+
 /* ── 방 아이템 제거 / 배치 ── */
 function removeFromRoom(id) {
   if (!id) return;
@@ -2030,6 +2087,7 @@ function removeFromRoom(id) {
 
 function placeItem(id) {
   if (!roomPlaced.includes(id)) {
+    unplaceExclusive(id);
     roomPlaced.push(id);
     saveData();
     renderPointsAndRoom();
@@ -2182,11 +2240,26 @@ function selectShopCat(cat) {
   renderShop();
 }
 
+// ── 아바타 단독 착용 그룹: 옷·신발·헤어스타일은 한 번에 하나만. 새로 착용하면 이전 것은 자동 해제
+function exclusiveGroupOf(id) {
+  if (id.startsWith('av_outfit_')) return x => x.startsWith('av_outfit_');
+  if (id.startsWith('av_shoes_'))  return x => x.startsWith('av_shoes_');
+  if (AV_HAIR_IDS.includes(id))    return x => AV_HAIR_IDS.includes(x);
+  return null;
+}
+function unplaceExclusive(id) {
+  const inGroup = exclusiveGroupOf(id);
+  if (!inGroup) return;
+  roomPlaced.filter(x => x !== id && inGroup(x)).forEach(x => delete itemPositions[x]);
+  roomPlaced = roomPlaced.filter(x => x === id || !inGroup(x));
+}
+
 function purchaseItem(id) {
   const item = SHOP_ITEMS.find(it => it.id === id);
   if (!item || shopOwned.includes(id) || points < item.price) return;
   points -= item.price;
   shopOwned.push(id);
+  unplaceExclusive(id);
   roomPlaced.push(id);
   if (item.cat === 'theme') activeTheme = id;
   saveData();
