@@ -70,6 +70,7 @@
   <section class="panel">
     <h3 id="listTitle">새 아이템 (체크 = 표시, 클릭 = 선택)</h3>
     <div id="itemList"></div>
+    <div id="existingList"></div>
     <hr style="border:0;border-top:1px solid #eee;margin:10px 0">
     <h3>기존 아이템 참고용 표시</h3>
     <div id="refList"></div>
@@ -118,6 +119,37 @@ const NEW_AVATAR = [
   { id:'av_acc_pompom',        img:'av_acc_pompom.png',        name:'치어 폼폼',       layer:'acc',    emoji:'📣', price:280, desc:'양손에 드는 빨간 치어 폼폼' },
   { id:'av_shoes_flowershoes', img:'av_shoes_flower2.png',     name:'꽃신',            layer:'shoes',  emoji:'🌺', price:330, desc:'한복에 신는 예쁜 꽃신' },
 ];
+// 기존 아바타 아이템 재조정용 (대시보드 현재 값이 기본값)
+const EXISTING_AVATAR = [{"id":"av_hair_bow","img":"av_hair_bow.png","name":"핑크 리본 헤어","emoji":"🎀","layer":"hair","fit":{"scale":0.443,"scaleX":1,"ox":24.8,"oy":-31.3}},
+  {"id":"av_hair_pink","img":"av_hair_band.png","name":"분홍 트윈테일","emoji":"💗","layer":"hair","fit":{"scale":0.803,"scaleX":1.185,"ox":0,"oy":-10.3}},
+  {"id":"av_hair_star","img":"av_hair_star.png","name":"별 핀 헤어","emoji":"⭐","layer":"hair","fit":{"scale":0.694,"scaleX":1,"ox":22.7,"oy":-33.2}},
+  {"id":"av_hair_flower","img":"av_hair_flower.png","name":"꽃 화환 헤어","emoji":"🌸","layer":"hair","fit":{"scale":0.735,"scaleX":1,"ox":-0.2,"oy":-13.59}},
+  {"id":"av_outfit_princess","img":"av_outfit_princess.png","name":"프린세스 드레스","emoji":"👸","layer":"outfit","fit":{"scale":0.953,"scaleX":1,"ox":-0.2,"oy":13.1}},
+  {"id":"av_outfit_rainbow","img":"av_outfit_rainbow.png","name":"무지개 드레스","emoji":"🌈","layer":"outfit","fit":{"scale":1.102,"scaleX":1,"ox":0,"oy":1.8}},
+  {"id":"av_outfit_galaxy","img":"av_outfit_galaxy.png","name":"갤럭시 드레스","emoji":"🌌","layer":"outfit","fit":{"scale":0.9,"scaleX":1.3,"ox":0,"oy":-0.7}},
+  {"id":"av_outfit_angel","img":"av_outfit_angel.png","name":"천사 드레스","emoji":"🤍","layer":"outfit","fit":{"scale":1.0485,"scaleX":1,"ox":0,"oy":1.22}},
+  {"id":"av_outfit_witch","img":"av_outfit_witch.png","name":"마녀 드레스","emoji":"🧙","layer":"outfit","fit":{"scale":0.9,"scaleX":1.04,"ox":0.6,"oy":-0.7}},
+  {"id":"av_outfit_star","img":"av_outfit_star.png","name":"별빛 드레스","emoji":"🌟","layer":"outfit","fit":{"scale":0.9,"scaleX":1,"ox":0,"oy":13.1}},
+  {"id":"av_outfit_rose","img":"av_outfit_rose.png","name":"장미 드레스","emoji":"🌹","layer":"outfit","fit":{"scale":0.9,"scaleX":1.155,"ox":0,"oy":0.2}},
+  {"id":"av_outfit_ballet","img":"av_outfit_ballet.png","name":"화려한 발레복","emoji":"🩰","layer":"outfit","fit":{"scale":1.112,"scaleX":1,"ox":-0.2,"oy":1.2}},
+  {"id":"av_outfit_sporty","img":"av_outfit_sporty.png","name":"화려한 운동복","emoji":"🎽","layer":"outfit","fit":{"scale":1.137,"scaleX":1,"ox":0,"oy":2.2}},
+  {"id":"av_outfit_school1","img":"av_outfit_school1.png","name":"대광초 교복 춘추복","emoji":"🎒","layer":"outfit","fit":{"scale":1.003,"scaleX":1,"ox":0,"oy":0.7}},
+  {"id":"av_outfit_school2","img":"av_outfit_school2.png","name":"대광초 생활복","emoji":"🎒","layer":"outfit","fit":{"scale":0.995,"scaleX":1.05,"ox":0.2,"oy":-0.2}},
+  {"id":"av_acc_tiara","img":"av_acc_tiara.png","name":"골드 티아라","emoji":"👑","layer":"acc","fit":{"scale":0.489,"scaleX":1,"ox":-0.5,"oy":-41.3}},
+  {"id":"av_acc_necklace","img":"av_acc_necklace.png","name":"별 목걸이","emoji":"💫","layer":"acc","fit":{"scale":0.326,"scaleX":1,"ox":0,"oy":-1.7}},
+  {"id":"av_acc_glasses","img":"av_acc_glasses.png","name":"동그란 안경","emoji":"👓","layer":"acc","fit":{"scale":0.56,"scaleX":1,"ox":0.6,"oy":-22.2}},
+  {"id":"av_acc_ribbon","img":"av_acc_ribbon.png","name":"리본 목걸이","emoji":"💝","layer":"acc","fit":{"scale":0.242,"scaleX":1,"ox":0.4,"oy":-0.2}},
+  {"id":"av_shoes_star","img":"av_shoes_star.png","name":"별빛 부츠","emoji":"⭐","layer":"shoes","fit":{"scale":0.602,"scaleX":1,"ox":-0.1,"oy":34.2}},
+  {"id":"av_shoes_rainbow","img":"av_shoes_rainbow.png","name":"무지개 스니커즈","emoji":"🌈","layer":"shoes","fit":{"scale":0.644,"scaleX":1,"ox":-0.1,"oy":33.2}},
+  {"id":"av_shoes_flower","img":"av_shoes_ribbon_extra.png","name":"꽃 샌들","emoji":"🌸","layer":"shoes","fit":{"scale":1,"scaleX":1,"ox":0,"oy":0}},
+  {"id":"av_shoes_rainbow2","img":"av_shoes_rainbow2.png","name":"무지개 샌들","emoji":"🌈","layer":"shoes","fit":{"scale":0.97,"scaleX":1,"ox":0,"oy":2.2}},
+  {"id":"av_shoes_rose","img":"av_shoes_rose.png","name":"장미 구두","emoji":"🌹","layer":"shoes","fit":{"scale":1.012,"scaleX":1,"ox":0,"oy":0.2}},
+  {"id":"av_shoes_star2","img":"av_shoes_star2.png","name":"별무늬 부츠","emoji":"⭐","layer":"shoes","fit":{"scale":1.02,"scaleX":1,"ox":0,"oy":-0.7}},
+  {"id":"av_shoes_blackmaryjane","img":"av_shoes_blackmaryjane.png","name":"검정 메리제인","emoji":"👞","layer":"shoes","fit":{"scale":0.6,"scaleX":1,"ox":0,"oy":34}},
+  {"id":"av_acc_shellpin","img":"av_acc_shellpin.png","name":"조개 핀","emoji":"🐚","layer":"acc","fit":{"scale":1.145,"scaleX":1.165,"ox":-10.4,"oy":3.1}},
+  {"id":"av_acc_witchhat","img":"av_acc_witchhat.png","name":"마녀 모자","emoji":"🎩","layer":"acc","fit":{"scale":0.769,"scaleX":1,"ox":9.6,"oy":-21.3}},
+  {"id":"av_bag_star","img":"av_bag_star.png","name":"별 미니백","emoji":"⭐","layer":"acc","fit":{"scale":0.836,"scaleX":1,"ox":36.7,"oy":23.2}},
+  {"id":"av_bag_flower","img":"av_bag_flower.png","name":"꽃바구니 백","emoji":"🧺","layer":"acc","fit":{"scale":0.4,"scaleX":1,"ox":22,"oy":15}}];
 // 기존 아이템(참고용, 대시보드 값 그대로)
 const REF_AVATAR = [
   { id:'av_outfit_princess', img:'av_outfit_princess.png', name:'프린세스 드레스', layer:'outfit', fit:{scale:0.953, ox:-0.20, oy:13.10} },
@@ -155,6 +187,7 @@ let refVisible = state.refVisible || {};
 
 function defaultsFor(id) {
   if (NEW_FURN.find(f => f.id === id)) { const i = NEW_FURN.findIndex(f => f.id === id); const f = NEW_FURN[i]; return { w: 110, zone: f.zone, x: 4 + (i % 5) * 19, y: f.zone === 'wall' ? 6 + Math.floor(i / 5) * 14 : 52 + Math.floor(i / 5) * 18 }; }
+  const ex = EXISTING_AVATAR.find(e => e.id === id); if (ex) return { ...ex.fit };
   return { scale: 1, scaleX: 1, ox: 0, oy: 0 };
 }
 function fitOf(id) { if (!state.fit[id]) state.fit[id] = defaultsFor(id); return state.fit[id]; }
@@ -181,12 +214,20 @@ function renderList() {
       <img src="${ASSETS}${it.img || it.file}" alt="">
       <div class="nm">${it.emoji || ''} ${it.name}<small>${it.id}${it.layer ? ' · ' + it.layer : ''}</small></div>
     </div>`).join('');
+  const exBox = document.getElementById('existingList');
+  exBox.innerHTML = tab !== 'avatar' ? '' : '<h3 style="margin-top:12px">기존 아바타 아이템 재조정 (클릭=선택·표시)</h3>' + EXISTING_AVATAR.map(it => `
+    <div class="item-row ${selected === it.id ? 'selected' : ''}" onclick="selectItem('${it.id}')">
+      <input type="checkbox" ${visible[it.id] ? 'checked' : ''} onclick="event.stopPropagation();toggleVisible('${it.id}', this.checked)">
+      <img src="${ASSETS}${it.img}" alt="">
+      <div class="nm">${it.emoji} ${it.name}<small>${it.id} · ${it.layer}${JSON.stringify(fitOf(it.id)) !== JSON.stringify(it.fit) ? ' · <b style=color:#e0407a>수정됨</b>' : ''}</small></div>
+    </div>`).join('');
   document.getElementById('refList').innerHTML = refs.map(it => `
     <label class="ref-toggle"><input type="checkbox" ${refVisible[it.id] ? 'checked' : ''} onchange="refVisible['${it.id}']=this.checked;renderAll()"> ${it.name}</label>`).join('');
 }
 function exclusive(id) {
-  const it = NEW_AVATAR.find(n => n.id === id); if (!it || !['outfit','hair'].includes(it.layer)) return;
-  NEW_AVATAR.forEach(n => { if (n.id !== id && n.layer === it.layer) visible[n.id] = false; });
+  const all = [...NEW_AVATAR, ...EXISTING_AVATAR];
+  const it = all.find(n => n.id === id); if (!it || !['outfit','hair','shoes'].includes(it.layer)) return;
+  all.forEach(n => { if (n.id !== id && n.layer === it.layer) visible[n.id] = false; });
 }
 function toggleVisible(id, on) { visible[id] = on; if (on) exclusive(id); renderAll(); }
 function selectItem(id) { selected = id; visible[id] = true; exclusive(id); renderAll(); }
@@ -202,6 +243,7 @@ function renderStage() {
     let layers = [];
     REF_AVATAR.forEach(r => { if (refVisible[r.id]) layers.push({ id: r.id, img: r.img, layer: r.layer, fit: r.fit, ref: true }); });
     NEW_AVATAR.forEach(n => { if (visible[n.id] !== false) layers.push({ id: n.id, img: n.img, layer: n.layer, fit: fitOf(n.id), ref: false }); });
+    EXISTING_AVATAR.forEach(n => { if (visible[n.id]) layers.push({ id: n.id, img: n.img, layer: n.layer, fit: fitOf(n.id), ref: false }); });
     layers.sort((a, b) => LAYER_ORDER[a.layer] - LAYER_ORDER[b.layer]);
     st.innerHTML = `<img src="${ASSETS}lily_final.png" alt="">` +
       layers.map(l => `<img src="${ASSETS}${l.img}" class="${selected === l.id ? 'sel-outline' : ''}" style="${avStyle(l.fit)}${l.ref ? 'opacity:.85;' : ''}" alt="">`).join('');
@@ -229,7 +271,7 @@ function ctrlRow(key, label, min, max, step) {
 function renderCtrls() {
   const title = document.getElementById('ctrlTitle'); const box = document.getElementById('ctrls');
   if (!selected) { title.textContent = '선택된 아이템 없음'; box.innerHTML = '<p class="muted">왼쪽 목록에서 아이템을 클릭하세요.</p>'; return; }
-  const item = [...NEW_AVATAR, ...NEW_FURN].find(i => i.id === selected);
+  const item = [...NEW_AVATAR, ...NEW_FURN, ...EXISTING_AVATAR].find(i => i.id === selected);
   title.textContent = `${item.emoji} ${item.name}`;
   let html = '';
   if (tab === 'avatar') {
@@ -250,7 +292,7 @@ function renderCtrls() {
     <div class="price-row">설명 <input class="wide" value="${metaOf(item).desc}" onchange="setMeta('desc', this.value)"></div>`;
   box.innerHTML = html;
 }
-function metaOf(item) { state.meta = state.meta || {}; const m = state.meta[item.id] || {}; return { emoji: m.emoji || item.emoji, price: m.price || item.price, name: m.name || item.name, desc: m.desc || item.desc }; }
+function metaOf(item) { state.meta = state.meta || {}; const m = state.meta[item.id] || {}; return { emoji: m.emoji || item.emoji || '', price: m.price || item.price || 0, name: m.name || item.name, desc: m.desc || item.desc || '' }; }
 function setMeta(k, v) { state.meta = state.meta || {}; state.meta[selected] = state.meta[selected] || {}; state.meta[selected][k] = k === 'price' ? Number(v) : v; renderAll(); }
 function setVal(key, v) {
   const f = fitOf(selected);
@@ -325,6 +367,8 @@ function renderExport() {
   const lines = [];
   lines.push('// ===== AV_FIT 추가 =====');
   NEW_AVATAR.forEach(n => { const f = fitOf(n.id); lines.push(`  ${n.id}: { img:'${n.img}', scale:${f.scale.toFixed(3)}, scaleX:${(f.scaleX ?? 1).toFixed(3)}, ox:${f.ox.toFixed(2)}, oy:${f.oy.toFixed(2)} },`); });
+  const changed = EXISTING_AVATAR.filter(n => JSON.stringify(fitOf(n.id)) !== JSON.stringify(n.fit));
+  if (changed.length) { lines.push('// ===== AV_FIT 수정(기존 아이템) ====='); changed.forEach(n => { const f = fitOf(n.id); lines.push(`  ${n.id}: { img:'${n.img}', scale:${f.scale.toFixed(3)}, scaleX:${(f.scaleX ?? 1).toFixed(3)}, ox:${f.ox.toFixed(2)}, oy:${f.oy.toFixed(2)} },`); }); }
   lines.push('// ===== PNG_FURNITURE 추가 =====');
   NEW_FURN.forEach(n => { const f = fitOf(n.id); lines.push(`  ${n.id}: { file:'${n.file}', w:${f.w} },  // zone: ${f.zone}`); });
   lines.push('// ===== SHOP_ITEMS 추가 =====');

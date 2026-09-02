@@ -7,6 +7,9 @@ using System.Runtime.InteropServices;
 
 public static class ImgTool
 {
+    // When true, small components are dropped only if they are grey-ish (checker remnants); colourful bits are kept.
+    public static bool KeepColourfulSmall = false;
+
     // Load into premultiplied-free ARGB byte array (B,G,R,A)
     static byte[] GetBytes(Bitmap bmp, out int stride)
     {
@@ -152,11 +155,24 @@ public static class ImgTool
                 }
             }
             int largest = 0; foreach (var a in areas) if (a > largest) largest = a;
+            // per-component mean chroma (to keep small but colourful pieces such as sparkles / sprig leaves)
+            var chromaSum = new long[nc + 1];
+            for (int s = 0; s < w * h; s++)
+            {
+                if (isBg[s]) continue;
+                int i = (s / w) * stride + (s % w) * 4; int b = p[i], g = p[i + 1], r = p[i + 2];
+                chromaSum[comp[s]] += Math.Max(r, Math.Max(g, b)) - Math.Min(r, Math.Min(g, b));
+            }
             int dropped = 0;
             for (int s = 0; s < w * h; s++)
             {
                 if (isBg[s]) continue;
-                if (areas[comp[s]] < largest * minCompFrac) { isBg[s] = true; dropped++; }
+                int k = comp[s];
+                if (areas[k] < largest * minCompFrac)
+                {
+                    double meanChroma = (double)chromaSum[k] / areas[k];
+                    if (!KeepColourfulSmall || meanChroma <= 16 || areas[k] < largest * 0.0003) { isBg[s] = true; dropped++; }
+                }
             }
 
             // apply alpha + soften edge: pixels adjacent to bg get partial alpha based on palette distance
@@ -273,6 +289,130 @@ public static class ImgTool
             }
             using (var outBmp = FromBytes(p, w, h, stride)) outBmp.Save(dst, ImageFormat.Png);
             return string.Format("gray px {0}, comps {1}, patch bbox x{2}-{3} y{4}-{5} (area {6}), cleared {7}px", count, nc, x0, x1, y0, y1, areas[best], cleared);
+        }
+    }
+
+    // Combine: above yCut use alpha from maskPng (aggressively cleaned), below keep origPng. Both must be same size.
+    // Then crop to content (+padPct) and downscale to maxSide.
+    public static string CombineAlphaAbove(string origPng, string maskPng, string dst, int yCut, int padPct, int maxSide) { return CombineAlphaAbove(origPng, maskPng, dst, yCut, padPct, maxSide, 0); }
+    // protectBlueMin > 0: never clear a pixel whose original colour is blue-ish (B - max(R,G) >= protectBlueMin), e.g. the table.
+    public static string CombineAlphaAbove(string origPng, string maskPng, string dst, int yCut, int padPct, int maxSide, int protectBlueMin)
+    {
+        using (var o = new Bitmap(origPng)) using (var m = new Bitmap(maskPng))
+        {
+            if (o.Width != m.Width || o.Height != m.Height) return "size mismatch " + o.Width + "x" + o.Height + " vs " + m.Width + "x" + m.Height;
+            int so, sm; var po = GetBytes(o, out so); var pm = GetBytes(m, out sm);
+            int w = o.Width, h = o.Height; int changed = 0;
+            for (int y = 0; y < Math.Min(yCut, h); y++) for (int x = 0; x < w; x++)
+            {
+                int io = y * so + x * 4, im = y * sm + x * 4;
+                if (protectBlueMin > 0) { int b = po[io], g = po[io + 1], r = po[io + 2]; if (b - Math.Max(r, g) >= protectBlueMin) continue; }
+                if (po[io + 3] != 0 && pm[im + 3] == 0) { po[io + 3] = 0; changed++; }
+                else if (pm[im + 3] < po[io + 3]) po[io + 3] = pm[im + 3];
+            }
+            int minX = w, maxX = -1, minY = h, maxY = -1;
+            for (int y = 0; y < h; y++) for (int x = 0; x < w; x++)
+                if (po[y * so + x * 4 + 3] > 20) { if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y; }
+            int padX = (maxX - minX + 1) * padPct / 100, padY = (maxY - minY + 1) * padPct / 100;
+            var srcRect = new Rectangle(Math.Max(0, minX - padX), Math.Max(0, minY - padY), 0, 0);
+            srcRect.Width = Math.Min(w - 1, maxX + padX) - srcRect.X + 1; srcRect.Height = Math.Min(h - 1, maxY + padY) - srcRect.Y + 1;
+            double sc = Math.Min(1.0, (double)maxSide / Math.Max(srcRect.Width, srcRect.Height));
+            int tw = Math.Max(1, (int)Math.Round(srcRect.Width * sc)), th = Math.Max(1, (int)Math.Round(srcRect.Height * sc));
+            using (var full = FromBytes(po, w, h, so))
+            using (var outBmp = new Bitmap(tw, th, PixelFormat.Format32bppArgb))
+            using (var g = Graphics.FromImage(outBmp))
+            {
+                g.Clear(Color.Transparent); g.InterpolationMode = InterpolationMode.HighQualityBicubic; g.PixelOffsetMode = PixelOffsetMode.HighQuality; g.CompositingMode = CompositingMode.SourceCopy;
+                using (var ia = new ImageAttributes()) { ia.SetWrapMode(WrapMode.TileFlipXY);
+                    g.DrawImage(full, new Rectangle(0, 0, tw, th), srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, GraphicsUnit.Pixel, ia); }
+                outBmp.Save(dst, ImageFormat.Png);
+            }
+            return string.Format("cleared {0}px above y={1}; out {2}x{3}", changed, yCut, tw, th);
+        }
+    }
+
+    // Thumbnail using bbox of significant connected components only (ignores stray specks).
+    // Components with area < minFrac * largest are ignored when measuring the box (pairs like shoes are kept).
+    public static string ThumbSmart(string src, string dst, int size, int padPct, int alphaMin, double minFrac)
+    {
+        using (var bmp = new Bitmap(src))
+        {
+            int stride; var p = GetBytes(bmp, out stride);
+            int w = bmp.Width, h = bmp.Height;
+            var comp = new int[w * h]; int nc = 0; var areas = new List<int> { 0 }; var boxes = new List<int[]> { null };
+            int[] dx = { 1, -1, 0, 0, 1, 1, -1, -1 }, dy = { 0, 0, 1, -1, 1, -1, 1, -1 };
+            for (int s = 0; s < w * h; s++)
+            {
+                if (comp[s] != 0 || p[(s / w) * stride + (s % w) * 4 + 3] <= alphaMin) continue;
+                nc++; areas.Add(0); var bx = new[] { w, h, -1, -1 }; boxes.Add(bx);
+                var st = new Stack<int>(); st.Push(s); comp[s] = nc;
+                while (st.Count > 0)
+                {
+                    int idx = st.Pop(); areas[nc]++; int cx = idx % w, cy = idx / w;
+                    if (cx < bx[0]) bx[0] = cx; if (cy < bx[1]) bx[1] = cy; if (cx > bx[2]) bx[2] = cx; if (cy > bx[3]) bx[3] = cy;
+                    for (int d = 0; d < 8; d++)
+                    {
+                        int nx = cx + dx[d], ny = cy + dy[d];
+                        if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+                        int ni = ny * w + nx;
+                        if (comp[ni] != 0 || p[ny * stride + nx * 4 + 3] <= alphaMin) continue;
+                        comp[ni] = nc; st.Push(ni);
+                    }
+                }
+            }
+            if (nc == 0) return "EMPTY";
+            int largest = 0; for (int k = 1; k <= nc; k++) if (areas[k] > largest) largest = areas[k];
+            int minX = w, maxX = -1, minY = h, maxY = -1;
+            for (int k = 1; k <= nc; k++)
+            {
+                if (areas[k] < largest * minFrac) continue;
+                var bx = boxes[k]; if (bx[0] < minX) minX = bx[0]; if (bx[1] < minY) minY = bx[1]; if (bx[2] > maxX) maxX = bx[2]; if (bx[3] > maxY) maxY = bx[3];
+            }
+            var srcRect = new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
+            int inner = size - size * padPct / 50;
+            double sc = Math.Min((double)inner / srcRect.Width, (double)inner / srcRect.Height);
+            int tw = Math.Max(1, (int)Math.Round(srcRect.Width * sc)), th = Math.Max(1, (int)Math.Round(srcRect.Height * sc));
+            using (var outBmp = new Bitmap(size, size, PixelFormat.Format32bppArgb))
+            using (var g = Graphics.FromImage(outBmp))
+            {
+                g.Clear(Color.Transparent); g.InterpolationMode = InterpolationMode.HighQualityBicubic; g.PixelOffsetMode = PixelOffsetMode.HighQuality; g.CompositingMode = CompositingMode.SourceOver;
+                using (var ia = new ImageAttributes()) { ia.SetWrapMode(WrapMode.TileFlipXY);
+                    g.DrawImage(bmp, new Rectangle((size - tw) / 2, (size - th) / 2, tw, th), srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, GraphicsUnit.Pixel, ia); }
+                outBmp.Save(dst, ImageFormat.Png);
+            }
+            return string.Format("comps {0}, bbox {1}x{2} -> {3}x{4}", nc, srcRect.Width, srcRect.Height, tw, th);
+        }
+    }
+
+    // Shop thumbnail: crop to opaque content (+pad%), fit into a square transparent canvas, centered.
+    public static string Thumb(string src, string dst, int size, int padPct) { return Thumb(src, dst, size, padPct, 20); }
+    // alphaMin: ignore faint noise pixels when measuring the content box (e.g. 90 for images with stray semi-transparent dots)
+    public static string Thumb(string src, string dst, int size, int padPct, int alphaMin)
+    {
+        using (var bmp = new Bitmap(src))
+        {
+            int stride; var p = GetBytes(bmp, out stride);
+            int w = bmp.Width, h = bmp.Height;
+            int minX = w, maxX = -1, minY = h, maxY = -1;
+            for (int y = 0; y < h; y++) for (int x = 0; x < w; x++)
+                if (p[y * stride + x * 4 + 3] > alphaMin) { if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y; }
+            if (maxX < 0) return "EMPTY";
+            var srcRect = new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
+            int inner = size - size * padPct / 50; // pad on both sides
+            double sc = Math.Min((double)inner / srcRect.Width, (double)inner / srcRect.Height);
+            int tw = Math.Max(1, (int)Math.Round(srcRect.Width * sc)), th = Math.Max(1, (int)Math.Round(srcRect.Height * sc));
+            using (var outBmp = new Bitmap(size, size, PixelFormat.Format32bppArgb))
+            using (var g = Graphics.FromImage(outBmp))
+            {
+                g.Clear(Color.Transparent);
+                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                g.CompositingMode = CompositingMode.SourceOver;
+                using (var ia = new ImageAttributes()) { ia.SetWrapMode(WrapMode.TileFlipXY);
+                    g.DrawImage(bmp, new Rectangle((size - tw) / 2, (size - th) / 2, tw, th), srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, GraphicsUnit.Pixel, ia); }
+                outBmp.Save(dst, ImageFormat.Png);
+            }
+            return string.Format("bbox {0}x{1} -> {2}x{3} in {4}px", srcRect.Width, srcRect.Height, tw, th, size);
         }
     }
 

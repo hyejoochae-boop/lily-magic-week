@@ -22,3 +22,12 @@ AI 생성 이미지의 가짜 체커보드 배경(불투명)을 테두리 색 �
 # 바깥과 연결되지 않은(둘러싸인) 체커보드 조각 제거 — 회색 사각형(밝기 185~225) 위치를 찾아 그 영역의 무채색 픽셀만 지움
 [ImgTool]::RemoveNeutralPatch($src, $dst, 185, 225, 8, 175, 3, 200)
 ```
+
+```powershell
+# 상점 썸네일: 가장 큰 덩어리 기준으로 내용물만 잘라 160px 정사각형 가운데 배치 (잡점 무시)
+[ImgTool]::ThumbSmart($src, "lily2_assets\thumbs\<id>.png", 160, 8, 90, 0.05)
+# 작은 조각 중 회색(체커 잔여물)만 버리고 색 있는 조각(반짝이·잔가지)은 유지
+[ImgTool]::KeepColourfulSmall = $true; [ImgTool]::RemoveBg(...)
+# 빛 번짐 제거: 강한 설정 마스크를 y 기준 위쪽에만 적용해 합성 (달 조명)
+[ImgTool]::CombineAlphaAbove($origFull, $maskFull, $dst, $yCut, 4, 500)
+```

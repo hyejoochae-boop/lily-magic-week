@@ -1165,7 +1165,7 @@ const AV_FIT = {
   av_acc_shellpin:   { img:'av_acc_shellpin.png',   scale:1.145, scaleX:1.165, ox:-10.40, oy:3.10 },
   av_acc_witchhat:   { img:'av_acc_witchhat.png',   scale:0.769, scaleX:1.000, ox:9.60, oy:-21.30 },
   av_bag_star:   { img:'av_bag_star.png',   scale:0.836, ox:36.70, oy:23.20 },
-  av_bag_flower: { img:'av_bag_flower.png', scale:0.4,   ox:22,    oy:15 },
+  av_bag_flower: { img:'av_bag_flower.png', scale:0.820, scaleX:1.000, ox:37.10, oy:21.60 },
   av_outfit_cheer:      { img:'av_outfit_cheer.png',      scale:0.780, scaleX:1.000, ox:-0.50, oy:9.60 },
   av_outfit_hanbok:     { img:'av_outfit_hanbok.png',     scale:0.930, scaleX:1.000, ox:0.00, oy:-0.20 },
   av_hair_hanbokband:   { img:'av_hair_hanbokband.png',   scale:0.690, scaleX:1.000, ox:0.20, oy:-20.70 },
@@ -2206,6 +2206,13 @@ function renderPointsAndRoom() {
   renderRoom();
 }
 
+/* ── 상점 카드 썸네일: PNG 아이템은 내용물만 잘라 정사각형 가운데 정렬한 thumbs/ 이미지 사용 ── */
+const SHOP_THUMB_IDS = new Set(["av_hair_bow","av_hair_pink","av_hair_star","av_hair_flower","av_outfit_princess","av_outfit_rainbow","av_outfit_galaxy","av_outfit_angel","av_outfit_witch","av_outfit_star","av_outfit_rose","av_outfit_ballet","av_outfit_sporty","av_outfit_school1","av_outfit_school2","av_acc_tiara","av_acc_necklace","av_acc_glasses","av_acc_ribbon","av_shoes_star","av_shoes_rainbow","av_shoes_flower","av_shoes_rainbow2","av_shoes_rose","av_shoes_star2","av_shoes_blackmaryjane","av_acc_shellpin","av_acc_witchhat","av_bag_star","av_bag_flower","av_outfit_cheer","av_outfit_hanbok","av_hair_hanbokband","av_hair_redribbon","av_acc_pompom","av_shoes_flowershoes","furn_canopybed","furn_clock","furn_pastelpiano","furn_teatable","furn_flowerstand","furn_closet","furn_springbookshelf","furn_springbox","furn_springtable","furn_starbed","furn_stargarland","furn_starsidetable","furn_stardrawer","furn_starposter","furn_wallshelf","pet_cat","pet_rabbit","pet_hamster","pet_butterfly","pet_fox","pet_unicorn","pet_frog","pet_dragon","pet_penguin","food_cake","food_cupcake","food_macaron","food_parfait","food_icecream"]);
+function shopIcon(item) {
+  if (SHOP_THUMB_IDS.has(item.id)) return `<img src="${AV_ASSETS}thumbs/${item.id}.png" style="width:80px;height:80px;object-fit:contain;" alt="">`;
+  return customItemIcon(item.id) || item.emoji;
+}
+
 /* ── SHOP RENDER ── */
 function renderShop() {
   // Tabs
@@ -2238,7 +2245,7 @@ function renderShop() {
       }
     }
     return `<div class="shop-item-card ${owned ? 'owned' : ''} ${!owned && !canAfford ? 'unaffordable' : ''}">
-      <div class="shop-item-emoji">${customItemIcon(item.id) || item.emoji}</div>
+      <div class="shop-item-emoji">${shopIcon(item)}</div>
       <div class="shop-item-name">${item.name}</div>
       <div class="shop-item-desc">${item.desc}</div>
       <div class="shop-item-price">💰 ${item.price} pt</div>
