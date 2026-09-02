@@ -408,9 +408,11 @@
   }
   .shop-item-card.owned { background: linear-gradient(145deg, #fff8cf, #fff); border-color: #ffd76a; }
   .shop-item-card.unaffordable { opacity: .65; }
-  .shop-item-emoji { font-size: 2.4rem; line-height: 1.1; }
-  .shop-item-name { font: 700 .95rem 'Emilys Candy', 'Gowun Dodum', sans-serif; }
-  .shop-item-desc { font: 700 .78rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: #7c6294; min-height: 26px; }
+  .shop-item-emoji { height: 80px; flex: 0 0 80px; width: 100%; display: flex; align-items: center; justify-content: center; font-size: 2.4rem; line-height: 1; overflow: hidden; }
+  .shop-item-emoji img, .shop-item-emoji svg { width: auto !important; height: auto !important; max-width: 80px !important; max-height: 80px !important; object-fit: contain; }
+  .shop-item-emoji .rc-item-emoji { font-size: 2.4rem !important; line-height: 1; }
+  .shop-item-name { font: 700 .95rem 'Emilys Candy', 'Gowun Dodum', sans-serif; width: 100%; height: 1.3em; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .shop-item-desc { font: 700 .78rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: #7c6294; width: 100%; height: 2.6em; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
   .shop-item-price { font: 700 .9rem 'Emilys Candy', 'Gowun Dodum', sans-serif; color: #5a3500; background: linear-gradient(135deg,#ffeea0,#ffd76a); padding: 3px 12px; border-radius: 999px; }
   .shop-buy-btn {
     margin-top: 4px; border: 0; border-radius: 999px;
@@ -775,16 +777,16 @@ const DAY_NAMES = { Mon:'Monday', Tue:'Tuesday', Wed:'Wednesday', Thu:'Thursday'
 const DAY_KOR = { Mon:'월요일', Tue:'화요일', Wed:'수요일', Thu:'목요일', Fri:'금요일', Sat:'토요일', Sun:'일요일' };
 const STORAGE_KEY = 'joys-wonderful-week-v8';
 const STORAGE_KEY_V7 = 'joys-wonderful-week-v7';
-const MAX_TASKS = 10;
+const MAX_TASKS = 8;
 
 const FAIRIES = {
-  Mon: { name: 'Goldie', title: 'the Sunshine Fairy', dayName: 'Goldie Day', icon: '☀️', weather: 'sunshine', accent: '#f7a916', light: '#fff0a7', dress: '#ffc23d', dressDark: '#f39a16', hair: '#d98b27', hairDark: '#9f6320', skin: '#ffe2c2', effect: ['☀️','✨','🌻'], hairStyle: 'curls', wand: 'sun', items: [['☀️','Sunshine Wand'], ['👑','Golden Crown'], ['📿','Sun Necklace'], ['🪽','Glitter Wings'], ['👗','Sunny Petal Dress'], ['🥾','Golden Boots'], ['💛','Sunbeam Belt'], ['💍','Dawn Bracelet'], ['🌻','Sunflower Charm'], ['🌈','Rainbow Glow']] },
-  Tue: { name: 'Crystal', title: 'the Snow Fairy', dayName: 'Crystal Day', icon: '❄️', weather: 'snow', accent: '#43a8e8', light: '#dff6ff', dress: '#77c9ff', dressDark: '#3f94d8', hair: '#ffeeb2', hairDark: '#d5b352', skin: '#ffe4cb', effect: ['❄️','✧','🧊'], hairStyle: 'bob', wand: 'snow', items: [['❄️','Snowflake Wand'], ['🧣','Frosty Scarf'], ['👑','Ice Crown'], ['🪽','Crystal Wings'], ['👗','Snow Dress'], ['⛸️','Snow Boots'], ['💎','Icicle Necklace'], ['🧤','Warm Mittens'], ['🧊','Ice Charm'], ['🌨️','Snowy Glow']] },
-  Wed: { name: 'Abigail', title: 'the Breeze Fairy', dayName: 'Abigail Day', icon: '💨', weather: 'breeze', accent: '#f6a13d', light: '#ffe2b8', dress: '#ffc85c', dressDark: '#ef8830', hair: '#8b4a2a', hairDark: '#5c2e1b', skin: '#ffd9bd', effect: ['🍃','💨','🌀'], hairStyle: 'long', wand: 'pinwheel', items: [['💨','Breeze Wand'], ['🎀','Wind Ribbon'], ['🪁','Kite Brooch'], ['🪽','Flutter Wings'], ['👗','Breezy Dress'], ['👢','Leaf Boots'], ['🌀','Swirl Necklace'], ['🍃','Leaf Bracelet'], ['🌬️','Whisper Charm'], ['🌈','Wind Glow']] },
-  Thu: { name: 'Pearl', title: 'the Cloud Fairy', dayName: 'Pearl Day', icon: '☁️', weather: 'cloud', accent: '#f58abc', light: '#ffe0ef', dress: '#ff9ec7', dressDark: '#e864a7', hair: '#2e2630', hairDark: '#141018', skin: '#ffe0c7', effect: ['☁️','✨','🫧'], hairStyle: 'braid', wand: 'cloud', items: [['☁️','Cloud Wand'], ['🎀','Pearl Hair Bow'], ['📿','Cloud Necklace'], ['🪽','Soft Wings'], ['👗','Puffy Cloud Dress'], ['🥿','Cloud Shoes'], ['🫧','Bubble Belt'], ['💍','Pearl Bracelet'], ['🌤️','Cloud Charm'], ['✨','Silver Lining']] },
-  Fri: { name: 'Evie', title: 'the Mist Fairy', dayName: 'Evie Day', icon: '🌫️', weather: 'mist', accent: '#8e6fd1', light: '#eadfff', dress: '#a486de', dressDark: '#7652bd', hair: '#59413d', hairDark: '#2d2222', skin: '#ffe0c7', effect: ['🌫️','💧','✧'], hairStyle: 'wave', wand: 'mist', items: [['🌫️','Mist Wand'], ['💜','Violet Headband'], ['🔮','Mist Necklace'], ['🪽','Hazy Wings'], ['👗','Lavender Dress'], ['🥿','Fog Shoes'], ['🫧','Mist Belt'], ['💍','Dew Bracelet'], ['🧴','Tiny Potion'], ['🌌','Misty Glow']] },
-  Sat: { name: 'Storm', title: 'the Lightning Fairy', dayName: 'Storm Day', icon: '⚡', weather: 'lightning', accent: '#5757c8', light: '#dfe4ff', dress: '#6b55c8', dressDark: '#3b348f', hair: '#f6d46d', hairDark: '#c28e2a', skin: '#ffe0c7', effect: ['⚡','🌩️','✦'], hairStyle: 'straight', wand: 'lightning', items: [['⚡','Lightning Wand'], ['👑','Thunder Tiara'], ['⭐','Bolt Necklace'], ['🪽','Storm Wings'], ['👗','Lightning Dress'], ['🥾','Bolt Boots'], ['🟣','Storm Belt'], ['💍','Spark Ring'], ['🌩️','Thunder Charm'], ['✨','Electric Glow']] },
-  Sun: { name: 'Hayley', title: 'the Rain Fairy', dayName: 'Hayley Day', icon: '💧', weather: 'rain', accent: '#6d63d8', light: '#e3dcff', dress: '#7b6edc', dressDark: '#4f45aa', hair: '#7b3f2d', hairDark: '#4d241a', skin: '#ffd8bd', effect: ['💧','☔','🌧️'], hairStyle: 'pony', wand: 'rain', items: [['💧','Rain Wand'], ['☔','Tiny Umbrella'], ['📿','Raindrop Necklace'], ['🪽','Rainy Wings'], ['👗','Violet Rain Dress'], ['👢','Splash Boots'], ['💙','Rain Belt'], ['💍','Droplet Bracelet'], ['🌧️','Raincloud Charm'], ['🌈','After-Rain Glow']] }
+  Mon: { name: 'Goldie', title: 'the Sunshine Fairy', dayName: 'Goldie Day', icon: '☀️', weather: 'sunshine', accent: '#f7a916', light: '#fff0a7', dress: '#ffc23d', dressDark: '#f39a16', hair: '#d98b27', hairDark: '#9f6320', skin: '#ffe2c2', effect: ['☀️','✨','🌻'], hairStyle: 'curls', wand: 'sun', items: [['☀️','Sunshine Wand'], ['📿','Sun Necklace'], ['👗','Sunny Petal Dress'], ['🥾','Golden Boots'], ['💛','Sunbeam Belt'], ['💍','Dawn Bracelet'], ['🌻','Sunflower Charm'], ['🌈','Rainbow Glow']] },
+  Tue: { name: 'Crystal', title: 'the Snow Fairy', dayName: 'Crystal Day', icon: '❄️', weather: 'snow', accent: '#43a8e8', light: '#dff6ff', dress: '#77c9ff', dressDark: '#3f94d8', hair: '#ffeeb2', hairDark: '#d5b352', skin: '#ffe4cb', effect: ['❄️','✧','🧊'], hairStyle: 'bob', wand: 'snow', items: [['👑','Ice Crown'], ['💎','Icicle Necklace'], ['🪽','Crystal Wings'], ['👗','Snow Dress'], ['🩵','Frost Belt'], ['💠','Icicle Bracelet'], ['🧊','Ice Charm'], ['🌨️','Snowy Glow']] },
+  Wed: { name: 'Abigail', title: 'the Breeze Fairy', dayName: 'Abigail Day', icon: '💨', weather: 'breeze', accent: '#f6a13d', light: '#ffe2b8', dress: '#ffc85c', dressDark: '#ef8830', hair: '#8b4a2a', hairDark: '#5c2e1b', skin: '#ffd9bd', effect: ['🍃','💨','🌀'], hairStyle: 'long', wand: 'pinwheel', items: [['💨','Breeze Wand'], ['🎀','Wind Ribbon'], ['🌀','Swirl Necklace'], ['🪽','Flutter Wings'], ['👗','Breezy Dress'], ['👢','Leaf Boots'], ['🍃🌿','Leaf Bracelet & Vine Belt'], ['🌈','Wind Glow']] },
+  Thu: { name: 'Pearl', title: 'the Cloud Fairy', dayName: 'Pearl Day', icon: '☁️', weather: 'cloud', accent: '#f58abc', light: '#ffe0ef', dress: '#ff9ec7', dressDark: '#e864a7', hair: '#2e2630', hairDark: '#141018', skin: '#ffe0c7', effect: ['☁️','✨','🫧'], hairStyle: 'braid', wand: 'cloud', items: [['☁️','Cloud Wand'], ['🎀','Pearl Hair Bow'], ['📿','Cloud Necklace'], ['🪽','Soft Wings'], ['👗','Puffy Cloud Dress'], ['🥿','Cloud Shoes'], ['💍🫧','Pearl Bracelet & Bubble Belt'], ['✨','Silver Lining']] },
+  Fri: { name: 'Evie', title: 'the Mist Fairy', dayName: 'Evie Day', icon: '🌫️', weather: 'mist', accent: '#8e6fd1', light: '#eadfff', dress: '#a486de', dressDark: '#7652bd', hair: '#59413d', hairDark: '#2d2222', skin: '#ffe0c7', effect: ['🌫️','💧','✧'], hairStyle: 'wave', wand: 'mist', items: [['🌫️','Mist Wand'], ['💜','Violet Headband'], ['🔮','Mist Necklace'], ['🪽','Hazy Wings'], ['👗','Lavender Dress'], ['🥿','Fog Shoes'], ['💍🫧','Dew Bracelet & Mist Belt'], ['🌌','Misty Glow']] },
+  Sat: { name: 'Storm', title: 'the Lightning Fairy', dayName: 'Storm Day', icon: '⚡', weather: 'lightning', accent: '#5757c8', light: '#dfe4ff', dress: '#6b55c8', dressDark: '#3b348f', hair: '#f6d46d', hairDark: '#c28e2a', skin: '#ffe0c7', effect: ['⚡','🌩️','✦'], hairStyle: 'straight', wand: 'lightning', items: [['⚡','Lightning Wand'], ['👑','Thunder Tiara'], ['⭐','Bolt Necklace'], ['🪽','Storm Wings'], ['👗','Lightning Dress'], ['🥾','Bolt Boots'], ['💍🟣','Spark Ring & Storm Belt'], ['✨','Electric Glow']] },
+  Sun: { name: 'Hayley', title: 'the Rain Fairy', dayName: 'Hayley Day', icon: '💧', weather: 'rain', accent: '#6d63d8', light: '#e3dcff', dress: '#7b6edc', dressDark: '#4f45aa', hair: '#7b3f2d', hairDark: '#4d241a', skin: '#ffd8bd', effect: ['💧','☔','🌧️'], hairStyle: 'pony', wand: 'rain', items: [['💧','Rain Wand'], ['☔','Tiny Umbrella'], ['📿','Raindrop Necklace'], ['🪽','Rainy Wings'], ['👗','Violet Rain Dress'], ['👢','Splash Boots'], ['💍💙','Droplet Bracelet & Rain Belt'], ['🌈','After-Rain Glow']] }
 };
 
 /*
@@ -1448,7 +1450,7 @@ function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-function itemCountFor(day) { return Math.min(taskCounts(day).done, MAX_TASKS); }
+function itemCountFor(day) { return isFairyComplete(day) ? MAX_TASKS : Math.min(taskCounts(day).done, MAX_TASKS); }
 function keyFor(f) { return Object.keys(FAIRIES).find(day => FAIRIES[day] === f); }
 function buildMiniFairy(day, itemCount = 0) {
   return buildFairyImage(day, itemCount);
@@ -2243,7 +2245,7 @@ function renderTodos() {
   if (currentMode === 'mom') {
     document.getElementById('momSection').style.display = '';
     document.getElementById('kidSection').style.display = 'none';
-    document.getElementById('helpTip').textContent = total >= MAX_TASKS ? '오늘은 10개의 미션이 모두 준비됐어요.' : `엄마가 ${f.name}의 미션을 추가해 주세요. 하루 최대 10개까지 저장돼요.`;
+    document.getElementById('helpTip').textContent = total >= MAX_TASKS ? '오늘은 8개의 미션이 모두 준비됐어요.' : `엄마가 ${f.name}의 미션을 추가해 주세요. 하루 최대 8개까지 저장돼요.`;
     document.getElementById('newTodoInput').disabled = total >= MAX_TASKS;
     document.getElementById('addBtn').disabled = total >= MAX_TASKS;
     const list = document.getElementById('momList');
@@ -2409,7 +2411,7 @@ function addTodo() {
   const input = document.getElementById('newTodoInput');
   const text = input.value.trim();
   if (!text) return;
-  if ((data[currentDay] || []).length >= MAX_TASKS) { showToast('하루 미션은 최대 10개까지예요 ✨'); return; }
+  if ((data[currentDay] || []).length >= MAX_TASKS) { showToast('하루 미션은 최대 8개까지예요 ✨'); return; }
   data[currentDay].push({ text, done: false });
   input.value = '';
   saveData(); render();
