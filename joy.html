@@ -838,6 +838,17 @@ const SHOP_ITEMS = [
   { id:'furn_pastelpiano', emoji:'🎹', name:'파스텔 피아노', cat:'furniture', price:880, desc:'무지개 빛이 어른거리는 업라이트 피아노' },
   { id:'furn_teatable',    emoji:'🍵', name:'티 테이블 세트', cat:'furniture', price:630, desc:'의자 두 개와 다과가 놓인 티 테이블' },
   { id:'furn_flowerstand', emoji:'🌷', name:'장미 스탠드',   cat:'furniture', price:300, desc:'별이 매달린 장미 조명 스탠드' },
+  // ── 가구 추가 (2026-09)
+  { id:'furn_closet',          emoji:'🚪', name:'요정 옷장',            cat:'furniture', price:880,  desc:'유니콘·성 스티커가 붙은 파스텔 옷장' },
+  { id:'furn_springbookshelf', emoji:'📚', name:'봄 나무 책장',         cat:'furniture', price:700,  desc:'다육이와 책이 놓인 아치 책장' },
+  { id:'furn_springbox',       emoji:'🧸', name:'곰돌이 장난감 바구니', cat:'furniture', price:380,  desc:'곰돌이가 숨어 있는 토끼 바구니' },
+  { id:'furn_springtable',     emoji:'🌷', name:'튤립 테이블',          cat:'furniture', price:630,  desc:'버섯 의자가 딸린 튤립 램프 테이블' },
+  { id:'furn_starbed',         emoji:'🛏️', name:'별빛 침대',            cat:'furniture', price:1000, desc:'보라 이불의 포근한 별빛 침대' },
+  { id:'furn_stargarland',     emoji:'⭐', name:'별 가랜드',            cat:'furniture', price:300,  desc:'반짝이는 별 전구 가랜드' },
+  { id:'furn_starsidetable',   emoji:'🌙', name:'달빛 사이드테이블',    cat:'furniture', price:550,  desc:'달 램프가 놓인 파란 사이드테이블' },
+  { id:'furn_stardrawer',      emoji:'🔮', name:'마법 서랍장',          cat:'furniture', price:750,  desc:'수정구슬과 크리스탈이 놓인 별 서랍장' },
+  { id:'furn_starposter',      emoji:'🗺️', name:'별자리 포스터',        cat:'furniture', price:350,  desc:'파스텔 별자리 지도 포스터' },
+  { id:'furn_wallshelf',       emoji:'☁️', name:'구름 벽선반',          cat:'furniture', price:480,  desc:'포션과 선인장이 놓인 구름 선반' },
   // ── 반려동물
   { id:'pet_cat',         emoji:'🐱', name:'마법 고양이',  cat:'pet',       price:630, desc:'마법을 쓸 줄 아는 고양이' },
   { id:'pet_rabbit',      emoji:'🐰', name:'달빛 토끼',    cat:'pet',       price:500, desc:'달에서 온 귀여운 토끼' },
@@ -889,6 +900,13 @@ const SHOP_ITEMS = [
   { id:'av_shoes_blackmaryjane', emoji:'👞', name:'검정 메리제인', cat:'av_shoes', price:330, desc:'단정한 검정 메리제인 슈즈' },
   { id:'av_bag_star',       emoji:'⭐', name:'별 미니백',       cat:'av_acc', price:350, desc:'노란 손잡이가 달린 별 모양 반짝이 미니백' },
   { id:'av_bag_flower',     emoji:'🧺', name:'꽃바구니 백',    cat:'av_acc', price:300, desc:'꽃이 담긴 예쁜 바구니 백' },
+  // ── 아바타 추가 (2026-09)
+  { id:'av_outfit_cheer',      emoji:'🎽', name:'치어리더 유니폼', cat:'av_outfit', price:600, desc:'DGES 치어리더 유니폼' },
+  { id:'av_outfit_hanbok',     emoji:'🎎', name:'분홍 한복',       cat:'av_outfit', price:650, desc:'고운 분홍 저고리 한복' },
+  { id:'av_hair_hanbokband',   emoji:'💮', name:'한복 화관',       cat:'av_hair',   price:350, desc:'한복에 어울리는 금빛 화관 머리띠' },
+  { id:'av_hair_redribbon',    emoji:'🎀', name:'빨간 리본 헤어',  cat:'av_hair',   price:300, desc:'큼직한 빨간 리본 머리 장식' },
+  { id:'av_acc_pompom',        emoji:'📣', name:'치어 폼폼',       cat:'av_acc',    price:280, desc:'양손에 드는 빨간 치어 폼폼' },
+  { id:'av_shoes_flowershoes', emoji:'🌺', name:'꽃신',            cat:'av_shoes',  price:330, desc:'한복에 신는 예쁜 꽃신' },
 ];
 
 let currentDay = 'Mon';
@@ -1141,9 +1159,15 @@ const AV_FIT = {
   av_acc_witchhat:   { img:'av_acc_witchhat.png',   scale:0.769, scaleX:1.000, ox:9.60, oy:-21.30 },
   av_bag_star:   { img:'av_bag_star.png',   scale:0.836, ox:36.70, oy:23.20 },
   av_bag_flower: { img:'av_bag_flower.png', scale:0.4,   ox:22,    oy:15 },
+  av_outfit_cheer:      { img:'av_outfit_cheer.png',      scale:0.780, scaleX:1.000, ox:-0.50, oy:9.60 },
+  av_outfit_hanbok:     { img:'av_outfit_hanbok.png',     scale:0.930, scaleX:1.000, ox:0.00, oy:-0.20 },
+  av_hair_hanbokband:   { img:'av_hair_hanbokband.png',   scale:0.690, scaleX:1.000, ox:0.20, oy:-20.70 },
+  av_hair_redribbon:    { img:'av_hair_redribbon.png',    scale:0.374, scaleX:1.000, ox:24.40, oy:-30.80 },
+  av_acc_pompom:        { img:'av_acc_pompom.png',        scale:0.990, scaleX:1.000, ox:0.00, oy:0.00 },
+  av_shoes_flowershoes: { img:'av_shoes_flower2.png',     scale:0.930, scaleX:1.000, ox:0.00, oy:55.10 },
 };
-const AV_HAIR_IDS = ['av_hair_bow','av_hair_pink','av_hair_star','av_hair_flower'];
-const AV_ACC_IDS  = ['av_acc_tiara','av_acc_necklace','av_acc_glasses','av_acc_ribbon','av_bag_star','av_bag_flower','av_acc_shellpin','av_acc_witchhat'];
+const AV_HAIR_IDS = ['av_hair_bow','av_hair_pink','av_hair_star','av_hair_flower','av_hair_hanbokband','av_hair_redribbon'];
+const AV_ACC_IDS  = ['av_acc_tiara','av_acc_necklace','av_acc_glasses','av_acc_ribbon','av_bag_star','av_bag_flower','av_acc_shellpin','av_acc_witchhat','av_acc_pompom'];
 
 function avLayer(id) {
   const f = AV_FIT[id];
@@ -1590,7 +1614,8 @@ function getItemZone(item) {
   if (item.cat === 'theme') return 'bg';
   if (AVATAR_CATS.includes(item.cat)) return 'avatar';
   if (item.cat === 'pet') return 'pet';
-  if (item.cat === 'furniture' || item.cat === 'food') return 'floor';
+  if (item.cat === 'furniture') return ['furn_stargarland','furn_starposter','furn_wallshelf'].includes(item.id) ? 'wall' : 'floor';
+  if (item.cat === 'food') return 'floor';
   if (item.cat === 'deco') {
     return ['deco_blossom','deco_mobile','deco_painting','deco_rainbow','deco_balloon','deco_crystal','deco_clock'].includes(item.id) ? 'wall' : 'floor';
   }
@@ -1756,6 +1781,16 @@ const PNG_FURNITURE = {
   furn_pastelpiano: { file:'furniture/furniture_piano.png',  w:110 },
   furn_teatable:    { file:'furniture/furniture_table.png',  w:120 },
   furn_flowerstand: { file:'furniture/furniture_flower.png', w:60 },
+  furn_closet:          { file:'furniture/furniture_closet.png',          w:110 },
+  furn_springbookshelf: { file:'furniture/furniture_springbookshelf.png', w:110 },
+  furn_springbox:       { file:'furniture/furniture_springbox.png',       w:110 },
+  furn_springtable:     { file:'furniture/furniture_springtable.png',     w:110 },
+  furn_starbed:         { file:'furniture/furniture_starbed.png',         w:110 },
+  furn_stargarland:     { file:'furniture/furniture_stargarland.png',     w:110 },
+  furn_starsidetable:   { file:'furniture/furniture_starsidetable.png',   w:110 },
+  furn_stardrawer:      { file:'furniture/furniture_stardrawer.png',      w:110 },
+  furn_starposter:      { file:'furniture/furniture_starposter.png',      w:110 },
+  furn_wallshelf:       { file:'furniture/furniture_wallshelf.png',       w:110 },
 };
 
 function customItemIcon(id) {

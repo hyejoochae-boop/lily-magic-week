@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lily 아이템 피팅 시뮬레이터</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Gowun Dodum', 'Malgun Gothic', sans-serif; background: #f3eefb; color: #2d1e4a; }
+  header { background: linear-gradient(90deg,#9d6eff,#ff7eb3); color: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  header h1 { font-size: 1.15rem; margin: 0; }
+  .tabs { display: flex; gap: 6px; }
+  .tab { border: 0; border-radius: 999px; padding: 6px 16px; background: rgba(255,255,255,.25); color: #fff; font-weight: 700; cursor: pointer; }
+  .tab.active { background: #fff; color: #7a3fd6; }
+  main { display: grid; grid-template-columns: 420px 1fr 340px; gap: 16px; padding: 16px 20px; align-items: start; }
+  .panel { background: #fff; border-radius: 16px; padding: 14px; box-shadow: 0 6px 20px rgba(80,40,120,.10); }
+  .panel h3 { margin: 0 0 10px; font-size: .95rem; color: #7a3fd6; }
+  .item-row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 10px; cursor: pointer; border: 2px solid transparent; }
+  .item-row:hover { background: #f6f1ff; }
+  .item-row.selected { border-color: #9d6eff; background: #f3ecff; }
+  .item-row img { width: 40px; height: 40px; object-fit: contain; background: repeating-conic-gradient(#eee 0 25%, #fff 0 50%) 0 0 / 12px 12px; border-radius: 6px; }
+  .item-row .nm { flex: 1; font-size: .88rem; }
+  .item-row .nm small { display: block; color: #8a7aa8; font-size: .72rem; }
+  .item-row input[type=checkbox] { width: 18px; height: 18px; }
+  .ref-toggle { font-size: .8rem; color: #6b5a8a; display: flex; align-items: center; gap: 6px; margin: 3px 0; }
+  /* avatar stage */
+  .stage-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .av-stage { position: relative; width: 380px; aspect-ratio: 1536/2752; background: linear-gradient(180deg,#e9f4ff,#fff5fb); border-radius: 14px; overflow: hidden; border: 2px dashed #d7c8f5; user-select: none; touch-action: none; }
+  .av-stage img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; transform-origin: center center; pointer-events: none; }
+  .av-stage .sel-outline { outline: 2px solid rgba(157,110,255,.7); }
+  .hint { font-size: .78rem; color: #8a7aa8; text-align: center; }
+  /* room stage */
+  .room-stage { position: relative; width: 455px; height: 700px; border-radius: 14px; overflow: hidden; border: 2px dashed #d7c8f5; user-select: none; touch-action: none; }
+  .room-stage .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .rc-item { position: absolute; z-index: 6; cursor: grab; }
+  .rc-item img { display: block; height: auto; filter: drop-shadow(0 6px 10px rgba(0,0,0,.35)); }
+  .rc-item.selected img { outline: 2px solid rgba(157,110,255,.8); }
+  .rc-item.ref { opacity: .8; cursor: default; }
+  .rc-lily { position: absolute; width: 140px; z-index: 8; left: 28%; top: 18%; pointer-events: none; }
+  .rc-lily .av { position: relative; width: 100%; aspect-ratio: 1536/2752; }
+  .rc-lily img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
+  /* controls */
+  .ctrl { margin: 8px 0; }
+  .ctrl label { display: flex; justify-content: space-between; font-size: .82rem; color: #4b3a6e; margin-bottom: 2px; }
+  .ctrl input[type=range] { width: 100%; }
+  .ctrl input[type=number] { width: 78px; border: 1px solid #d7c8f5; border-radius: 6px; padding: 2px 6px; font-size: .8rem; }
+  .btn { border: 0; border-radius: 999px; padding: 7px 14px; background: linear-gradient(135deg,#9d6eff,#ff7eb3); color: #fff; font-weight: 700; cursor: pointer; font-size: .82rem; }
+  .btn.gray { background: #e8e1f5; color: #5a4a7a; }
+  .btn-row { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+  textarea { width: 100%; height: 220px; font: 11px/1.4 Consolas, monospace; border: 1px solid #d7c8f5; border-radius: 8px; padding: 8px; resize: vertical; }
+  select { border: 1px solid #d7c8f5; border-radius: 6px; padding: 3px 6px; font-size: .82rem; }
+  .muted { color: #8a7aa8; font-size: .78rem; }
+  .price-row { display: flex; gap: 6px; align-items: center; font-size: .82rem; margin: 6px 0; }
+  .price-row input { width: 80px; border: 1px solid #d7c8f5; border-radius: 6px; padding: 2px 6px; }
+  .price-row input.wide { width: 100%; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🧚 Lily 아이템 피팅 시뮬레이터</h1>
+  <div class="tabs">
+    <button class="tab active" data-tab="avatar" onclick="setTab('avatar')">👗 아바타 아이템 (6)</button>
+    <button class="tab" data-tab="room" onclick="setTab('room')">🛋️ 가구 (10)</button>
+  </div>
+  <span class="muted" style="color:#fff;opacity:.85">값은 자동 저장됩니다 · 다 되면 오른쪽 "내보내기" 텍스트를 복사해서 알려주세요</span>
+</header>
+
+<main>
+  <!-- LEFT: item list -->
+  <section class="panel">
+    <h3 id="listTitle">새 아이템 (체크 = 표시, 클릭 = 선택)</h3>
+    <div id="itemList"></div>
+    <hr style="border:0;border-top:1px solid #eee;margin:10px 0">
+    <h3>기존 아이템 참고용 표시</h3>
+    <div id="refList"></div>
+  </section>
+
+  <!-- CENTER: stage -->
+  <section class="panel stage-wrap">
+    <div id="avatarStageWrap">
+      <div class="av-stage" id="avStage"></div>
+      <div class="hint">선택한 아이템을 드래그해서 위치 이동 · 방향키(Shift=크게) 미세 조정 · 마우스휠 크기</div>
+    </div>
+    <div id="roomStageWrap" hidden>
+      <div class="room-stage" id="roomStage"></div>
+      <div class="hint">가구를 드래그해서 배치 확인 · 마우스휠로 크기(w) 조정 · 실제 대시보드 방 크기와 동일(455px)</div>
+    </div>
+  </section>
+
+  <!-- RIGHT: controls + export -->
+  <section class="panel">
+    <h3 id="ctrlTitle">선택된 아이템 없음</h3>
+    <div id="ctrls"></div>
+    <div class="btn-row">
+      <button class="btn gray" onclick="resetSelected()">이 아이템 초기화</button>
+      <button class="btn gray" onclick="resetAll()">전체 초기화</button>
+    </div>
+    <hr style="border:0;border-top:1px solid #eee;margin:10px 0">
+    <h3>내보내기</h3>
+    <div class="btn-row">
+      <button class="btn" onclick="copyExport()">📋 복사하기</button>
+      <span class="muted" id="copyMsg"></span>
+    </div>
+    <textarea id="exportBox" readonly></textarea>
+  </section>
+</main>
+
+<script>
+const ASSETS = 'lily2_assets/';
+const STORE = 'lily-fit-sim-v1';
+
+// ── 새 아바타 아이템 (레이어 순서: shoes → outfit → hair → acc)
+const NEW_AVATAR = [
+  { id:'av_outfit_cheer',      img:'av_outfit_cheer.png',      name:'치어리더 유니폼', layer:'outfit', emoji:'🎽', price:600, desc:'DGES 치어리더 유니폼' },
+  { id:'av_outfit_hanbok',     img:'av_outfit_hanbok.png',     name:'분홍 한복',       layer:'outfit', emoji:'🎎', price:650, desc:'고운 분홍 저고리 한복' },
+  { id:'av_hair_hanbokband',   img:'av_hair_hanbokband.png',   name:'한복 화관',       layer:'hair',   emoji:'💮', price:350, desc:'한복에 어울리는 금빛 화관 머리띠' },
+  { id:'av_hair_redribbon',    img:'av_hair_redribbon.png',    name:'빨간 리본 헤어',  layer:'hair',   emoji:'🎀', price:300, desc:'큼직한 빨간 리본 머리 장식' },
+  { id:'av_acc_pompom',        img:'av_acc_pompom.png',        name:'치어 폼폼',       layer:'acc',    emoji:'📣', price:280, desc:'양손에 드는 빨간 치어 폼폼' },
+  { id:'av_shoes_flowershoes', img:'av_shoes_flower2.png',     name:'꽃신',            layer:'shoes',  emoji:'🌺', price:330, desc:'한복에 신는 예쁜 꽃신' },
+];
+// 기존 아이템(참고용, 대시보드 값 그대로)
+const REF_AVATAR = [
+  { id:'av_outfit_princess', img:'av_outfit_princess.png', name:'프린세스 드레스', layer:'outfit', fit:{scale:0.953, ox:-0.20, oy:13.10} },
+  { id:'av_outfit_school1',  img:'av_outfit_school1.png',  name:'교복 춘추복',     layer:'outfit', fit:{scale:1.003, scaleX:1.000, ox:0.00, oy:0.70} },
+  { id:'av_hair_bow',        img:'av_hair_bow.png',        name:'핑크 리본 헤어',  layer:'hair',   fit:{scale:0.443, ox:24.80, oy:-31.30} },
+  { id:'av_acc_tiara',       img:'av_acc_tiara.png',       name:'골드 티아라',     layer:'acc',    fit:{scale:0.489, ox:-0.50, oy:-41.30} },
+  { id:'av_shoes_rose',      img:'av_shoes_rose.png',      name:'장미 구두',       layer:'shoes',  fit:{scale:1.012, scaleX:1.000, ox:0.00, oy:0.20} },
+];
+// ── 새 가구
+const NEW_FURN = [
+  { id:'furn_closet',          file:'furniture/furniture_closet.png',          name:'요정 옷장',            zone:'floor', emoji:'🚪', price:880,  desc:'유니콘·성 스티커가 붙은 파스텔 옷장' },
+  { id:'furn_springbookshelf', file:'furniture/furniture_springbookshelf.png', name:'봄 나무 책장',         zone:'floor', emoji:'📚', price:700,  desc:'다육이와 책이 놓인 아치 책장' },
+  { id:'furn_springbox',       file:'furniture/furniture_springbox.png',       name:'곰돌이 장난감 바구니', zone:'floor', emoji:'🧸', price:380,  desc:'곰돌이가 숨어 있는 토끼 바구니' },
+  { id:'furn_springtable',     file:'furniture/furniture_springtable.png',     name:'튤립 테이블',          zone:'floor', emoji:'🌷', price:630,  desc:'버섯 의자가 딸린 튤립 램프 테이블' },
+  { id:'furn_starbed',         file:'furniture/furniture_starbed.png',         name:'별빛 침대',            zone:'floor', emoji:'🛏️', price:1000, desc:'보라 이불의 포근한 별빛 침대' },
+  { id:'furn_stargarland',     file:'furniture/furniture_stargarland.png',     name:'별 가랜드',            zone:'wall',  emoji:'⭐', price:300,  desc:'반짝이는 별 전구 가랜드' },
+  { id:'furn_starsidetable',   file:'furniture/furniture_starsidetable.png',   name:'달빛 사이드테이블',    zone:'floor', emoji:'🌙', price:550,  desc:'달 램프가 놓인 파란 사이드테이블' },
+  { id:'furn_stardrawer',      file:'furniture/furniture_stardrawer.png',      name:'마법 서랍장',          zone:'floor', emoji:'🔮', price:750,  desc:'수정구슬과 크리스탈이 놓인 별 서랍장' },
+  { id:'furn_starposter',      file:'furniture/furniture_starposter.png',      name:'별자리 포스터',        zone:'wall',  emoji:'🗺️', price:350,  desc:'파스텔 별자리 지도 포스터' },
+  { id:'furn_wallshelf',       file:'furniture/furniture_wallshelf.png',       name:'구름 벽선반',          zone:'wall',  emoji:'☁️', price:480,  desc:'포션과 선인장이 놓인 구름 선반' },
+];
+const REF_FURN = [
+  { id:'furn_canopybed',   file:'furniture/furniture_bed.png',    name:'캐노피 침대(150)', w:150 },
+  { id:'furn_pastelpiano', file:'furniture/furniture_piano.png',  name:'파스텔 피아노(110)', w:110 },
+  { id:'furn_teatable',    file:'furniture/furniture_table.png',  name:'티 테이블(120)', w:120 },
+  { id:'furn_clock',       file:'furniture/furniture_clock.png',  name:'무지개 벽시계(70)', w:70 },
+];
+const LAYER_ORDER = { shoes:1, outfit:2, hair:3, acc:4 };
+
+let tab = 'avatar';
+let state = load();
+let selected = null;     // item id
+let visible = state.visible || { av_outfit_hanbok: false, av_hair_hanbokband: false, av_hair_redribbon: false, av_acc_pompom: false, av_shoes_flowershoes: false };
+let refVisible = state.refVisible || {};
+
+function defaultsFor(id) {
+  if (NEW_FURN.find(f => f.id === id)) { const i = NEW_FURN.findIndex(f => f.id === id); const f = NEW_FURN[i]; return { w: 110, zone: f.zone, x: 4 + (i % 5) * 19, y: f.zone === 'wall' ? 6 + Math.floor(i / 5) * 14 : 52 + Math.floor(i / 5) * 18 }; }
+  return { scale: 1, scaleX: 1, ox: 0, oy: 0 };
+}
+function fitOf(id) { if (!state.fit[id]) state.fit[id] = defaultsFor(id); return state.fit[id]; }
+function load() { try { const s = JSON.parse(localStorage.getItem(STORE) || '{}'); s.fit = s.fit || {}; return s; } catch (e) { return { fit: {} }; } }
+function save() { state.visible = visible; state.refVisible = refVisible; try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
+
+function setTab(t) {
+  tab = t; selected = null;
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t));
+  document.getElementById('avatarStageWrap').hidden = t !== 'avatar';
+  document.getElementById('roomStageWrap').hidden = t !== 'room';
+  renderAll();
+}
+
+function renderAll() { renderList(); renderStage(); renderCtrls(); renderExport(); save(); }
+
+/* ── 리스트 ── */
+function renderList() {
+  const items = tab === 'avatar' ? NEW_AVATAR : NEW_FURN;
+  const refs  = tab === 'avatar' ? REF_AVATAR : REF_FURN;
+  document.getElementById('itemList').innerHTML = items.map(it => `
+    <div class="item-row ${selected === it.id ? 'selected' : ''}" onclick="selectItem('${it.id}')">
+      <input type="checkbox" ${visible[it.id] !== false ? 'checked' : ''} onclick="event.stopPropagation();toggleVisible('${it.id}', this.checked)">
+      <img src="${ASSETS}${it.img || it.file}" alt="">
+      <div class="nm">${it.emoji || ''} ${it.name}<small>${it.id}${it.layer ? ' · ' + it.layer : ''}</small></div>
+    </div>`).join('');
+  document.getElementById('refList').innerHTML = refs.map(it => `
+    <label class="ref-toggle"><input type="checkbox" ${refVisible[it.id] ? 'checked' : ''} onchange="refVisible['${it.id}']=this.checked;renderAll()"> ${it.name}</label>`).join('');
+}
+function exclusive(id) {
+  const it = NEW_AVATAR.find(n => n.id === id); if (!it || !['outfit','hair'].includes(it.layer)) return;
+  NEW_AVATAR.forEach(n => { if (n.id !== id && n.layer === it.layer) visible[n.id] = false; });
+}
+function toggleVisible(id, on) { visible[id] = on; if (on) exclusive(id); renderAll(); }
+function selectItem(id) { selected = id; visible[id] = true; exclusive(id); renderAll(); }
+
+/* ── 아바타 스테이지 ── */
+function avStyle(f) {
+  const sx = f.scaleX !== undefined ? f.scaleX : 1;
+  return `transform:translate(${f.ox}%, ${f.oy}%) scale(${(f.scale * sx).toFixed(4)}, ${f.scale});`;
+}
+function renderStage() {
+  if (tab === 'avatar') {
+    const st = document.getElementById('avStage');
+    let layers = [];
+    REF_AVATAR.forEach(r => { if (refVisible[r.id]) layers.push({ id: r.id, img: r.img, layer: r.layer, fit: r.fit, ref: true }); });
+    NEW_AVATAR.forEach(n => { if (visible[n.id] !== false) layers.push({ id: n.id, img: n.img, layer: n.layer, fit: fitOf(n.id), ref: false }); });
+    layers.sort((a, b) => LAYER_ORDER[a.layer] - LAYER_ORDER[b.layer]);
+    st.innerHTML = `<img src="${ASSETS}lily_final.png" alt="">` +
+      layers.map(l => `<img src="${ASSETS}${l.img}" class="${selected === l.id ? 'sel-outline' : ''}" style="${avStyle(l.fit)}${l.ref ? 'opacity:.85;' : ''}" alt="">`).join('');
+  } else {
+    const st = document.getElementById('roomStage');
+    let html = `<img class="bg" src="${ASSETS}room_base.png" alt="">`;
+    REF_FURN.forEach((r, i) => { if (refVisible[r.id]) html += `<div class="rc-item ref" style="left:${4 + i * 22}%;bottom:8%"><img src="${ASSETS}${r.file}" style="width:${r.w}px"></div>`; });
+    NEW_FURN.forEach(n => {
+      if (visible[n.id] === false) return;
+      const f = fitOf(n.id);
+      html += `<div class="rc-item ${selected === n.id ? 'selected' : ''}" data-id="${n.id}" style="left:${f.x}%;top:${f.y}%"><img src="${ASSETS}${n.file}" style="width:${f.w}px"></div>`;
+    });
+    html += `<div class="rc-lily"><div class="av"><img src="${ASSETS}lily_final.png"></div></div>`;
+    st.innerHTML = html;
+    st.querySelectorAll('.rc-item[data-id]').forEach(el => el.addEventListener('pointerdown', roomDragStart));
+  }
+}
+
+/* ── 컨트롤 ── */
+function ctrlRow(key, label, min, max, step) {
+  const f = fitOf(selected);
+  return `<div class="ctrl"><label><span>${label}</span><input type="number" step="${step}" value="${f[key]}" onchange="setVal('${key}', this.value)"></label>
+    <input type="range" min="${min}" max="${max}" step="${step}" value="${f[key]}" oninput="setVal('${key}', this.value)"></div>`;
+}
+function renderCtrls() {
+  const title = document.getElementById('ctrlTitle'); const box = document.getElementById('ctrls');
+  if (!selected) { title.textContent = '선택된 아이템 없음'; box.innerHTML = '<p class="muted">왼쪽 목록에서 아이템을 클릭하세요.</p>'; return; }
+  const item = [...NEW_AVATAR, ...NEW_FURN].find(i => i.id === selected);
+  title.textContent = `${item.emoji} ${item.name}`;
+  let html = '';
+  if (tab === 'avatar') {
+    html += ctrlRow('scale', '크기 scale', 0.2, 1.6, 0.001);
+    html += ctrlRow('scaleX', '가로 비율 scaleX', 0.5, 1.6, 0.001);
+    html += ctrlRow('ox', '가로 위치 ox (%)', -80, 80, 0.1);
+    html += ctrlRow('oy', '세로 위치 oy (%)', -80, 80, 0.1);
+  } else {
+    html += ctrlRow('w', '표시 폭 w (px)', 30, 320, 1);
+    const f = fitOf(selected);
+    html += `<div class="ctrl"><label><span>배치 영역</span></label><select onchange="setVal('zone', this.value)">
+      <option value="floor" ${f.zone === 'floor' ? 'selected' : ''}>바닥 (floor)</option>
+      <option value="wall" ${f.zone === 'wall' ? 'selected' : ''}>벽 (wall)</option></select></div>`;
+  }
+  html += `<hr style="border:0;border-top:1px solid #eee;margin:10px 0"><div class="muted">상점 정보(수정 가능)</div>
+    <div class="price-row">이모지 <input value="${item.emoji}" onchange="setMeta('emoji', this.value)" style="width:56px"> 가격 <input type="number" value="${metaOf(item).price}" onchange="setMeta('price', this.value)"></div>
+    <div class="price-row">이름 <input class="wide" value="${metaOf(item).name}" onchange="setMeta('name', this.value)"></div>
+    <div class="price-row">설명 <input class="wide" value="${metaOf(item).desc}" onchange="setMeta('desc', this.value)"></div>`;
+  box.innerHTML = html;
+}
+function metaOf(item) { state.meta = state.meta || {}; const m = state.meta[item.id] || {}; return { emoji: m.emoji || item.emoji, price: m.price || item.price, name: m.name || item.name, desc: m.desc || item.desc }; }
+function setMeta(k, v) { state.meta = state.meta || {}; state.meta[selected] = state.meta[selected] || {}; state.meta[selected][k] = k === 'price' ? Number(v) : v; renderAll(); }
+function setVal(key, v) {
+  const f = fitOf(selected);
+  f[key] = key === 'zone' ? v : Number(v);
+  if (key !== 'zone') f[key] = Math.round(f[key] * 1000) / 1000;
+  renderStage(); renderCtrls(); renderExport(); save();
+}
+function resetSelected() { if (!selected) return; state.fit[selected] = defaultsFor(selected); renderAll(); }
+function resetAll() { if (!confirm('모든 값을 초기화할까요?')) return; state = { fit: {} }; visible = {}; refVisible = {}; selected = null; renderAll(); }
+
+/* ── 드래그 / 키보드 / 휠 (아바타) ── */
+(function () {
+  const st = document.getElementById('avStage');
+  let dragging = false, sx = 0, sy = 0, ox0 = 0, oy0 = 0;
+  st.addEventListener('pointerdown', e => {
+    if (!selected || tab !== 'avatar') return;
+    dragging = true; sx = e.clientX; sy = e.clientY; const f = fitOf(selected); ox0 = f.ox; oy0 = f.oy; st.setPointerCapture(e.pointerId);
+  });
+  st.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const r = st.getBoundingClientRect(); const f = fitOf(selected);
+    f.ox = Math.round((ox0 + (e.clientX - sx) / r.width * 100) * 10) / 10;
+    f.oy = Math.round((oy0 + (e.clientY - sy) / r.height * 100) * 10) / 10;
+    renderStage(); renderCtrls(); renderExport();
+  });
+  st.addEventListener('pointerup', () => { dragging = false; save(); });
+  st.addEventListener('wheel', e => {
+    if (!selected || tab !== 'avatar') return; e.preventDefault();
+    const f = fitOf(selected); f.scale = Math.round(Math.max(0.05, f.scale + (e.deltaY < 0 ? 0.01 : -0.01)) * 1000) / 1000;
+    renderStage(); renderCtrls(); renderExport(); save();
+  }, { passive: false });
+})();
+document.addEventListener('keydown', e => {
+  if (!selected || ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+  const f = fitOf(selected); const step = e.shiftKey ? 1 : 0.1;
+  if (tab === 'avatar') {
+    if (e.key === 'ArrowLeft') f.ox -= step; else if (e.key === 'ArrowRight') f.ox += step;
+    else if (e.key === 'ArrowUp') f.oy -= step; else if (e.key === 'ArrowDown') f.oy += step;
+    else if (e.key === '+' || e.key === '=') f.scale += 0.005; else if (e.key === '-') f.scale -= 0.005; else return;
+    f.ox = Math.round(f.ox * 10) / 10; f.oy = Math.round(f.oy * 10) / 10; f.scale = Math.round(f.scale * 1000) / 1000;
+  } else {
+    if (e.key === '+' || e.key === '=') f.w += 1; else if (e.key === '-') f.w -= 1; else return;
+  }
+  e.preventDefault(); renderStage(); renderCtrls(); renderExport(); save();
+});
+
+/* ── 드래그 / 휠 (가구) ── */
+let rd = null;
+function roomDragStart(e) {
+  const el = e.currentTarget; const id = el.dataset.id; selected = id;
+  const st = document.getElementById('roomStage'); const r = st.getBoundingClientRect(); const f = fitOf(id);
+  rd = { id, sx: e.clientX, sy: e.clientY, x0: f.x, y0: f.y, w: r.width, h: r.height };
+  el.setPointerCapture(e.pointerId);
+  el.addEventListener('pointermove', roomDragMove); el.addEventListener('pointerup', roomDragEnd, { once: true });
+  renderList(); renderCtrls();
+}
+function roomDragMove(e) {
+  if (!rd) return; const f = fitOf(rd.id);
+  f.x = Math.round((rd.x0 + (e.clientX - rd.sx) / rd.w * 100) * 10) / 10;
+  f.y = Math.round((rd.y0 + (e.clientY - rd.sy) / rd.h * 100) * 10) / 10;
+  const el = document.querySelector(`.rc-item[data-id="${rd.id}"]`); if (el) { el.style.left = f.x + '%'; el.style.top = f.y + '%'; }
+}
+function roomDragEnd() { rd = null; save(); renderStage(); }
+document.getElementById('roomStage').addEventListener('wheel', e => {
+  if (!selected || tab !== 'room') return; e.preventDefault();
+  const f = fitOf(selected); f.w = Math.max(20, f.w + (e.deltaY < 0 ? 2 : -2));
+  renderStage(); renderCtrls(); renderExport(); save();
+}, { passive: false });
+
+/* ── 내보내기 ── */
+function renderExport() {
+  const lines = [];
+  lines.push('// ===== AV_FIT 추가 =====');
+  NEW_AVATAR.forEach(n => { const f = fitOf(n.id); lines.push(`  ${n.id}: { img:'${n.img}', scale:${f.scale.toFixed(3)}, scaleX:${(f.scaleX ?? 1).toFixed(3)}, ox:${f.ox.toFixed(2)}, oy:${f.oy.toFixed(2)} },`); });
+  lines.push('// ===== PNG_FURNITURE 추가 =====');
+  NEW_FURN.forEach(n => { const f = fitOf(n.id); lines.push(`  ${n.id}: { file:'${n.file}', w:${f.w} },  // zone: ${f.zone}`); });
+  lines.push('// ===== SHOP_ITEMS 추가 =====');
+  NEW_AVATAR.forEach(n => { const m = metaOf(n); const cat = 'av_' + (n.layer === 'outfit' ? 'outfit' : n.layer === 'hair' ? 'hair' : n.layer === 'acc' ? 'acc' : 'shoes'); lines.push(`  { id:'${n.id}', emoji:'${m.emoji}', name:'${m.name}', cat:'${cat}', price:${m.price}, desc:'${m.desc}' },`); });
+  NEW_FURN.forEach(n => { const m = metaOf(n); lines.push(`  { id:'${n.id}', emoji:'${m.emoji}', name:'${m.name}', cat:'furniture', price:${m.price}, desc:'${m.desc}' },`); });
+  lines.push('// ===== JSON =====');
+  lines.push(JSON.stringify({ fit: state.fit, meta: state.meta || {} }));
+  document.getElementById('exportBox').value = lines.join('\n');
+}
+function copyExport() {
+  const ta = document.getElementById('exportBox'); ta.select();
+  const done = () => { document.getElementById('copyMsg').textContent = '복사됨 ✓'; setTimeout(() => document.getElementById('copyMsg').textContent = '', 1500); };
+  if (navigator.clipboard) navigator.clipboard.writeText(ta.value).then(done, () => { document.execCommand('copy'); done(); });
+  else { document.execCommand('copy'); done(); }
+}
+
+renderAll();
+</script>
+</body>
+</html>
