@@ -929,7 +929,7 @@ let points = 0;
 let shopOwned = [];
 let roomPlaced = [];
 let messages = [];
-let msgIndex = 0;
+let msgIndex = -1; // -1 = 미초기화(로드 시 최신 쪽지로 설정)
 let currentShopCat = 'theme';
 let activeTheme = null;
 let itemPositions = {};
@@ -949,7 +949,7 @@ function applyParsed(parsed) {
     : ([...shopOwned].reverse().find(id => id.startsWith('theme_')) || null);
   itemPositions = (parsed.itemPositions && typeof parsed.itemPositions === 'object') ? parsed.itemPositions : {};
   messages = Array.isArray(parsed.messages) ? parsed.messages : [];
-  if (msgIndex >= messages.length) msgIndex = Math.max(0, messages.length - 1);
+  if (msgIndex < 0 || msgIndex >= messages.length) msgIndex = messages.length - 1; // 최신 쪽지부터
   rewardedDays = Array.isArray(parsed.rewardedDays) ? parsed.rewardedDays : [];
   weekBonusGiven = !!parsed.weekBonusGiven;
   DAYS.forEach(day => {
@@ -2172,8 +2172,9 @@ function deleteMsg() {
   renderMessages();
 }
 
-function prevMsg() { if (msgIndex > 0) { msgIndex--; renderMessages(); } }
-function nextMsg() { if (msgIndex < messages.length - 1) { msgIndex++; renderMessages(); } }
+// 표시 순서: 최신(배열 끝) → 오래된(배열 앞). ◁ = 더 최신, ▷ = 더 오래된. 끝에서는 반대편으로 순환
+function prevMsg() { if (!messages.length) return; msgIndex = (msgIndex + 1) % messages.length; renderMessages(); }
+function nextMsg() { if (!messages.length) return; msgIndex = (msgIndex - 1 + messages.length) % messages.length; renderMessages(); }
 
 function renderMessages() {
   const card = document.getElementById('rmbCard');
@@ -2188,15 +2189,16 @@ function renderMessages() {
     if (nav) nav.style.display = 'none';
     return;
   }
+  if (msgIndex < 0 || msgIndex >= messages.length) msgIndex = messages.length - 1;
   const msg = messages[msgIndex];
   const fromLabel = msg.from === 'mom' ? '👩 엄마' : '🧚 Lily';
   card.className = 'rmb-card';
   card.innerHTML = `<div class="rmb-from">${fromLabel} · ${msg.date}</div>${msg.text}`;
   if (nav) {
     nav.style.display = 'flex';
-    counter.textContent = `${msgIndex + 1}/${messages.length}`;
-    prevBtn.disabled = msgIndex === 0;
-    nextBtn.disabled = msgIndex === messages.length - 1;
+    counter.textContent = `${messages.length - msgIndex}/${messages.length}`; // 1 = 최신
+    prevBtn.disabled = messages.length <= 1;
+    nextBtn.disabled = messages.length <= 1;
   }
 }
 
