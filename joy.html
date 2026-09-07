@@ -322,6 +322,9 @@
   .todo-item.done .todo-text { text-decoration: line-through; color: #8c74a4; }
   .task-reward { font-size: 1.45rem; width: 32px; text-align: center; flex-shrink: 0; }
   .delete-btn { width: 36px; height: 36px; border-radius: 50%; border: 0; background: #ffe1ed; color: #d73778; font-weight: 700; cursor: pointer; }
+  .pin-btn { width: 36px; height: 36px; border-radius: 50%; border: 0; background: #f1ecf7; font-size: 1.05rem; cursor: pointer; opacity: .35; filter: grayscale(1); flex-shrink: 0; }
+  .pin-btn.on { background: #fff3c4; opacity: 1; filter: none; box-shadow: 0 0 0 2px rgba(247,169,22,.35); }
+  .mom-todo-item .text small.repeat { color: #b07a10; }
   .empty-msg { text-align: center; padding: 28px 14px; color: #7c6294; font: 700 1.05rem 'Emilys Candy', 'Gowun Dodum', sans-serif; }
   .empty-msg .big-emoji { display: block; font-size: 3rem; margin-bottom: 8px; }
   .help-tip { margin-top: 12px; padding: 11px 12px; border-radius: 8px; background: rgba(247,169,22,.11); color: #654286; font: 700 1rem 'Emilys Candy', 'Gowun Dodum', sans-serif; text-align: center; }
@@ -785,6 +788,7 @@ const DAY_KOR = { Mon:'월요일', Tue:'화요일', Wed:'수요일', Thu:'목요
 const STORAGE_KEY = 'joys-wonderful-week-v8';
 const STORAGE_KEY_V7 = 'joys-wonderful-week-v7';
 const MAX_TASKS = 8;
+const NON_FIXED_PATTERN = /그리스s*로마s*신화/; // 기존 데이터 마이그레이션용: 이 패턴만 고정 미션에서 제외
 
 const FAIRIES = {
   Mon: { name: 'Goldie', title: 'the Sunshine Fairy', dayName: 'Goldie Day', icon: '☀️', weather: 'sunshine', accent: '#f7a916', light: '#fff0a7', dress: '#ffc23d', dressDark: '#f39a16', hair: '#d98b27', hairDark: '#9f6320', skin: '#ffe2c2', effect: ['☀️','✨','🌻'], hairStyle: 'curls', wand: 'sun', items: [['☀️','Sunshine Wand'], ['📿','Sun Necklace'], ['👗','Sunny Petal Dress'], ['🥾','Golden Boots'], ['💛','Sunbeam Belt'], ['💍','Dawn Bracelet'], ['🌻','Sunflower Charm'], ['🌈','Rainbow Glow']] },
@@ -950,7 +954,12 @@ function applyParsed(parsed) {
   weekBonusGiven = !!parsed.weekBonusGiven;
   DAYS.forEach(day => {
     if (!Array.isArray(data[day])) data[day] = [];
-    data[day] = data[day].slice(0, MAX_TASKS).map(task => ({ text: String(task.text || ''), done: !!task.done, rewarded: !!task.rewarded }));
+    data[day] = data[day].slice(0, MAX_TASKS).map(task => {
+      const text = String(task.text || '');
+      // fixed(📌): 다음 주 시작 시 자동으로 다시 등록되는 고정 미션. 플래그가 없는 기존 데이터는 그리스로마신화만 제외하고 고정으로 간주.
+      const fixed = typeof task.fixed === 'boolean' ? task.fixed : !NON_FIXED_PATTERN.test(text);
+      return { text, done: !!task.done, rewarded: !!task.rewarded, fixed };
+    });
   });
 }
 
@@ -2377,15 +2386,16 @@ function renderTodos() {
   if (currentMode === 'mom') {
     document.getElementById('momSection').style.display = '';
     document.getElementById('kidSection').style.display = 'none';
-    document.getElementById('helpTip').textContent = total >= MAX_TASKS ? '오늘은 8개의 미션이 모두 준비됐어요.' : `엄마가 ${f.name}의 미션을 추가해 주세요. 하루 최대 8개까지 저장돼요.`;
+    document.getElementById('helpTip').textContent = total >= MAX_TASKS ? '오늘은 8개의 미션이 모두 준비됐어요. 📌 켜진 미션은 다음 주에도 자동 등록돼요.' : `엄마가 ${f.name}의 미션을 추가해 주세요. 하루 최대 8개까지 저장돼요. 📌 켜진 미션은 다음 주에도 자동 등록돼요.`;
     document.getElementById('newTodoInput').disabled = total >= MAX_TASKS;
     document.getElementById('addBtn').disabled = total >= MAX_TASKS;
     const list = document.getElementById('momList');
     list.innerHTML = todos.length ? todos.map((task, idx) => {
       const reward = f.items[idx] || ['✨','Magic'];
-      return `<div class="mom-todo-item"><span class="task-reward">${reward[0]}</span><span class="text">${idx + 1}. ${escapeHtml(task.text)}<br><small>Unlocks: ${reward[1]}</small></span><button class="delete-btn" data-idx="${idx}">✕</button></div>`;
+      return `<div class="mom-todo-item"><span class="task-reward">${reward[0]}</span><span class="text">${idx + 1}. ${escapeHtml(task.text)}<br><small>Unlocks: ${reward[1]}</small>${task.fixed ? '<small class="repeat"> · 매주 반복</small>' : '<small> · 이번 주만</small>'}</span><button class="pin-btn ${task.fixed ? 'on' : ''}" data-idx="${idx}" title="${task.fixed ? '매주 반복 (누르면 이번 주만)' : '이번 주만 (누르면 매주 반복)'}">📌</button><button class="delete-btn" data-idx="${idx}">✕</button></div>`;
     }).join('') : `<div class="empty-msg"><span class="big-emoji">${f.icon}</span>No missions yet</div>`;
     list.querySelectorAll('.delete-btn').forEach(btn => btn.onclick = () => deleteTodo(Number(btn.dataset.idx)));
+    list.querySelectorAll('.pin-btn').forEach(btn => btn.onclick = () => toggleFixed(Number(btn.dataset.idx)));
   } else {
     document.getElementById('momSection').style.display = 'none';
     document.getElementById('kidSection').style.display = '';
@@ -2544,12 +2554,18 @@ function addTodo() {
   const text = input.value.trim();
   if (!text) return;
   if ((data[currentDay] || []).length >= MAX_TASKS) { showToast('하루 미션은 최대 8개까지예요 ✨'); return; }
-  data[currentDay].push({ text, done: false });
+  data[currentDay].push({ text, done: false, rewarded: false, fixed: true });
   input.value = '';
   saveData(); render();
 }
 
 function deleteTodo(idx) { data[currentDay].splice(idx, 1); saveData(); render(); }
+function toggleFixed(idx) {
+  const t = data[currentDay][idx]; if (!t) return;
+  t.fixed = !t.fixed;
+  showToast(t.fixed ? '📌 매주 자동으로 등록돼요' : '이번 주만 하는 미션이에요');
+  saveData(); render();
+}
 
 function toggleTodo(idx) {
   const todos = data[currentDay];
@@ -2590,7 +2606,8 @@ function recordWeekAndReset() {
   const now = new Date();
   const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
   history.push({ weekNum: history.length + 1, completedDays: completedDaysArr, doneCount, success, date: dateStr });
-  DAYS.forEach(day => { data[day] = []; });
+  // 고정(📌) 미션은 체크만 풀고 그대로 유지, 나머지는 삭제
+  DAYS.forEach(day => { data[day] = (data[day] || []).filter(t => t.fixed).map(t => ({ text: t.text, done: false, rewarded: false, fixed: true })); });
   rewardedDays = [];      // 새 주: 요정 보너스 기록 초기화
   weekBonusGiven = false; // 새 주: 주간 보너스 다시 받을 수 있게
   saveData(); render();
